@@ -2,27 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>r1-map - Rabbit R1 Navigation</title>
-    <link href="css/style.css" rel="stylesheet"/>
-    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
-    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <!-- Loading Indicator -->
-    <div class="loading-container" id="loading">
+    <div id="loading" class="loading-container">
         <div class="loading-spinner"></div>
         <p>Loading map...</p>
     </div>
     
     <!-- Main Application Container -->
-    <div class="app-container" id="app" style="display: none;">
-        <!-- Map Background Image -->
-        <img id="map-bg" src="r1-map.png" alt="r1 map bg" />
+    <div id="app" class="app-container" style="display: none;">
         
         <!-- Map Container - First Element for Fast Loading -->
-        <div class="map-area" id="map">
+        <div id="map" class="map-area">
             <!-- Map renders directly here for maximum speed -->
         </div>
         
