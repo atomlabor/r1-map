@@ -101,11 +101,88 @@ body {
     border: 1px solid #444;
 }
 
+/* Search Container */
+.search-container {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #333;
+    padding: 10px 15px;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-bar {
+    flex: 1;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #444;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-bar:focus {
+    border-color: #ff6b35;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.search-bar::placeholder {
+    color: #888;
+}
+
+.search-button {
+    width: 45px;
+    height: 45px;
+    border: 2px solid #444;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.search-button:hover,
+.search-button:active {
+    background: rgba(255, 107, 53, 0.2);
+    border-color: #ff6b35;
+    transform: scale(0.95);
+}
+
+.search-button:focus {
+    outline: 2px solid #ff6b35;
+    outline-offset: 2px;
+}
+
+.search-results {
+    position: fixed;
+    top: 108px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #333;
+    padding: 10px 15px;
+    z-index: 98;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 /* Map Container */
 .map-container {
     flex: 1;
-    margin-top: 50px;
-    margin-bottom: 120px;
+    margin-top: 108px;
     position: relative;
 }
 
@@ -127,179 +204,13 @@ body {
     font-size: 16px;
 }
 
-/* Control Panel */
-.controls-container {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #333;
-    padding: 15px;
-    z-index: 200;
-}
-
-.control-row {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 10px;
-}
-
-.control-btn {
-    width: 60px;
-    height: 60px;
-    border: 2px solid #444;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    color: #fff;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.control-btn:hover,
-.control-btn:active {
-    background: rgba(255, 107, 53, 0.2);
-    border-color: #ff6b35;
-    transform: scale(0.95);
-}
-
-.control-btn:focus {
-    outline: 2px solid #ff6b35;
-    outline-offset: 2px;
-}
-
-/* Voice Control */
-.voice-control {
-    text-align: center;
-    margin-top: 5px;
-}
-
-.voice-indicator {
-    font-size: 12px;
-    color: #ff6b35;
-    padding: 5px 10px;
-    background: rgba(255, 107, 53, 0.1);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 107, 53, 0.3);
-    display: inline-block;
-}
-
-/* Search Panel */
-.search-panel {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid #333;
-    padding: 15px;
-    z-index: 150;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-#search-input {
-    width: 100%;
-    padding: 12px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #444;
-    border-radius: 25px;
-    color: #fff;
-    font-size: 16px;
-    outline: none;
-}
-
-#search-input:focus {
-    border-color: #ff6b35;
-    background: rgba(255, 255, 255, 0.15);
-}
-
-#search-input::placeholder {
-    color: #888;
-}
-
-.search-results {
-    margin-top: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-/* Route Panel */
-.route-panel {
-    position: fixed;
-    top: 50px;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid #333;
-    padding: 15px;
-    z-index: 150;
-}
-
-.route-inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.route-inputs input,
-.route-inputs select {
-    padding: 12px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #444;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 14px;
-    outline: none;
-}
-
-.route-inputs input:focus,
-.route-inputs select:focus {
-    border-color: #ff6b35;
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.route-inputs input::placeholder {
-    color: #888;
-}
-
-.route-inputs select option {
-    background: #333;
-    color: #fff;
-}
-
-.action-btn {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #ff6b35, #ff8c42);
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.action-btn:hover,
-.action-btn:active {
-    background: linear-gradient(135deg, #e55a2b, #e67b32);
-    transform: translateY(1px);
-}
-
-.action-btn:focus {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
+/* Map Optimization */
+#map, .map-area {
+    width: 100vw !important;
+    height: calc(100vh - 108px) !important;
+    min-height: 380px;
+    min-width: 250px;
+    background: #1a1a1a;
 }
 
 /* Responsive Design for Rabbit R1 */
@@ -308,20 +219,24 @@ body {
         font-size: 16px;
     }
     
-    .control-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
+    .search-container {
+        padding: 8px 10px;
     }
     
-    .controls-container {
-        padding: 10px;
-    }
-    
-    #search-input,
-    .route-inputs input,
-    .route-inputs select {
+    .search-bar {
         font-size: 16px; /* Prevents iOS zoom */
+        padding: 10px 12px;
+    }
+    
+    .search-button {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    #map, .map-area {
+        height: calc(100vh - 100px) !important;
+        min-height: 240px !important;
     }
 }
 
@@ -332,18 +247,15 @@ body {
 
 /* High Contrast Mode */
 @media (prefers-contrast: high) {
-    .control-btn {
+    .search-button {
         border-width: 3px;
     }
     
-    .status-indicator,
-    .voice-indicator {
+    .status-indicator {
         border-width: 2px;
     }
     
-    #search-input,
-    .route-inputs input,
-    .route-inputs select {
+    .search-bar {
         border-width: 2px;
     }
 }
@@ -354,44 +266,19 @@ body {
         animation: none;
     }
     
-    .control-btn,
-    .action-btn {
+    .search-button {
         transition: none;
     }
 }
 
 /* Touch-specific optimizations */
 @media (pointer: coarse) {
-    .control-btn {
-        width: 65px;
-        height: 65px;
+    .search-button {
+        width: 50px;
+        height: 50px;
     }
     
-    .controls-container {
-        padding: 20px;
+    .search-container {
+        padding: 15px;
     }
-}
-
-#map, .map-area {
-  width: 100vw !important;
-  height: 80vh !important;
-  min-height: 380px;
-  min-width: 250px;
-  background: #1a1a1a;
-}
-
-/* Rabbit R1-Optimierung (Portrait-Touch, kleine Geräte) */
-@media screen and (max-width: 480px) {
-  #map, .map-area {
-    height: 74vh !important;
-    min-height: 240px !important;
-  }
-  .controls-container {
-    padding-bottom: 5px;
-  }
-  .control-btn {
-    width: 65px;
-    height: 65px;
-    font-size: 28px;
-  }
 }
