@@ -1,8 +1,8 @@
 /**
- * R1 Map - Complete Application with Leaflet Integration
- * Rabbit R1 Creations App for Interactive Maps and Navigation
+ * R1 Map - Minimalist Navigation App for Rabbit R1
+ * Rabbit R1 Creations App for Interactive Maps with Hardware Integration
  * 
- * Features: Leaflet maps, POI search, Rabbit R1 hardware integration, pinch-to-zoom
+ * Features: Leaflet maps, R1 hardware scroll zoom, PTT feedback, minimal UI
  */
 
 // Application state
@@ -13,20 +13,16 @@ const AppState = {
     currentLocation: null,
     zoom: 15,
     markers: [],
-    searchActive: false,
-    poiVisible: true,
     locationMarker: null,
     watchId: null
 };
 
-// DOM elements cache (removed status indicators)
+// DOM elements cache
 const Elements = {
     loading: null,
     app: null,
     map: null,
-    searchInput: null,
-    searchButton: null,
-    searchResults: null
+    toast: null
 };
 
 /**
@@ -53,6 +49,9 @@ function initializeApp() {
     // Auto-request location on startup
     autoRequestLocation();
     
+    // Create toast element for PTT feedback
+    createToastElement();
+    
     // Show app
     showApp();
     
@@ -67,9 +66,6 @@ function cacheElements() {
     Elements.loading = document.getElementById('loading');
     Elements.app = document.getElementById('app');
     Elements.map = document.getElementById('map');
-    Elements.searchInput = document.getElementById('search-input');
-    Elements.searchButton = document.getElementById('search-btn');
-    Elements.searchResults = document.getElementById('search-results');
     
     console.log('📝 DOM elements cached');
 }
@@ -93,7 +89,7 @@ function checkR1Device() {
 }
 
 /**
- * Initialize Leaflet map with fullview and pinch-to-zoom
+ * Initialize Leaflet map with fullview and hardware integration
  */
 function initializeLeafletMap() {
     if (!Elements.map) {
@@ -109,12 +105,12 @@ function initializeLeafletMap() {
             zoomControl: true,
             touchZoom: true,
             doubleClickZoom: true,
-            scrollWheelZoom: true,
+            scrollWheelZoom: true, // Enable scroll wheel zoom
             boxZoom: true,
             keyboard: true,
             dragging: true,
             tap: true,
-            pinchZoom: true // Ensure pinch-to-zoom is enabled
+            pinchZoom: true
         });
         
         // Add OpenStreetMap tiles
@@ -123,12 +119,7 @@ function initializeLeafletMap() {
             maxZoom: 19
         }).addTo(AppState.map);
         
-        // Enable gesture handling for mobile
-        if (AppState.map.gestureHandling) {
-            AppState.map.gestureHandling.enable();
-        }
-        
-        console.log('🗺️ Leaflet map initialized with pinch-to-zoom');
+        console.log('🗺️ Leaflet map initialized with hardware support');
     } catch (error) {
         console.error('❌ Failed to initialize map:', error);
     }
@@ -138,64 +129,35 @@ function initializeLeafletMap() {
  * Setup event listeners including R1 hardware events
  */
 function setupEventListeners() {
-    // Search functionality
-    if (Elements.searchButton) {
-        Elements.searchButton.addEventListener('click', handleSearch);
-    }
-    
-    if (Elements.searchInput) {
-        Elements.searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
-        });
-        
-        Elements.searchInput.addEventListener('input', (e) => {
-            if (e.target.value.trim() === '') {
-                hideSearchResults();
-            }
-        });
-    }
-    
-    // R1 Hardware Events
-    // ScrollWheel support
+    // R1 Hardware Events - ScrollWheel zoom support
     document.addEventListener('wheel', (e) => {
-        if (AppState.map) {
-            // Let Leaflet handle scroll wheel zoom naturally
-            console.log('🖱️ ScrollWheel event detected');
-        }
-    });
-    
-    // PTT (Push-to-Talk) Button for search
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' || e.code === 'KeyS') { // PTT or S key
+        if (AppState.map && AppState.isR1Device) {
             e.preventDefault();
-            if (!AppState.searchActive) {
-                console.log('🎙️ PTT Button pressed - activating search');
-                if (Elements.searchInput) {
-                    Elements.searchInput.focus();
-                    Elements.searchInput.select();
-                }
-            }
+            const currentZoom = AppState.map.getZoom();
+            const delta = e.deltaY > 0 ? -1 : 1; // Invert for natural scrolling
+            const newZoom = Math.max(1, Math.min(19, currentZoom + delta));
+            AppState.map.setZoom(newZoom);
+            console.log(`🖱️ R1 ScrollWheel zoom: ${currentZoom} → ${newZoom}`);
         }
-        
-        // ESC to clear search
-        if (e.code === 'Escape') {
-            hideSearchResults();
-            if (Elements.searchInput) {
-                Elements.searchInput.blur();
-            }
+    }, { passive: false });
+    
+    // PTT (Push-to-Talk) Button for feedback
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && AppState.isR1Device) {
+            e.preventDefault();
+            showPTTFeedback();
+            console.log('🎙️ R1 PTT Button pressed');
         }
     });
     
-    // Touch and gesture events
+    // Touch events for visual feedback
     if (Elements.map) {
         Elements.map.addEventListener('touchstart', (e) => {
             console.log('👆 Touch interaction detected');
         }, { passive: true });
     }
     
-    console.log('👂 Event listeners set up (including R1 hardware events)');
+    console.log('👂 Event listeners set up (R1 hardware focus)');
 }
 
 /**
@@ -206,7 +168,6 @@ function initializeRabbitSDK() {
         console.log('🐰 Rabbit SDK detected, initializing...');
         
         try {
-            // Initialize SDK integration
             window.RabbitSDK.onReady(() => {
                 console.log('✅ Rabbit SDK ready');
                 
@@ -214,19 +175,19 @@ function initializeRabbitSDK() {
                 if (window.RabbitSDK.hardware) {
                     // ScrollWheel events
                     window.RabbitSDK.hardware.on('scroll', (data) => {
-                        console.log('🖱️ R1 ScrollWheel:', data);
+                        console.log('🖱️ R1 ScrollWheel SDK:', data);
                         if (AppState.map && data.delta) {
                             const currentZoom = AppState.map.getZoom();
                             const newZoom = data.delta > 0 ? currentZoom + 1 : currentZoom - 1;
-                            AppState.map.setZoom(newZoom);
+                            AppState.map.setZoom(Math.max(1, Math.min(19, newZoom)));
                         }
                     });
                     
                     // PTT Button events
                     window.RabbitSDK.hardware.on('ptt', (data) => {
-                        console.log('🎙️ R1 PTT Button:', data);
-                        if (data.pressed && !AppState.searchActive) {
-                            handleSearch();
+                        console.log('🎙️ R1 PTT Button SDK:', data);
+                        if (data.pressed) {
+                            showPTTFeedback();
                         }
                     });
                 }
@@ -240,94 +201,49 @@ function initializeRabbitSDK() {
 }
 
 /**
- * Handle search functionality
+ * Create toast element for PTT feedback
  */
-function handleSearch() {
-    const query = Elements.searchInput?.value.trim();
+function createToastElement() {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.id = 'ptt-toast';
+    Elements.app.appendChild(toast);
+    Elements.toast = toast;
+    console.log('🍞 Toast element created for PTT feedback');
+}
+
+/**
+ * Show PTT feedback with toast and optional marker
+ */
+function showPTTFeedback() {
+    if (!Elements.toast) return;
     
-    if (!query) {
-        console.log('⚠️ Empty search query');
-        return;
+    // Show toast message
+    Elements.toast.textContent = '🎙️ PTT Activated';
+    Elements.toast.classList.add('show');
+    
+    // Add a temporary marker at map center
+    if (AppState.map) {
+        const center = AppState.map.getCenter();
+        const marker = L.circleMarker(center, {
+            color: '#ff6b35',
+            fillColor: '#ff6b35',
+            fillOpacity: 0.7,
+            radius: 8
+        }).addTo(AppState.map);
+        
+        // Remove marker after 2 seconds
+        setTimeout(() => {
+            AppState.map.removeLayer(marker);
+        }, 2000);
     }
     
-    console.log(`🔍 Searching for: ${query}`);
-    AppState.searchActive = true;
-    
-    // Simulate search (in real implementation, use Nominatim or other geocoding API)
+    // Hide toast after 2 seconds
     setTimeout(() => {
-        displaySearchResults([
-            {
-                name: `Result for "${query}"`,
-                address: 'Sample address, City',
-                lat: 52.5200 + (Math.random() - 0.5) * 0.1,
-                lon: 13.4050 + (Math.random() - 0.5) * 0.1
-            }
-        ]);
-        AppState.searchActive = false;
-    }, 1000);
-}
-
-/**
- * Display search results
- */
-function displaySearchResults(results) {
-    if (!Elements.searchResults || !results.length) {
-        hideSearchResults();
-        return;
-    }
+        Elements.toast.classList.remove('show');
+    }, 2000);
     
-    const resultsHtml = results.map((result, index) => `
-        <div class="search-result-item" onclick="selectSearchResult(${result.lat}, ${result.lon}, '${result.name}')">
-            <div class="search-result-title">${result.name}</div>
-            <div class="search-result-address">${result.address}</div>
-        </div>
-    `).join('');
-    
-    Elements.searchResults.innerHTML = resultsHtml;
-    Elements.searchResults.style.display = 'block';
-    Elements.searchResults.classList.add('slide-up');
-    
-    console.log(`📍 Displayed ${results.length} search results`);
-}
-
-/**
- * Hide search results
- */
-function hideSearchResults() {
-    if (Elements.searchResults) {
-        Elements.searchResults.style.display = 'none';
-        Elements.searchResults.classList.remove('slide-up');
-    }
-}
-
-/**
- * Select a search result and show on map
- */
-function selectSearchResult(lat, lon, name) {
-    hideSearchResults();
-    
-    if (!AppState.map) {
-        console.error('❌ Map not available');
-        return;
-    }
-    
-    // Clear existing markers
-    AppState.markers.forEach(marker => {
-        AppState.map.removeLayer(marker);
-    });
-    AppState.markers = [];
-    
-    // Add new marker
-    const marker = L.marker([lat, lon]).addTo(AppState.map)
-        .bindPopup(name)
-        .openPopup();
-    
-    AppState.markers.push(marker);
-    
-    // Center map on result
-    AppState.map.setView([lat, lon], 16);
-    
-    console.log(`📍 Selected result: ${name} at ${lat}, ${lon}`);
+    console.log('🎙️ PTT feedback shown');
 }
 
 /**
@@ -417,15 +333,11 @@ if (typeof window !== 'undefined') {
         AppState,
         Elements,
         initializeApp,
-        handleSearch,
-        selectSearchResult,
+        showPTTFeedback,
         autoRequestLocation,
         getAppState,
         cleanup
     };
-    
-    // Make selectSearchResult globally available for onclick handlers
-    window.selectSearchResult = selectSearchResult;
     
     console.log('🗺️ R1 Map App ready for integration');
 }
