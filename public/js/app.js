@@ -15,6 +15,7 @@ const AppState = {
     locationMarker: null,
     watchId: null
 };
+
 // DOM elements cache
 const Elements = {
     loading: null,
@@ -22,6 +23,7 @@ const Elements = {
     map: null,
     toast: null
 };
+
 /**
  * Initialize the R1 Map Application
  */
@@ -47,7 +49,7 @@ function initializeApp() {
     initializeRabbitSDK();
     
     // Auto-request location on startup
-    autoRequestLocation();
+    // autoRequestLocation(); // Removed - replaced with modal-based permission
     
     // Create toast element for PTT feedback
     createToastElement();
@@ -57,7 +59,11 @@ function initializeApp() {
     
     AppState.isInitialized = true;
     console.log('✅ R1 Map App initialized successfully');
+    
+    // Ask for location permission via modal
+    maybeAskLocationPermission();
 }
+
 /**
  * Cache DOM elements for performance
  */
@@ -65,252 +71,223 @@ function cacheElements() {
     Elements.loading = document.getElementById('loading');
     Elements.app = document.getElementById('app');
     Elements.map = document.getElementById('map');
-    
-    console.log('📝 DOM elements cached');
+    Elements.toast = document.getElementById('toast');
 }
+
 /**
- * Check if running on Rabbit R1 device
+ * Check if we're running on a Rabbit R1 device
  */
 function checkR1Device() {
-    AppState.isR1Device = (
-        navigator.userAgent.includes('RabbitR1') ||
-        navigator.userAgent.includes('Rabbit') ||
-        window.innerWidth === 240 && window.innerHeight === 282
-    );
+    // Check user agent for R1 indicators
+    const userAgent = navigator.userAgent.toLowerCase();
+    AppState.isR1Device = userAgent.includes('rabbit') || userAgent.includes('r1');
     
     if (AppState.isR1Device) {
-        console.log('🐰 Running on Rabbit R1 device');
+        console.log('🐰 Rabbit R1 device detected! Hardware integration enabled.');
         document.body.classList.add('r1-device');
     } else {
-        console.log('💻 Running on non-R1 device');
+        console.log('🌐 Standard web browser detected. Using web-only features.');
     }
 }
+
 /**
- * Initialize Leaflet map with minimal config for maximum speed
+ * Initialize Leaflet map with R1-optimized settings
  */
 function initializeLeafletMap() {
-    if (!Elements.map) {
-        console.error('❌ Map container not found');
-        return;
-    }
-    
     try {
-        // Create map with minimal settings for max performance
-        AppState.map = L.map(Elements.map, {
-            center: [20, 0], // Changed from Wuppertal to global overview
-            zoom: AppState.zoom, // Now zoom level 2 for global overview
-            zoomControl: false, // Remove zoom control for speed
-            touchZoom: true, // Keep touch zoom for touch devices
-            doubleClickZoom: false, // Disable double-click zoom
-            scrollWheelZoom: true, // FIXED: Enable scroll wheel zoom for all devices
-            boxZoom: false, // Disable box zoom
-            keyboard: false, // Disable keyboard navigation
-            dragging: true, // Keep drag for touch devices
-            tap: true, // Keep tap for touch devices
-            pinchZoom: true // Keep pinch zoom for touch devices
+        // Initialize map centered on global overview
+        AppState.map = L.map('map', {
+            center: [20, 0], // Centered on equator for global view
+            zoom: AppState.zoom,
+            zoomControl: true,
+            attributionControl: true,
+            // R1-optimized settings
+            doubleClickZoom: false, // Disabled for R1 hardware control
+            boxZoom: false,
+            keyboard: AppState.isR1Device, // Enable keyboard nav on R1
+            scrollWheelZoom: false // Will be handled by custom R1 scroll
         });
         
-        // Add faster OSM-DE tiles with subdomains and crossOrigin
-        L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
-            subdomains: ['a','b','c'],
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
             maxZoom: 19,
-            crossOrigin: true
+            minZoom: 1
         }).addTo(AppState.map);
         
-        console.log('🗺️ Leaflet map initialized with global overview (center: [20,0], zoom: 2)');
+        console.log('🗺️ Leaflet map initialized with global overview');
+        
     } catch (error) {
         console.error('❌ Failed to initialize map:', error);
+        showPTTFeedback('Map initialization failed', 'error');
     }
 }
+
 /**
- * Setup Rabbit R1 Scrollwheel Integration
- * This is placed after map initialization and before other scroll fallbacks
+ * Setup Rabbit R1 scroll wheel integration
  */
 function setupRabbitR1ScrollWheel() {
-    // Legacy R1 app events integration
-    if (window.r1app && window.r1app.events) {
-        window.r1app.events.on('scroll', (delta) => {
-            if (AppState.map) {
-                if (delta > 0) {
-                    AppState.map.zoomIn();
-                } else {
-                    AppState.map.zoomOut();
-                }
-            }
-        });
-        console.log('✅ R1 app scrollwheel integration enabled');
-    }
+    if (!AppState.isR1Device || !AppState.map) return;
     
-    // Modern RabbitSDK integration
-    if (typeof window.RabbitSDK !== 'undefined') {
-        window.RabbitSDK.onReady(() => {
-            if (window.RabbitSDK.hardware) {
-                window.RabbitSDK.hardware.on('scroll', (data) => {
-                    if (AppState.map && data && typeof data.delta !== 'undefined') {
-                        if (data.delta > 0) {
-                            AppState.map.zoomIn();
-                        } else {
-                            AppState.map.zoomOut();
-                        }
-                    }
-                });
-                console.log('✅ RabbitSDK scrollwheel integration enabled');
-            }
-        });
+    try {
+        // Custom scroll wheel handling for R1 hardware
+        const mapContainer = AppState.map.getContainer();
+        
+        mapContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            const currentZoom = AppState.map.getZoom();
+            const zoomDelta = e.deltaY > 0 ? -0.5 : 0.5;
+            const newZoom = Math.max(1, Math.min(19, currentZoom + zoomDelta));
+            
+            AppState.map.setZoom(newZoom, {
+                animate: true,
+                duration: 0.2
+            });
+            
+            // Haptic feedback for R1
+            showPTTFeedback(`Zoom: ${Math.round(newZoom)}`, 'info');
+        }, { passive: false });
+        
+        console.log('🐰 R1 scroll wheel integration active');
+        
+    } catch (error) {
+        console.warn('⚠️ R1 scroll wheel setup failed:', error);
     }
 }
+
 /**
- * Setup event listeners including R1 hardware events
+ * Setup general event listeners
  */
 function setupEventListeners() {
-    // Enhanced ScrollWheel zoom support for ALL devices (not just R1)
-    document.addEventListener('wheel', (e) => {
+    // Handle window resize
+    window.addEventListener('resize', () => {
         if (AppState.map) {
-            e.preventDefault();
-            const currentZoom = AppState.map.getZoom();
-            const delta = e.deltaY > 0 ? -1 : 1; // Invert for natural scrolling
-            const newZoom = Math.max(1, Math.min(19, currentZoom + delta));
-            
-            // Use both methods for robustness
-            if (delta > 0) {
-                AppState.map.zoomIn();
-            } else {
-                AppState.map.zoomOut();
-            }
-            
-            // Also use setZoom as fallback
-            AppState.map.setZoom(newZoom);
-            
-            console.log(`🖱️ ScrollWheel zoom: ${currentZoom} → ${newZoom}`);
-        }
-    }, { passive: false });
-    
-    // PTT (Push-to-Talk) Button for feedback
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && AppState.isR1Device) {
-            e.preventDefault();
-            showPTTFeedback();
-            console.log('🎙️ R1 PTT Button pressed');
+            AppState.map.invalidateSize();
         }
     });
     
-    // Touch events for visual feedback
-    if (Elements.map) {
-        Elements.map.addEventListener('touchstart', (e) => {
-            console.log('👆 Touch interaction detected');
-        }, { passive: true });
+    // Handle map events
+    if (AppState.map) {
+        AppState.map.on('zoomend', () => {
+            AppState.zoom = AppState.map.getZoom();
+        });
+        
+        AppState.map.on('moveend', () => {
+            const center = AppState.map.getCenter();
+            console.log(`📍 Map moved to: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`);
+        });
     }
-    
-    console.log('👂 Event listeners set up (Enhanced scroll wheel zoom for all devices)');
 }
+
 /**
  * Initialize Rabbit SDK if available
  */
 function initializeRabbitSDK() {
-    if (typeof window.RabbitSDK !== 'undefined') {
-        console.log('🐰 Rabbit SDK detected, initializing...');
-        
+    if (typeof RabbitSDK !== 'undefined' && AppState.isR1Device) {
         try {
-            window.RabbitSDK.onReady(() => {
-                console.log('✅ Rabbit SDK ready');
-                
-                // Register for hardware events
-                if (window.RabbitSDK.hardware) {
-                    // PTT Button events
-                    window.RabbitSDK.hardware.on('ptt', (data) => {
-                        console.log('🎙️ R1 PTT Button SDK:', data);
-                        if (data.pressed) {
-                            showPTTFeedback();
-                        }
-                    });
-                }
+            // Initialize Rabbit SDK
+            RabbitSDK.init({
+                appName: 'R1 Map',
+                version: '1.0.0'
             });
+            
+            console.log('🐰 Rabbit SDK initialized');
+            showPTTFeedback('R1 Integration Active', 'success');
+            
         } catch (error) {
             console.warn('⚠️ Rabbit SDK initialization failed:', error);
         }
-    } else {
-        console.log('ℹ️ Rabbit SDK not available (running outside R1)');
     }
 }
+
 /**
  * Create toast element for PTT feedback
  */
 function createToastElement() {
+    if (document.getElementById('toast')) return;
+    
     const toast = document.createElement('div');
+    toast.id = 'toast';
     toast.className = 'toast';
-    toast.id = 'ptt-toast';
-    Elements.app.appendChild(toast);
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        font-size: 14px;
+        z-index: 10000;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+        max-width: 300px;
+        word-wrap: break-word;
+    `;
+    
+    document.body.appendChild(toast);
     Elements.toast = toast;
-    console.log('🍞 Toast element created for PTT feedback');
 }
+
 /**
- * Show PTT feedback with toast and instantly centered marker
+ * Show PTT (Push-To-Talk) style feedback for R1 users
  */
-function showPTTFeedback() {
-    if (!Elements.toast) return;
+function showPTTFeedback(message, type = 'info') {
+    if (!Elements.toast) createToastElement();
     
-    // Show toast message
-    Elements.toast.textContent = '🎙️ PTT Activated';
-    Elements.toast.classList.add('show');
+    // Set color based on type
+    const colors = {
+        success: '#4CAF50',
+        error: '#f44336',
+        warning: '#ff9800',
+        info: '#2196F3'
+    };
     
-    // Add a persistent marker at map center - ensure it's always centered and visible
-    if (AppState.map) {
-        // Get current map center to ensure marker is always visible
-        const center = AppState.map.getCenter();
-        
-        // Create marker with custom styling to make it more visible
-        const marker = L.marker(center, {
-            // Add custom icon to make it more prominent
-            icon: L.divIcon({
-                className: 'ptt-marker-icon',
-                html: '📍',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            })
-        }).addTo(AppState.map);
-        
-        // Add popup and open it immediately for better visibility
-        marker.bindPopup('🎙️ PTT Marker', { 
-            closeButton: false,
-            autoClose: false,
-            closeOnClick: false
-        }).openPopup();
-        
-        // Ensure the marker is centered in view by panning to it
-        AppState.map.panTo(center);
-        
-        // Add marker to AppState.markers array
-        AppState.markers.push(marker);
-        
-        console.log(`📍 PTT marker added and centered at: ${center.lat.toFixed(6)}, ${center.lng.toFixed(6)}`);
-    }
+    Elements.toast.style.backgroundColor = colors[type] || colors.info;
+    Elements.toast.textContent = message;
     
-    // Hide toast after 2 seconds
+    // Show toast
+    Elements.toast.style.opacity = '1';
+    Elements.toast.style.transform = 'translateY(0)';
+    
+    // Hide after 3 seconds
     setTimeout(() => {
-        Elements.toast.classList.remove('show');
-    }, 2000);
+        if (Elements.toast) {
+            Elements.toast.style.opacity = '0';
+            Elements.toast.style.transform = 'translateY(-20px)';
+        }
+    }, 3000);
     
-    console.log('🎙️ PTT feedback shown with instantly centered and visible marker');
+    console.log(`🔔 PTT Feedback: ${message} (${type})`);
 }
+
 /**
- * Auto-request user location on startup (fallback to Wuppertal)
+ * Auto-request user location and center map
  */
 function autoRequestLocation() {
     if (!navigator.geolocation) {
-        console.log('❌ Geolocation not supported, staying on global overview');
+        console.warn('⚠️ Geolocation not supported, staying on global overview');
         return;
     }
     
-    console.log('🌍 Requesting user location...');
+    console.log('📍 Requesting user location...');
+    showPTTFeedback('Getting your location...', 'info');
     
     navigator.geolocation.getCurrentPosition(
         (position) => {
             const { latitude, longitude } = position.coords;
-            AppState.currentLocation = { lat: latitude, lon: longitude };
+            AppState.currentLocation = { lat: latitude, lng: longitude };
             
             if (AppState.map) {
-                // Center map on user location with higher zoom
-                AppState.map.setView([latitude, longitude], 13);
+                // Zoom to user location
+                AppState.map.setView([latitude, longitude], 13, {
+                    animate: true,
+                    duration: 1.0
+                });
                 
                 // Add location marker
                 if (AppState.locationMarker) {
@@ -335,6 +312,7 @@ function autoRequestLocation() {
         }
     );
 }
+
 /**
  * Show the app and hide loading screen
  */
@@ -346,12 +324,14 @@ function showApp() {
         Elements.app.style.display = 'block';
     }
 }
+
 /**
  * Get current app state (for debugging)
  */
 function getAppState() {
     return { ...AppState };
 }
+
 /**
  * Cleanup function
  */
@@ -361,12 +341,15 @@ function cleanup() {
         AppState.watchId = null;
     }
 }
+
 /**
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
+
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
+
 // Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
@@ -380,4 +363,27 @@ if (typeof window !== 'undefined') {
     };
     
     console.log('🗺️ R1 Map App ready for integration');
+}
+
+/**
+ * Check localStorage for location permission and show modal if needed
+ */
+function maybeAskLocationPermission() {
+    const seen = localStorage.getItem('location-permission');
+    if (seen) {
+        if (seen === 'granted') autoRequestLocation();
+        return;
+    }
+    const modal = document.getElementById('location-permission-modal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    document.getElementById('allow-location-btn').onclick = () => {
+        localStorage.setItem('location-permission', 'granted');
+        modal.style.display = 'none';
+        autoRequestLocation();
+    };
+    document.getElementById('deny-location-btn').onclick = () => {
+        localStorage.setItem('location-permission', 'denied');
+        modal.style.display = 'none';
+    };
 }
