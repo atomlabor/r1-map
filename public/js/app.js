@@ -4,19 +4,17 @@
  * 
  * Features: Leaflet maps, R1 hardware scroll zoom, PTT feedback, minimal UI
  */
-
 // Application state
 const AppState = {
     isInitialized: false,
     isR1Device: false,
     map: null,
     currentLocation: null,
-    zoom: 15,
+    zoom: 13, // Set default zoom to 13 for Wuppertal
     markers: [],
     locationMarker: null,
     watchId: null
 };
-
 // DOM elements cache
 const Elements = {
     loading: null,
@@ -24,7 +22,6 @@ const Elements = {
     map: null,
     toast: null
 };
-
 /**
  * Initialize the R1 Map Application
  */
@@ -58,7 +55,6 @@ function initializeApp() {
     AppState.isInitialized = true;
     console.log('✅ R1 Map App initialized successfully');
 }
-
 /**
  * Cache DOM elements for performance
  */
@@ -69,7 +65,6 @@ function cacheElements() {
     
     console.log('📝 DOM elements cached');
 }
-
 /**
  * Check if running on Rabbit R1 device
  */
@@ -87,9 +82,8 @@ function checkR1Device() {
         console.log('💻 Running on non-R1 device');
     }
 }
-
 /**
- * Initialize Leaflet map with fullview and hardware integration
+ * Initialize Leaflet map with minimal config for maximum speed
  */
 function initializeLeafletMap() {
     if (!Elements.map) {
@@ -98,38 +92,37 @@ function initializeLeafletMap() {
     }
     
     try {
-        // Create map with touch and gesture support enabled
+        // Create map with minimal settings for max performance
         AppState.map = L.map(Elements.map, {
-            center: [52.5200, 13.4050], // Berlin default
-            zoom: AppState.zoom,
-            zoomControl: true,
-            touchZoom: true,
-            doubleClickZoom: true,
-            scrollWheelZoom: true, // Enable scroll wheel zoom
-            boxZoom: true,
-            keyboard: true,
-            dragging: true,
-            tap: true,
-            pinchZoom: true
+            center: [51.2577, 7.1485], // Wuppertal coordinates
+            zoom: AppState.zoom, // Zoom level 13
+            zoomControl: false, // Remove zoom control for speed
+            touchZoom: true, // Keep touch zoom for touch devices
+            doubleClickZoom: false, // Disable double-click zoom
+            scrollWheelZoom: false, // Disable scroll wheel zoom
+            boxZoom: false, // Disable box zoom
+            keyboard: false, // Disable keyboard navigation
+            dragging: true, // Keep drag for touch devices
+            tap: true, // Keep tap for touch devices
+            pinchZoom: true // Keep pinch zoom for touch devices
         });
         
-        // Add OpenStreetMap tiles
+        // Add OpenStreetMap tiles without attribution for speed
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
+            attribution: '', // Remove attribution for minimal UI
             maxZoom: 19
         }).addTo(AppState.map);
         
-        console.log('🗺️ Leaflet map initialized with hardware support');
+        console.log('🗺️ Leaflet map initialized with Wuppertal center and max speed settings');
     } catch (error) {
         console.error('❌ Failed to initialize map:', error);
     }
 }
-
 /**
  * Setup event listeners including R1 hardware events
  */
 function setupEventListeners() {
-    // R1 Hardware Events - ScrollWheel zoom support
+    // R1 Hardware Events - ScrollWheel zoom support (only for R1 device)
     document.addEventListener('wheel', (e) => {
         if (AppState.map && AppState.isR1Device) {
             e.preventDefault();
@@ -159,7 +152,6 @@ function setupEventListeners() {
     
     console.log('👂 Event listeners set up (R1 hardware focus)');
 }
-
 /**
  * Initialize Rabbit SDK if available
  */
@@ -199,7 +191,6 @@ function initializeRabbitSDK() {
         console.log('ℹ️ Rabbit SDK not available (running outside R1)');
     }
 }
-
 /**
  * Create toast element for PTT feedback
  */
@@ -211,7 +202,6 @@ function createToastElement() {
     Elements.toast = toast;
     console.log('🍞 Toast element created for PTT feedback');
 }
-
 /**
  * Show PTT feedback with toast and optional marker
  */
@@ -245,13 +235,12 @@ function showPTTFeedback() {
     
     console.log('🎙️ PTT feedback shown');
 }
-
 /**
- * Auto-request user location on startup
+ * Auto-request user location on startup (fallback to Wuppertal)
  */
 function autoRequestLocation() {
     if (!navigator.geolocation) {
-        console.log('❌ Geolocation not supported');
+        console.log('❌ Geolocation not supported, staying on Wuppertal');
         return;
     }
     
@@ -280,7 +269,7 @@ function autoRequestLocation() {
             }
         },
         (error) => {
-            console.warn('⚠️ Location request failed:', error.message);
+            console.warn('⚠️ Location request failed, staying on Wuppertal:', error.message);
         },
         {
             enableHighAccuracy: true,
@@ -289,7 +278,6 @@ function autoRequestLocation() {
         }
     );
 }
-
 /**
  * Show the app and hide loading screen
  */
@@ -301,14 +289,12 @@ function showApp() {
         Elements.app.style.display = 'block';
     }
 }
-
 /**
  * Get current app state (for debugging)
  */
 function getAppState() {
     return { ...AppState };
 }
-
 /**
  * Cleanup function
  */
@@ -318,15 +304,12 @@ function cleanup() {
         AppState.watchId = null;
     }
 }
-
 /**
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
-
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
-
 // Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
