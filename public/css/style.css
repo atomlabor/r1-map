@@ -240,6 +240,99 @@ body {
     }
 }
 
+/* Rabbit R1 Specific Layout - 240x282px Display */
+@media screen and (max-width: 282px), (max-height: 282px) {
+    /* Exact container dimensions for R1 */
+    body, html, .app-container {
+        width: 240px !important;
+        height: 282px !important;
+        max-width: 240px;
+        max-height: 282px;
+        overflow: hidden;
+    }
+    
+    /* Compact header - 25px height */
+    .app-header {
+        height: 25px !important;
+        padding: 0 8px;
+    }
+    
+    .app-header h1 {
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .status-bar {
+        gap: 5px;
+    }
+    
+    .status-indicator {
+        font-size: 8px;
+        padding: 2px 4px;
+        border-radius: 6px;
+    }
+    
+    /* Compact search bar - 30px height */
+    .search-container {
+        top: 25px;
+        height: 30px !important;
+        padding: 4px 8px;
+    }
+    
+    .search-bar {
+        height: 22px;
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 11px;
+    }
+    
+    .search-button {
+        width: 22px;
+        height: 22px;
+        font-size: 12px;
+        border-width: 1px;
+    }
+    
+    /* Search results positioning */
+    .search-results {
+        top: 55px;
+        max-height: 80px;
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    /* Map area - exactly 202px height (282 - 80px for header/search) */
+    .map-container {
+        margin-top: 55px;
+        height: 202px !important;
+    }
+    
+    .map-container, #map, .map-area {
+        width: 240px !important;
+        height: 202px !important;
+        min-height: 202px !important;
+        max-height: 202px !important;
+        min-width: 240px !important;
+        max-width: 240px !important;
+    }
+    
+    .map-placeholder {
+        font-size: 12px;
+    }
+    
+    /* Remove any margins/padding that could affect layout */
+    * {
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+    
+    .app-container {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
 /* Dark Theme Optimizations */
 @media (prefers-color-scheme: dark) {
     /* Already optimized for dark theme by default */
