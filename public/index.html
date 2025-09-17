@@ -18,13 +18,17 @@
     
     <!-- Main Application Container -->
     <div id="app" class="app-container" style="display: none;">
-        <!-- Header -->
+        <!-- Fullview Map Container (Background) -->
+        <div id="map" class="map-area">
+            <!-- Map will be rendered here -->
+            <div class="map-placeholder">
+                🗺️ Initializing map...
+            </div>
+        </div>
+        
+        <!-- UI Overlay Elements -->
         <header class="app-header">
             <h1>r1-map</h1>
-            <div class="status-bar">
-                <span id="gps-status" class="status-indicator">GPS</span>
-                <span id="battery-status" class="status-indicator">100%</span>
-            </div>
         </header>
         
         <!-- Search Bar -->
@@ -33,19 +37,6 @@
             <button id="search-btn" class="search-button">🔍</button>
             <div id="search-results" class="search-results" style="display: none;"></div>
         </div>
-        
-        <!-- Status Element -->
-        <div id="status" class="status-indicator"></div>
-        
-        <!-- Map Container -->
-        <main class="map-container">
-            <div id="map" class="map-area">
-                <!-- Map will be rendered here -->
-                <div class="map-placeholder">
-                    🗺️ Initializing map...
-                </div>
-            </div>
-        </main>
     </div>
     
     <!-- Rabbit R1 Creations SDK -->
