@@ -308,6 +308,20 @@ function cleanup() {
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Native Rabbit R1 ScrollWheel Zoom
+if (window.r1app && window.r1app.events) {
+  window.r1app.events.on('scroll', (delta) => {
+    if (AppState.map) {
+      const z = AppState.map.getZoom();
+      const next = Math.max(1, Math.min(19, z + (delta > 0 ? 1 : -1)));
+      AppState.map.setZoom(next);
+    }
+  });
+}
+// Fallback Browser/SDK
+// (bereits vorhanden lassen)
+
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
 // Export for testing and R1 integration
