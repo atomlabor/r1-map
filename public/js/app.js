@@ -100,11 +100,13 @@ function initializeLeafletMap() {
             scrollWheelZoom: false // Will be handled by custom R1 scroll
         });
         
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
+        // Add OpenStreetMap tiles (optimized version)
+        L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+            subdomains: ['a','b','c'],
             maxZoom: 19,
-            minZoom: 1
+            minZoom: 1,
+            crossOrigin: true,
+            updateWhenIdle: false // höhere Priorität für sofortiges Laden im Viewport
         }).addTo(AppState.map);
         
         console.log('🗺️ Leaflet map initialized with global overview');
