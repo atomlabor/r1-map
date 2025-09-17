@@ -11,22 +11,19 @@
 </head>
 <body>
     <!-- Loading Indicator -->
-    <div id="loading" class="loading-container">
+    <div class="loading-container" id="loading">
         <div class="loading-spinner"></div>
         <p>Loading map...</p>
     </div>
     
     <!-- Main Application Container -->
-    <div id="app" class="app-container" style="display: none;">
-        <!-- Fullview Map Container (Background) -->
-        <div id="map" class="map-area">
-            <!-- Map will be rendered here -->
-            <div class="map-placeholder">
-                🗺️ Initializing map...
-            </div>
+    <div class="app-container" id="app" style="display: none;">
+        <!-- Map Container - First Element for Fast Loading -->
+        <div class="map-area" id="map">
+            <!-- Map renders directly here for maximum speed -->
         </div>
         
-        <!-- Minimal UI Overlay -->
+        <!-- Minimal UI Overlay - After Map -->
         <header class="app-header">
             r1 maps
         </header>
