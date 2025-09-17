@@ -99,7 +99,7 @@ function initializeLeafletMap() {
             zoomControl: false, // Remove zoom control for speed
             touchZoom: true, // Keep touch zoom for touch devices
             doubleClickZoom: false, // Disable double-click zoom
-            scrollWheelZoom: false, // Disable scroll wheel zoom
+            scrollWheelZoom: true, // FIXED: Enable scroll wheel zoom for all devices
             boxZoom: false, // Disable box zoom
             keyboard: false, // Disable keyboard navigation
             dragging: true, // Keep drag for touch devices
@@ -114,7 +114,7 @@ function initializeLeafletMap() {
             crossOrigin: true
         }).addTo(AppState.map);
         
-        console.log('🗺️ Leaflet map initialized with Wuppertal center and max speed settings');
+        console.log('🗺️ Leaflet map initialized with Wuppertal center and scroll wheel zoom enabled');
     } catch (error) {
         console.error('❌ Failed to initialize map:', error);
     }
@@ -123,15 +123,25 @@ function initializeLeafletMap() {
  * Setup event listeners including R1 hardware events
  */
 function setupEventListeners() {
-    // R1 Hardware Events - ScrollWheel zoom support (only for R1 device)
+    // Enhanced ScrollWheel zoom support for ALL devices (not just R1)
     document.addEventListener('wheel', (e) => {
-        if (AppState.map && AppState.isR1Device) {
+        if (AppState.map) {
             e.preventDefault();
             const currentZoom = AppState.map.getZoom();
             const delta = e.deltaY > 0 ? -1 : 1; // Invert for natural scrolling
             const newZoom = Math.max(1, Math.min(19, currentZoom + delta));
+            
+            // Use both methods for robustness
+            if (delta > 0) {
+                AppState.map.zoomIn();
+            } else {
+                AppState.map.zoomOut();
+            }
+            
+            // Also use setZoom as fallback
             AppState.map.setZoom(newZoom);
-            console.log(`🖱️ R1 ScrollWheel zoom: ${currentZoom} → ${newZoom}`);
+            
+            console.log(`🖱️ ScrollWheel zoom: ${currentZoom} → ${newZoom}`);
         }
     }, { passive: false });
     
@@ -151,7 +161,7 @@ function setupEventListeners() {
         }, { passive: true });
     }
     
-    console.log('👂 Event listeners set up (R1 hardware focus)');
+    console.log('👂 Event listeners set up (Enhanced scroll wheel zoom for all devices)');
 }
 /**
  * Initialize Rabbit SDK if available
@@ -171,8 +181,11 @@ function initializeRabbitSDK() {
                         console.log('🖱️ R1 ScrollWheel SDK:', data);
                         if (AppState.map && data.delta) {
                             const currentZoom = AppState.map.getZoom();
-                            const newZoom = data.delta > 0 ? currentZoom + 1 : currentZoom - 1;
-                            AppState.map.setZoom(Math.max(1, Math.min(19, newZoom)));
+                            if (data.delta > 0) {
+                                AppState.map.zoomIn();
+                            } else {
+                                AppState.map.zoomOut();
+                            }
                         }
                     });
                     
@@ -330,13 +343,17 @@ if (window.r1app && window.r1app.events) {
   window.r1app.events.on('scroll', (delta) => {
     if (AppState.map) {
       const z = AppState.map.getZoom();
+      // Use both zoomIn/zoomOut and setZoom for robustness
+      if (delta > 0) {
+        AppState.map.zoomIn();
+      } else {
+        AppState.map.zoomOut();
+      }
       const next = Math.max(1, Math.min(19, z + (delta > 0 ? 1 : -1)));
       AppState.map.setZoom(next);
     }
   });
 }
-// Fallback Browser/SDK
-// (bereits vorhanden lassen)
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
 // Export for testing and R1 integration
