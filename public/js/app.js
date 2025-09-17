@@ -4,7 +4,6 @@
  * 
  * Features: Leaflet maps, R1 hardware scroll zoom, PTT feedback, minimal UI
  */
-
 // Application state
 const AppState = {
     isInitialized: false,
@@ -16,7 +15,6 @@ const AppState = {
     locationMarker: null,
     watchId: null
 };
-
 // DOM elements cache
 const Elements = {
     loading: null,
@@ -24,7 +22,6 @@ const Elements = {
     map: null,
     toast: null
 };
-
 /**
  * Initialize the R1 Map Application
  */
@@ -50,7 +47,7 @@ function initializeApp() {
     initializeRabbitSDK();
     
     // Auto-request location on startup
-    // autoRequestLocation(); // Removed - replaced with modal-based permission
+    autoRequestLocation();
     
     // Create toast element for PTT feedback
     createToastElement();
@@ -60,11 +57,7 @@ function initializeApp() {
     
     AppState.isInitialized = true;
     console.log('✅ R1 Map App initialized successfully');
-    
-    // Ask for location permission via modal
-    maybeAskLocationPermission();
 }
-
 /**
  * Cache DOM elements for performance
  */
@@ -74,7 +67,6 @@ function cacheElements() {
     Elements.map = document.getElementById('map');
     Elements.toast = document.getElementById('toast');
 }
-
 /**
  * Check if we're running on a Rabbit R1 device
  */
@@ -90,7 +82,6 @@ function checkR1Device() {
         console.log('🌐 Standard web browser detected. Using web-only features.');
     }
 }
-
 /**
  * Initialize Leaflet map with R1-optimized settings
  */
@@ -123,7 +114,6 @@ function initializeLeafletMap() {
         showPTTFeedback('Map initialization failed', 'error');
     }
 }
-
 /**
  * Setup Rabbit R1 scroll wheel integration
  */
@@ -156,7 +146,6 @@ function setupRabbitR1ScrollWheel() {
         console.warn('⚠️ R1 scroll wheel setup failed:', error);
     }
 }
-
 /**
  * Setup general event listeners
  */
@@ -180,7 +169,6 @@ function setupEventListeners() {
         });
     }
 }
-
 /**
  * Initialize Rabbit SDK if available
  */
@@ -201,7 +189,6 @@ function initializeRabbitSDK() {
         }
     }
 }
-
 /**
  * Create toast element for PTT feedback
  */
@@ -233,7 +220,6 @@ function createToastElement() {
     document.body.appendChild(toast);
     Elements.toast = toast;
 }
-
 /**
  * Show PTT (Push-To-Talk) style feedback for R1 users
  */
@@ -265,7 +251,6 @@ function showPTTFeedback(message, type = 'info') {
     
     console.log(`🔔 PTT Feedback: ${message} (${type})`);
 }
-
 /**
  * Auto-request user location and center map
  */
@@ -313,7 +298,6 @@ function autoRequestLocation() {
         }
     );
 }
-
 /**
  * Show the app and hide loading screen
  */
@@ -325,14 +309,12 @@ function showApp() {
         Elements.app.style.display = 'block';
     }
 }
-
 /**
  * Get current app state (for debugging)
  */
 function getAppState() {
     return { ...AppState };
 }
-
 /**
  * Cleanup function
  */
@@ -342,15 +324,12 @@ function cleanup() {
         AppState.watchId = null;
     }
 }
-
 /**
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
-
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
-
 // Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
@@ -364,29 +343,4 @@ if (typeof window !== 'undefined') {
     };
     
     console.log('🗺️ R1 Map App ready for integration');
-}
-
-/**
- * Check localStorage for location permission and show modal if needed
- */
-function maybeAskLocationPermission() {
-    const seen = localStorage.getItem('location-permission');
-    if (seen) {
-        if (seen === 'granted') autoRequestLocation();
-        return;
-    }
-    const modal = document.getElementById('location-permission-modal');
-    if (!modal) return;
-    modal.style.display = 'flex';
-    document.getElementById('allow-location-btn').onclick = () => {
-        localStorage.setItem('location-permission', 'granted');
-        modal.style.display = 'none';
-        autoRequestLocation();
-    };
-    document.getElementById('deny-location-btn').onclick = () => {
-        localStorage.setItem('location-permission', 'denied');
-        modal.style.display = 'none';
-        // Ensure app is shown after modal is closed, even if location is denied
-        showApp();
-    };
 }
