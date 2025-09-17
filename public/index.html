@@ -52,6 +52,9 @@
                 <button id="btn-route" class="control-btn" title="Route planen">
                     🧭
                 </button>
+                <button id="btn-poi" class="control-btn" title="POI anzeigen">
+                    🏢
+                </button>
                 <button id="btn-settings" class="control-btn" title="Einstellungen">
                     ⚙️
                 </button>
@@ -73,15 +76,15 @@
         
         <!-- Search Panel (hidden by default) -->
         <div id="search-panel" class="search-panel" style="display: none;">
-            <input id="search-input" type="text" placeholder="Adresse oder POI suchen...">
+            <input type="text" id="search-input" placeholder="Adresse oder POI suchen...">
             <div id="search-results" class="search-results"></div>
         </div>
         
         <!-- Route Panel (hidden by default) -->
         <div id="route-panel" class="route-panel" style="display: none;">
             <div class="route-inputs">
-                <input id="route-from" type="text" placeholder="Von...">
-                <input id="route-to" type="text" placeholder="Nach...">
+                <input type="text" id="route-from" placeholder="Von...">
+                <input type="text" id="route-to" placeholder="Nach...">
                 <select id="route-mode">
                     <option value="walking">🚶‍♂️ Zu Fuß</option>
                     <option value="cycling">🚴‍♂️ Fahrrad</option>
