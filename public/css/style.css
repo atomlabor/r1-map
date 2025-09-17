@@ -81,8 +81,10 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 240px;
-    height: 282px;
+    width: 100vw;
+    height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
     z-index: 1;
     border: none;
     margin: 0;
@@ -120,8 +122,10 @@ body {
 
 /* Leaflet Map Customizations */
 .leaflet-container {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    min-width: 100vw !important;
+    min-height: 100vh !important;
     z-index: 1 !important;
 }
 
