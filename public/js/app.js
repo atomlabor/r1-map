@@ -106,19 +106,17 @@ function initializeLeafletMap() {
         markerZoomAnimation: false
     });
     
-    // Add optimized tile layer with performance settings
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 18,
-        keepBuffer: 6,
-        unloadInvisibleTiles: false,
-        reuseTiles: true
-    }).addTo(AppState.map);
-    
-    // Add custom zoom control positioned for R1
-    L.control.zoom({
-        position: 'bottomright'
-    }).addTo(AppState.map);
+L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+    subdomains: ['a','b','c'],
+    maxZoom: 19,
+    minZoom: 1,
+    crossOrigin: true,
+    updateWhenIdle: false,
+    keepBuffer: 6,              // NEU: Nachbar-Tiles im RAM halten für schnelles Panning
+    unloadInvisibleTiles: false,// NEU: Tiles in der Nähe im Cache lassen statt sofort entladen
+    reuseTiles: true            // NEU: Tiles werden für sofortige Neubefüllung wiederverwendet
+}).addTo(AppState.map);
+
     
     console.log('✅ Leaflet map initialized');
 }
