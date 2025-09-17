@@ -202,20 +202,20 @@ function createToastElement() {
     toast.className = 'toast';
     toast.style.cssText = `
         position: fixed;
-        top: 18px;
+        top: 52px;
         left: 50%;
         transform: translateX(-50%) translateY(-20px);
-        background: rgba(0,0,0,0.9);
+        background: #ff6b35;
         color: white;
-        padding: 8px 18px;
-        border-radius: 7px;
+        padding: 8px 16px;
+        border-radius: 8px;
         font-family: -apple-system, BlinkMacSystemFont, sans-serif;
         font-size: 12px;
-        z-index: 10001;
+        z-index: 950;
         opacity: 0;
         transition: all 0.3s ease;
         pointer-events: none;
-        max-width: 220px;
+        max-width: 180px;
         word-break: break-word;
         backdrop-filter: blur(5px);
     `;
@@ -229,16 +229,30 @@ function createToastElement() {
 function showPTTFeedback(message, type = 'info') {
     if (!Elements.toast) createToastElement();
     
-    // Set color based on type
+    // Set color based on type with default fallback to orange
     const colors = {
-        success: '#4CAF50',
-        error: '#f44336',
-        warning: '#ff9800',
-        info: '#2196F3'
+        success: '#ff6b35',
+        error: '#ff6b35',
+        warning: '#ff6b35',
+        info: '#ff6b35'
     };
     
-    Elements.toast.style.backgroundColor = colors[type] || colors.info;
+    Elements.toast.style.backgroundColor = colors[type] || '#ff6b35';
     Elements.toast.textContent = message;
+
+    // Place or update a marker at the current map center for visual/testing
+    try {
+        if (AppState.map) {
+            const center = AppState.map.getCenter();
+            if (AppState.locationMarker) {
+                AppState.locationMarker.setLatLng(center);
+            } else {
+                AppState.locationMarker = L.marker(center).addTo(AppState.map);
+            }
+        }
+    } catch (e) {
+        console.warn('Marker update on showPTTFeedback failed:', e);
+    }
     
     // Show toast
     Elements.toast.style.opacity = '1';
@@ -278,21 +292,32 @@ function autoRequestLocation() {
                     duration: 1.0
                 });
                 
-                // Add location marker
+                // Always keep marker at current map center (not user position)
+                const center = AppState.map.getCenter();
                 if (AppState.locationMarker) {
-                    AppState.map.removeLayer(AppState.locationMarker);
+                    AppState.locationMarker.setLatLng(center);
+                } else {
+                    AppState.locationMarker = L.marker(center)
+                        .addTo(AppState.map)
+                        .bindPopup('Center marker');
                 }
-                
-                AppState.locationMarker = L.marker([latitude, longitude])
-                    .addTo(AppState.map)
-                    .bindPopup('Your location')
-                    .openPopup();
                 
                 console.log(`📍 Location acquired: ${latitude}, ${longitude}`);
             }
         },
         (error) => {
             console.warn('⚠️ Location request failed, staying on global overview:', error.message);
+            // Ensure marker exists at center even if location fails
+            try {
+                if (AppState.map) {
+                    const center = AppState.map.getCenter();
+                    if (AppState.locationMarker) {
+                        AppState.locationMarker.setLatLng(center);
+                    } else {
+                        AppState.locationMarker = L.marker(center).addTo(AppState.map);
+                    }
+                }
+            } catch (e) {}
         },
         {
             enableHighAccuracy: true,
