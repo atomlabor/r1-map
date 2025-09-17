@@ -62,7 +62,7 @@ body {
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000;
+    z-index: 1000; /* keep header above map but below toast */
     background: rgba(0, 0, 0, 0.7);
     color: #ff6b35;
     padding: 4px 8px;
@@ -91,7 +91,7 @@ body {
     position: relative;
     width: 100vw;
     height: 100vh;
-    z-index: 10;
+    z-index: 10; /* map base layer */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -113,6 +113,7 @@ body {
 .leaflet-control-zoom {
     border: none;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 940; /* keep below toast */
 }
 .leaflet-control-zoom a {
     background: rgba(0,0,0,0.8);
@@ -127,26 +128,26 @@ body {
     background: rgba(0,0,0,0.7);
     color: #ccc;
     font-size: 10px;
+    z-index: 940; /* keep below toast */
 }
 /* Toast Notifications */
 .toast {
     position: fixed;
-    top: 18px;
+    top: 52px;
     left: 50%;
     transform: translateX(-50%) translateY(-20px);
-    background: rgba(0, 0, 0, 0.9);
+    background: #ff6b35; /* orange */
     color: #fff;
-    padding: 8px 18px;
-    border-radius: 7px;
-    border-left: none;
+    padding: 8px 16px;
+    border-radius: 8px;
     font-size: 12px;
-    z-index: 10001;
+    z-index: 950; /* above header and controls, below modals */
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; /* keep transition */
     pointer-events: none;
-    max-width: 220px;
+    max-width: 180px;
     word-break: break-word;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px); /* keep backdrop-filter */
 }
 /* Responsive Design for Rabbit R1 */
 @media (max-width: 280px) {
@@ -155,18 +156,20 @@ body {
         padding: 3px 6px;
         top: 8px;
     }
-    
+
     #map-bg {
         max-width: 150px;
         max-height: 150px;
     }
-    
+
     .toast {
-        top: 40px;
-        right: 10px;
-        left: 10px;
+        top: 52px; /* keep offset consistent */
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%) translateY(-20px);
         font-size: 12px;
-        padding: 10px 12px;
+        padding: 8px 16px;
+        max-width: 180px;
     }
 }
 /* Animations */
