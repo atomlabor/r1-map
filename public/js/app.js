@@ -4,7 +4,6 @@
  * 
  * Features: Leaflet maps, POI search, Rabbit R1 hardware integration
  */
-
 // Application state
 const AppState = {
     isInitialized: false,
@@ -16,7 +15,6 @@ const AppState = {
     searchActive: false,
     poiVisible: true
 };
-
 // DOM elements cache
 const Elements = {
     loading: null,
@@ -25,7 +23,6 @@ const Elements = {
     status: null,
     buttons: {}
 };
-
 /**
  * Initialize the R1 Map Application
  */
@@ -54,7 +51,6 @@ function initializeApp() {
     updateStatus('App initialisiert');
     console.log('✅ R1 Map App initialized successfully');
 }
-
 /**
  * Cache DOM elements for better performance
  */
@@ -70,7 +66,6 @@ function cacheElements() {
     Elements.buttons.location = document.getElementById('btn-location');
     Elements.buttons.poi = document.getElementById('btn-poi');
 }
-
 /**
  * Initialize Leaflet map
  */
@@ -82,8 +77,10 @@ function initializeLeafletMap() {
     if (mapContainer) {
         mapContainer.innerHTML = '';
         
-        // Initialize Leaflet map
-        AppState.map = L.map('map').setView([52.5200, 13.4050], AppState.zoom); // Berlin default
+        // Initialize Leaflet map with zoomControl: false
+        AppState.map = L.map('map', {
+            zoomControl: false
+        }).setView([52.5200, 13.4050], AppState.zoom); // Berlin default
         
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -106,7 +103,6 @@ function initializeLeafletMap() {
         updateStatus('Karte geladen');
     }
 }
-
 /**
  * Check if running on Rabbit R1 device
  */
@@ -123,7 +119,6 @@ function checkR1Device() {
         updateStatus('Browser-Modus');
     }
 }
-
 /**
  * Setup event listeners for UI interactions
  */
@@ -149,7 +144,6 @@ function setupEventListeners() {
     
     console.log('🎧 Event listeners setup complete');
 }
-
 /**
  * Handle zoom in
  */
@@ -160,7 +154,6 @@ function handleZoomIn() {
         console.log('🔍 Zoomed in');
     }
 }
-
 /**
  * Handle zoom out
  */
@@ -171,7 +164,6 @@ function handleZoomOut() {
         console.log('🔍 Zoomed out');
     }
 }
-
 /**
  * Handle location request
  */
@@ -213,7 +205,6 @@ function handleLocationRequest() {
         updateStatus('GPS nicht verfügbar');
     }
 }
-
 /**
  * Handle POI toggle
  */
@@ -235,7 +226,6 @@ function handlePOIToggle() {
     
     console.log(`🏢 POI visibility: ${AppState.poiVisible}`);
 }
-
 /**
  * Show Points of Interest
  */
@@ -260,12 +250,11 @@ function showPOIs() {
     samplePOIs.forEach(poi => {
         const marker = L.marker([poi.lat, poi.lng])
             .addTo(AppState.map)
-            .bindPopup(`<strong>${poi.name}</strong><br>Typ: ${poi.type}`);
+            .bindPopup(`${poi.name}<br>Typ: ${poi.type}`);
         
         AppState.poiMarkers.push(marker);
     });
 }
-
 /**
  * Hide Points of Interest
  */
@@ -275,7 +264,6 @@ function hidePOIs() {
     AppState.poiMarkers.forEach(marker => AppState.map.removeLayer(marker));
     AppState.poiMarkers = [];
 }
-
 /**
  * Initialize Rabbit Creations SDK
  */
@@ -304,7 +292,6 @@ function initializeRabbitSDK() {
         console.log('⚠️ Rabbit SDK not available (development mode)');
     }
 }
-
 /**
  * Setup hardware button listeners for R1
  */
@@ -322,7 +309,6 @@ function setupHardwareButtons() {
         }
     }
 }
-
 /**
  * Show main app, hide loading screen
  */
@@ -334,7 +320,6 @@ function showApp() {
         Elements.app.style.display = 'block';
     }
 }
-
 /**
  * Update status display
  */
@@ -344,7 +329,6 @@ function updateStatus(message) {
         console.log(`📊 Status: ${message}`);
     }
 }
-
 /**
  * Search for places near current location
  */
@@ -364,19 +348,16 @@ function searchNearbyPlaces(query) {
         console.log('✅ Search completed (simulated)');
     }, 1000);
 }
-
 /**
  * Get current app state (for debugging)
  */
 function getAppState() {
     return { ...AppState };
 }
-
 /**
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
-
 // Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
