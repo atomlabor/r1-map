@@ -2,14 +2,12 @@
  * R1 Map - Minimal UI Styles
  * Optimized for Rabbit R1 device (240x282px) with responsive fallbacks
  */
-
 /* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #000;
@@ -19,7 +17,6 @@ body {
     height: 100vh;
     position: relative;
 }
-
 /* Loading Screen */
 .loading-container {
     position: fixed;
@@ -35,7 +32,6 @@ body {
     color: #fff;
     z-index: 9999;
 }
-
 .loading-spinner {
     width: 40px;
     height: 40px;
@@ -45,12 +41,10 @@ body {
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
 }
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
 /* App Container */
 .app-container {
     position: relative;
@@ -62,7 +56,6 @@ body {
     justify-content: center;
     background: #000;
 }
-
 /* App Header - Minimal */
 .app-header {
     position: absolute;
@@ -80,7 +73,6 @@ body {
     pointer-events: none;
     backdrop-filter: blur(4px);
 }
-
 /* Map Background Image */
 #map-bg {
     position: absolute;
@@ -94,7 +86,6 @@ body {
     pointer-events: none;
     content: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iODAiIHN0cm9rZT0iI2ZmNmIzNSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjMiLz4KPHN0cm9rZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI0MCIgc3Ryb2tlPSIjZmY2YjM1IiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQiIGZpbGw9IiNmZjZiMzUiLz4KPC9zdmc+');
 }
-
 /* Map Area - Full Screen with R1 Constraints */
 .map-area {
     position: relative;
@@ -105,7 +96,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
 #map {
     width: 100vw;
     height: 100vh;
@@ -115,102 +105,29 @@ body {
     box-shadow: none;
     z-index: 10;
 }
-
 /* Leaflet Map Customization */
 .leaflet-container {
     background: #1a1a1a;
     font-family: inherit;
 }
-
 .leaflet-control-zoom {
     border: none;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
-
 .leaflet-control-zoom a {
     background: rgba(0,0,0,0.8);
     color: #fff;
     border: 1px solid #333;
 }
-
 .leaflet-control-zoom a:hover {
     background: rgba(255, 107, 53, 0.8);
     color: #fff;
 }
-
 .leaflet-control-attribution {
     background: rgba(0,0,0,0.7);
     color: #ccc;
     font-size: 10px;
 }
-
-/* Location Permission Modal */
-.modal {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    backdrop-filter: blur(4px);
-}
-
-.modal-content {
-    background: #181818;
-    color: #fff;
-    border-radius: 12px;
-    border: 1px solid #333;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-    padding: 24px 32px;
-    text-align: center;
-    max-width: 280px;
-    margin: 20px;
-}
-
-.modal-content p {
-    margin-bottom: 20px;
-    font-size: 16px;
-    line-height: 1.4;
-}
-
-.modal-content button {
-    margin: 8px 6px 0 0;
-    font-size: 14px;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-}
-
-#allow-location-btn {
-    background: #ff6b35;
-    color: #fff;
-    border-color: #ff6b35;
-}
-
-#allow-location-btn:hover {
-    background: rgba(255, 107, 53, 0.8);
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-}
-
-#deny-location-btn {
-    background: rgba(136, 136, 136, 0.3);
-    color: #ccc;
-    border-color: #666;
-}
-
-#deny-location-btn:hover {
-    background: rgba(136, 136, 136, 0.5);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(136, 136, 136, 0.2);
-}
-
 /* Toast Notifications */
 .toast {
     position: fixed;
@@ -231,7 +148,6 @@ body {
     word-wrap: break-word;
     backdrop-filter: blur(8px);
 }
-
 /* Responsive Design for Rabbit R1 */
 @media (max-width: 280px) {
     .app-header {
@@ -245,23 +161,6 @@ body {
         max-height: 150px;
     }
     
-    .modal-content {
-        padding: 20px;
-        margin: 10px;
-        max-width: 240px;
-    }
-    
-    .modal-content p {
-        font-size: 14px;
-        margin-bottom: 16px;
-    }
-    
-    .modal-content button {
-        padding: 8px 16px;
-        font-size: 13px;
-        margin: 6px 4px 0 0;
-    }
-    
     .toast {
         top: 40px;
         right: 10px;
@@ -270,21 +169,17 @@ body {
         padding: 10px 12px;
     }
 }
-
 /* Animations */
 .fade-in {
     animation: fadeIn 0.3s ease-in;
 }
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
 .slide-up {
     animation: slideUp 0.3s ease-out;
 }
-
 @keyframes slideUp {
     from {
         transform: translateY(20px);
@@ -295,7 +190,6 @@ body {
         opacity: 1;
     }
 }
-
 /* Performance Optimizations */
 .leaflet-container,
 .leaflet-tile,
@@ -304,11 +198,9 @@ body {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
 }
-
 /* Hardware Acceleration */
 #map,
-.app-container,
-.modal {
+.app-container {
     transform: translateZ(0);
     will-change: transform;
 }
