@@ -4,6 +4,7 @@
  * 
  * Features: Leaflet maps, R1 hardware scroll zoom, PTT feedback, minimal UI
  */
+
 // Application state
 const AppState = {
     isInitialized: false,
@@ -385,5 +386,7 @@ function maybeAskLocationPermission() {
     document.getElementById('deny-location-btn').onclick = () => {
         localStorage.setItem('location-permission', 'denied');
         modal.style.display = 'none';
+        // Ensure app is shown after modal is closed, even if location is denied
+        showApp();
     };
 }
