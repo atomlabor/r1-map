@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,7 @@
     <!-- Loading Indicator -->
     <div id="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Karte wird geladen...</p>
+        <p>Loading map...</p>
     </div>
     
     <!-- Main Application Container -->
@@ -27,7 +27,14 @@
             </div>
         </header>
         
-        <!-- Status Element (Neu hinzugefügt) -->
+        <!-- Search Bar -->
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-bar" placeholder="Search for places or POI...">
+            <button id="search-btn" class="search-button">🔍</button>
+            <div id="search-results" class="search-results" style="display: none;"></div>
+        </div>
+        
+        <!-- Status Element -->
         <div id="status" class="status-indicator"></div>
         
         <!-- Map Container -->
@@ -35,64 +42,10 @@
             <div id="map" class="map-area">
                 <!-- Map will be rendered here -->
                 <div class="map-placeholder">
-                    <p>🗺️ Karte wird initialisiert...</p>
+                    🗺️ Initializing map...
                 </div>
             </div>
         </main>
-        
-        <!-- Control Panel -->
-        <div class="controls-container">
-            <div class="control-row">
-                <button id="btn-location" class="control-btn" title="Mein Standort">
-                    📍
-                </button>
-                <button id="btn-search" class="control-btn" title="Suchen">
-                    🔍
-                </button>
-                <button id="btn-route" class="control-btn" title="Route planen">
-                    🧭
-                </button>
-                <button id="btn-poi" class="control-btn" title="POI anzeigen">
-                    🏢
-                </button>
-                <button id="btn-settings" class="control-btn" title="Einstellungen">
-                    ⚙️
-                </button>
-                <button id="btn-zoom-in" class="control-btn" title="Zoom In">
-                    +
-                </button>
-                <button id="btn-zoom-out" class="control-btn" title="Zoom Out">
-                    -
-                </button>
-            </div>
-            
-            <!-- Voice Control Indicator -->
-            <div class="voice-control">
-                <div id="voice-indicator" class="voice-indicator">
-                    🎙️ Sprachsteuerung aktiv
-                </div>
-            </div>
-        </div>
-        
-        <!-- Search Panel (hidden by default) -->
-        <div id="search-panel" class="search-panel" style="display: none;">
-            <input type="text" id="search-input" placeholder="Adresse oder POI suchen...">
-            <div id="search-results" class="search-results"></div>
-        </div>
-        
-        <!-- Route Panel (hidden by default) -->
-        <div id="route-panel" class="route-panel" style="display: none;">
-            <div class="route-inputs">
-                <input type="text" id="route-from" placeholder="Von...">
-                <input type="text" id="route-to" placeholder="Nach...">
-                <select id="route-mode">
-                    <option value="walking">🚶‍♂️ Zu Fuß</option>
-                    <option value="cycling">🚴‍♂️ Fahrrad</option>
-                    <option value="driving">🚗 Auto</option>
-                </select>
-            </div>
-            <button id="btn-calculate-route" class="action-btn">Route berechnen</button>
-        </div>
     </div>
     
     <!-- Rabbit R1 Creations SDK -->
