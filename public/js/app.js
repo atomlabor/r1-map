@@ -203,7 +203,7 @@ function createToastElement() {
     console.log('🍞 Toast element created for PTT feedback');
 }
 /**
- * Show PTT feedback with toast and optional marker
+ * Show PTT feedback with toast and persistent marker
  */
 function showPTTFeedback() {
     if (!Elements.toast) return;
@@ -212,20 +212,17 @@ function showPTTFeedback() {
     Elements.toast.textContent = '🎙️ PTT Activated';
     Elements.toast.classList.add('show');
     
-    // Add a temporary marker at map center
+    // Add a persistent marker at map center
     if (AppState.map) {
         const center = AppState.map.getCenter();
-        const marker = L.circleMarker(center, {
-            color: '#ff6b35',
-            fillColor: '#ff6b35',
-            fillOpacity: 0.7,
-            radius: 8
-        }).addTo(AppState.map);
+        const marker = L.marker(center)
+            .addTo(AppState.map)
+            .bindPopup('PTT Marker');
         
-        // Remove marker after 2 seconds
-        setTimeout(() => {
-            AppState.map.removeLayer(marker);
-        }, 2000);
+        // Add marker to AppState.markers array
+        AppState.markers.push(marker);
+        
+        console.log(`📍 PTT marker added at center: ${center.lat}, ${center.lng}`);
     }
     
     // Hide toast after 2 seconds
@@ -233,7 +230,7 @@ function showPTTFeedback() {
         Elements.toast.classList.remove('show');
     }, 2000);
     
-    console.log('🎙️ PTT feedback shown');
+    console.log('🎙️ PTT feedback shown with persistent marker');
 }
 /**
  * Auto-request user location on startup (fallback to Wuppertal)
@@ -308,7 +305,6 @@ function cleanup() {
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
-
 // Native Rabbit R1 ScrollWheel Zoom
 if (window.r1app && window.r1app.events) {
   window.r1app.events.on('scroll', (delta) => {
@@ -321,7 +317,6 @@ if (window.r1app && window.r1app.events) {
 }
 // Fallback Browser/SDK
 // (bereits vorhanden lassen)
-
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
 // Export for testing and R1 integration
