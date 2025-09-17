@@ -10,7 +10,7 @@ const AppState = {
     isR1Device: false,
     map: null,
     currentLocation: null,
-    zoom: 13, // Set default zoom to 13 for Wuppertal
+    zoom: 2, // Changed from 13 to 2 for global overview
     markers: [],
     locationMarker: null,
     watchId: null
@@ -94,8 +94,8 @@ function initializeLeafletMap() {
     try {
         // Create map with minimal settings for max performance
         AppState.map = L.map(Elements.map, {
-            center: [51.2577, 7.1485], // Wuppertal coordinates
-            zoom: AppState.zoom, // Zoom level 13
+            center: [20, 0], // Changed from Wuppertal to global overview
+            zoom: AppState.zoom, // Now zoom level 2 for global overview
             zoomControl: false, // Remove zoom control for speed
             touchZoom: true, // Keep touch zoom for touch devices
             doubleClickZoom: false, // Disable double-click zoom
@@ -114,7 +114,7 @@ function initializeLeafletMap() {
             crossOrigin: true
         }).addTo(AppState.map);
         
-        console.log('🗺️ Leaflet map initialized with Wuppertal center and scroll wheel zoom enabled');
+        console.log('🗺️ Leaflet map initialized with global overview (center: [20,0], zoom: 2)');
     } catch (error) {
         console.error('❌ Failed to initialize map:', error);
     }
@@ -270,7 +270,7 @@ function showPTTFeedback() {
  */
 function autoRequestLocation() {
     if (!navigator.geolocation) {
-        console.log('❌ Geolocation not supported, staying on Wuppertal');
+        console.log('❌ Geolocation not supported, staying on global overview');
         return;
     }
     
@@ -282,8 +282,8 @@ function autoRequestLocation() {
             AppState.currentLocation = { lat: latitude, lon: longitude };
             
             if (AppState.map) {
-                // Center map on user location
-                AppState.map.setView([latitude, longitude], AppState.zoom);
+                // Center map on user location with higher zoom
+                AppState.map.setView([latitude, longitude], 13);
                 
                 // Add location marker
                 if (AppState.locationMarker) {
@@ -299,7 +299,7 @@ function autoRequestLocation() {
             }
         },
         (error) => {
-            console.warn('⚠️ Location request failed, staying on Wuppertal:', error.message);
+            console.warn('⚠️ Location request failed, staying on global overview:', error.message);
         },
         {
             enableHighAccuracy: true,
