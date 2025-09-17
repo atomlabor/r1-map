@@ -202,21 +202,22 @@ function createToastElement() {
     toast.className = 'toast';
     toast.style.cssText = `
         position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(0,0,0,0.8);
+        top: 18px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-20px);
+        background: rgba(0,0,0,0.9);
         color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
+        padding: 8px 18px;
+        border-radius: 7px;
         font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-        font-size: 14px;
-        z-index: 10000;
+        font-size: 12px;
+        z-index: 10001;
         opacity: 0;
-        transform: translateY(-20px);
         transition: all 0.3s ease;
         pointer-events: none;
-        max-width: 300px;
-        word-wrap: break-word;
+        max-width: 220px;
+        word-break: break-word;
+        backdrop-filter: blur(5px);
     `;
     
     document.body.appendChild(toast);
@@ -241,13 +242,13 @@ function showPTTFeedback(message, type = 'info') {
     
     // Show toast
     Elements.toast.style.opacity = '1';
-    Elements.toast.style.transform = 'translateY(0)';
+    Elements.toast.style.transform = 'translateX(-50%) translateY(0)';
     
     // Hide after 3 seconds
     setTimeout(() => {
         if (Elements.toast) {
             Elements.toast.style.opacity = '0';
-            Elements.toast.style.transform = 'translateY(-20px)';
+            Elements.toast.style.transform = 'translateX(-50%) translateY(-20px)';
         }
     }, 3000);
     
