@@ -4,7 +4,6 @@
  * 
  * Features: Leaflet maps, R1 hardware scroll zoom, PTT feedback, minimal UI
  */
-
 // Application state
 const AppState = {
     isInitialized: false,
@@ -16,7 +15,6 @@ const AppState = {
     locationMarker: null,
     watchId: null
 };
-
 // DOM elements cache
 const Elements = {
     loading: null,
@@ -24,7 +22,6 @@ const Elements = {
     map: null,
     toast: null
 };
-
 /**
  * Initialize the R1 Map Application
  */
@@ -58,7 +55,6 @@ function initializeApp() {
     AppState.isInitialized = true;
     console.log('✅ R1 Map App initialized successfully');
 }
-
 /**
  * Cache DOM elements for performance
  */
@@ -69,7 +65,6 @@ function cacheElements() {
     
     console.log('📝 DOM elements cached');
 }
-
 /**
  * Check if running on Rabbit R1 device
  */
@@ -87,7 +82,6 @@ function checkR1Device() {
         console.log('💻 Running on non-R1 device');
     }
 }
-
 /**
  * Initialize Leaflet map with minimal config for maximum speed
  */
@@ -125,7 +119,6 @@ function initializeLeafletMap() {
         console.error('❌ Failed to initialize map:', error);
     }
 }
-
 /**
  * Setup event listeners including R1 hardware events
  */
@@ -160,7 +153,6 @@ function setupEventListeners() {
     
     console.log('👂 Event listeners set up (R1 hardware focus)');
 }
-
 /**
  * Initialize Rabbit SDK if available
  */
@@ -200,7 +192,6 @@ function initializeRabbitSDK() {
         console.log('ℹ️ Rabbit SDK not available (running outside R1)');
     }
 }
-
 /**
  * Create toast element for PTT feedback
  */
@@ -212,9 +203,8 @@ function createToastElement() {
     Elements.toast = toast;
     console.log('🍞 Toast element created for PTT feedback');
 }
-
 /**
- * Show PTT feedback with toast and persistent marker
+ * Show PTT feedback with toast and instantly centered marker
  */
 function showPTTFeedback() {
     if (!Elements.toast) return;
@@ -223,17 +213,36 @@ function showPTTFeedback() {
     Elements.toast.textContent = '🎙️ PTT Activated';
     Elements.toast.classList.add('show');
     
-    // Add a persistent marker at map center
+    // Add a persistent marker at map center - ensure it's always centered and visible
     if (AppState.map) {
+        // Get current map center to ensure marker is always visible
         const center = AppState.map.getCenter();
-        const marker = L.marker(center)
-            .addTo(AppState.map)
-            .bindPopup('PTT Marker');
+        
+        // Create marker with custom styling to make it more visible
+        const marker = L.marker(center, {
+            // Add custom icon to make it more prominent
+            icon: L.divIcon({
+                className: 'ptt-marker-icon',
+                html: '📍',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            })
+        }).addTo(AppState.map);
+        
+        // Add popup and open it immediately for better visibility
+        marker.bindPopup('🎙️ PTT Marker', { 
+            closeButton: false,
+            autoClose: false,
+            closeOnClick: false
+        }).openPopup();
+        
+        // Ensure the marker is centered in view by panning to it
+        AppState.map.panTo(center);
         
         // Add marker to AppState.markers array
         AppState.markers.push(marker);
         
-        console.log(`📍 PTT marker added at center: ${center.lat}, ${center.lng}`);
+        console.log(`📍 PTT marker added and centered at: ${center.lat.toFixed(6)}, ${center.lng.toFixed(6)}`);
     }
     
     // Hide toast after 2 seconds
@@ -241,9 +250,8 @@ function showPTTFeedback() {
         Elements.toast.classList.remove('show');
     }, 2000);
     
-    console.log('🎙️ PTT feedback shown with persistent marker');
+    console.log('🎙️ PTT feedback shown with instantly centered and visible marker');
 }
-
 /**
  * Auto-request user location on startup (fallback to Wuppertal)
  */
@@ -287,7 +295,6 @@ function autoRequestLocation() {
         }
     );
 }
-
 /**
  * Show the app and hide loading screen
  */
@@ -299,14 +306,12 @@ function showApp() {
         Elements.app.style.display = 'block';
     }
 }
-
 /**
  * Get current app state (for debugging)
  */
 function getAppState() {
     return { ...AppState };
 }
-
 /**
  * Cleanup function
  */
@@ -316,12 +321,10 @@ function cleanup() {
         AppState.watchId = null;
     }
 }
-
 /**
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
-
 // Native Rabbit R1 ScrollWheel Zoom
 if (window.r1app && window.r1app.events) {
   window.r1app.events.on('scroll', (delta) => {
@@ -332,13 +335,10 @@ if (window.r1app && window.r1app.events) {
     }
   });
 }
-
 // Fallback Browser/SDK
 // (bereits vorhanden lassen)
-
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
-
 // Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
