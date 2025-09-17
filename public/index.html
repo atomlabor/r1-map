@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>r1-map - Rabbit R1 Navigation</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
@@ -18,6 +18,9 @@
     
     <!-- Main Application Container -->
     <div class="app-container" id="app" style="display: none;">
+        <!-- Map Background Image -->
+        <img id="map-bg" src="r1-map.png" alt="r1 map bg" />
+        
         <!-- Map Container - First Element for Fast Loading -->
         <div class="map-area" id="map">
             <!-- Map renders directly here for maximum speed -->
