@@ -4,25 +4,32 @@
  * 
  * Features: Leaflet maps, POI search, Rabbit R1 hardware integration
  */
+
 // Application state
 const AppState = {
     isInitialized: false,
     isR1Device: false,
     map: null,
     currentLocation: null,
-    zoom: 13,
+    zoom: 15,
     markers: [],
     searchActive: false,
-    poiVisible: true
+    poiVisible: true,
+    locationMarker: null,
+    watchId: null
 };
+
 // DOM elements cache
 const Elements = {
     loading: null,
     app: null,
     map: null,
     status: null,
-    buttons: {}
+    searchInput: null,
+    searchButton: null,
+    searchResults: null
 };
+
 /**
  * Initialize the R1 Map Application
  */
@@ -44,13 +51,17 @@ function initializeApp() {
     // Initialize Rabbit SDK if available
     initializeRabbitSDK();
     
+    // Auto-request location on startup
+    autoRequestLocation();
+    
     // Show app
     showApp();
     
     AppState.isInitialized = true;
-    updateStatus('App initialisiert');
+    updateStatus('App initialized');
     console.log('✅ R1 Map App initialized successfully');
 }
+
 /**
  * Cache DOM elements for better performance
  */
@@ -59,13 +70,11 @@ function cacheElements() {
     Elements.app = document.getElementById('app');
     Elements.map = document.getElementById('map');
     Elements.status = document.getElementById('status');
-    
-    // Cache button elements
-    Elements.buttons.zoomIn = document.getElementById('btn-zoom-in');
-    Elements.buttons.zoomOut = document.getElementById('btn-zoom-out');
-    Elements.buttons.location = document.getElementById('btn-location');
-    Elements.buttons.poi = document.getElementById('btn-poi');
+    Elements.searchInput = document.getElementById('search-input');
+    Elements.searchButton = document.getElementById('search-btn');
+    Elements.searchResults = document.getElementById('search-results');
 }
+
 /**
  * Initialize Leaflet map
  */
@@ -100,9 +109,10 @@ function initializeLeafletMap() {
         });
         
         console.log('✅ Leaflet map initialized');
-        updateStatus('Karte geladen');
+        updateStatus('Map loaded');
     }
 }
+
 /**
  * Check if running on Rabbit R1 device
  */
@@ -112,158 +122,234 @@ function checkR1Device() {
     if (AppState.isR1Device) {
         console.log('🐰 Running on Rabbit R1 device');
         document.body.classList.add('r1-device');
-        updateStatus('R1 Gerät erkannt');
+        updateStatus('R1 device detected');
     } else {
         console.log('🖥️ Running in browser (development mode)');
         document.body.classList.add('browser-mode');
-        updateStatus('Browser-Modus');
+        updateStatus('Browser mode');
     }
 }
+
 /**
  * Setup event listeners for UI interactions
  */
 function setupEventListeners() {
-    // Zoom controls
-    if (Elements.buttons.zoomIn) {
-        Elements.buttons.zoomIn.addEventListener('click', handleZoomIn);
+    // Search functionality
+    if (Elements.searchButton) {
+        Elements.searchButton.addEventListener('click', handleSearch);
     }
     
-    if (Elements.buttons.zoomOut) {
-        Elements.buttons.zoomOut.addEventListener('click', handleZoomOut);
-    }
-    
-    // Location button
-    if (Elements.buttons.location) {
-        Elements.buttons.location.addEventListener('click', handleLocationRequest);
-    }
-    
-    // POI toggle button
-    if (Elements.buttons.poi) {
-        Elements.buttons.poi.addEventListener('click', handlePOIToggle);
+    if (Elements.searchInput) {
+        Elements.searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        });
+        
+        Elements.searchInput.addEventListener('input', function() {
+            if (this.value.trim() === '') {
+                hideSearchResults();
+            }
+        });
     }
     
     console.log('🎧 Event listeners setup complete');
 }
+
 /**
- * Handle zoom in
+ * Handle search functionality
  */
-function handleZoomIn() {
+function handleSearch() {
+    if (!Elements.searchInput) return;
+    
+    const query = Elements.searchInput.value.trim();
+    if (!query) {
+        updateStatus('Please enter a search term');
+        return;
+    }
+    
+    console.log(`🔍 Searching for: ${query}`);
+    updateStatus(`Searching for: ${query}`);
+    
+    // Show loading state
+    showSearchResults();
+    Elements.searchResults.innerHTML = '<div style="padding: 10px; color: #ccc;">Searching...</div>';
+    
+    // Use Nominatim API for geocoding
+    searchPlaces(query);
+}
+
+/**
+ * Search for places using Nominatim API
+ */
+function searchPlaces(query) {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            displaySearchResults(data);
+            updateStatus(`Found ${data.length} results`);
+        })
+        .catch(error => {
+            console.error('Search error:', error);
+            updateStatus('Search failed - please try again');
+            Elements.searchResults.innerHTML = '<div style="padding: 10px; color: #ff6b35;">Search failed. Please try again.</div>';
+        });
+}
+
+/**
+ * Display search results
+ */
+function displaySearchResults(results) {
+    if (!Elements.searchResults || !results.length) {
+        Elements.searchResults.innerHTML = '<div style="padding: 10px; color: #ccc;">No results found</div>';
+        return;
+    }
+    
+    let html = '';
+    results.forEach((result, index) => {
+        html += `
+            <div onclick="selectSearchResult(${result.lat}, ${result.lon}, '${result.display_name.replace(/'/g, "\\'")}')"
+                 style="padding: 10px; border-bottom: 1px solid #333; cursor: pointer; color: #fff;"
+                 onmouseover="this.style.backgroundColor='rgba(255,107,53,0.1)'"
+                 onmouseout="this.style.backgroundColor='transparent'">
+                📍 ${result.display_name}
+            </div>
+        `;
+    });
+    
+    Elements.searchResults.innerHTML = html;
+    showSearchResults();
+}
+
+/**
+ * Select a search result
+ */
+function selectSearchResult(lat, lng, name) {
+    console.log(`📍 Selected: ${name}`);
+    updateStatus('Location selected');
+    
+    // Center map on selected location
     if (AppState.map) {
-        AppState.map.zoomIn();
-        updateStatus('Zoom vergrößert');
-        console.log('🔍 Zoomed in');
+        AppState.map.setView([lat, lng], 16);
+        
+        // Add marker for selected location
+        const marker = L.marker([lat, lng])
+            .addTo(AppState.map)
+            .bindPopup(`📍 ${name}`)
+            .openPopup();
+        
+        // Store marker for cleanup
+        if (AppState.searchMarker) {
+            AppState.map.removeLayer(AppState.searchMarker);
+        }
+        AppState.searchMarker = marker;
+    }
+    
+    // Hide search results
+    hideSearchResults();
+    Elements.searchInput.value = '';
+}
+
+/**
+ * Show search results panel
+ */
+function showSearchResults() {
+    if (Elements.searchResults) {
+        Elements.searchResults.style.display = 'block';
     }
 }
+
 /**
- * Handle zoom out
+ * Hide search results panel
  */
-function handleZoomOut() {
-    if (AppState.map) {
-        AppState.map.zoomOut();
-        updateStatus('Zoom verkleinert');
-        console.log('🔍 Zoomed out');
+function hideSearchResults() {
+    if (Elements.searchResults) {
+        Elements.searchResults.style.display = 'none';
     }
 }
+
 /**
- * Handle location request
+ * Auto-request location on startup
  */
-function handleLocationRequest() {
-    console.log('📍 Location requested');
-    updateStatus('Suche Position...');
+function autoRequestLocation() {
+    console.log('📍 Auto-requesting location...');
+    updateStatus('Finding your location...');
     
     if (navigator.geolocation) {
+        // Get current position
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
+                handleLocationSuccess(position);
                 
-                AppState.currentLocation = { lat, lng };
-                
-                if (AppState.map) {
-                    AppState.map.setView([lat, lng], 15);
-                    
-                    // Add or update location marker
-                    if (AppState.locationMarker) {
-                        AppState.map.removeLayer(AppState.locationMarker);
-                    }
-                    
-                    AppState.locationMarker = L.marker([lat, lng])
-                        .addTo(AppState.map)
-                        .bindPopup('📍 Ihr Standort')
-                        .openPopup();
-                }
-                
-                updateStatus('Position gefunden');
-                console.log('✅ Location acquired:', AppState.currentLocation);
+                // Start watching position for continuous updates
+                AppState.watchId = navigator.geolocation.watchPosition(
+                    handleLocationSuccess,
+                    handleLocationError,
+                    { enableHighAccuracy: true, maximumAge: 30000, timeout: 15000 }
+                );
             },
-            (error) => {
-                updateStatus('GPS Fehler');
-                console.error('❌ Location error:', error);
-            }
+            handleLocationError,
+            { enableHighAccuracy: true, timeout: 10000 }
         );
     } else {
-        updateStatus('GPS nicht verfügbar');
+        updateStatus('Geolocation not available');
+        console.warn('⚠️ Geolocation not supported');
     }
 }
+
 /**
- * Handle POI toggle
+ * Handle successful location acquisition
  */
-function handlePOIToggle() {
-    AppState.poiVisible = !AppState.poiVisible;
+function handleLocationSuccess(position) {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    const accuracy = position.coords.accuracy;
     
-    if (AppState.poiVisible) {
-        showPOIs();
-        updateStatus('POIs angezeigt');
-    } else {
-        hidePOIs();
-        updateStatus('POIs ausgeblendet');
-    }
+    AppState.currentLocation = { lat, lng, accuracy };
     
-    // Update button visual state
-    if (Elements.buttons.poi) {
-        Elements.buttons.poi.classList.toggle('active', AppState.poiVisible);
-    }
-    
-    console.log(`🏢 POI visibility: ${AppState.poiVisible}`);
-}
-/**
- * Show Points of Interest
- */
-function showPOIs() {
-    if (!AppState.map) return;
-    
-    // Sample POIs for demonstration
-    const samplePOIs = [
-        { lat: 52.5200, lng: 13.4050, name: '🏛️ Brandenburger Tor', type: 'landmark' },
-        { lat: 52.5186, lng: 13.4081, name: '🏛️ Reichstag', type: 'government' },
-        { lat: 52.5164, lng: 13.3777, name: '🗼 Fernsehturm', type: 'landmark' },
-        { lat: 52.5001, lng: 13.4200, name: '🏛️ Checkpoint Charlie', type: 'historic' },
-        { lat: 52.5208, lng: 13.4094, name: '☕ Café Einstein', type: 'restaurant' }
-    ];
-    
-    // Clear existing POI markers
-    AppState.poiMarkers = AppState.poiMarkers || [];
-    AppState.poiMarkers.forEach(marker => AppState.map.removeLayer(marker));
-    AppState.poiMarkers = [];
-    
-    // Add POI markers
-    samplePOIs.forEach(poi => {
-        const marker = L.marker([poi.lat, poi.lng])
-            .addTo(AppState.map)
-            .bindPopup(`${poi.name}<br>Typ: ${poi.type}`);
+    if (AppState.map) {
+        // Center map on user location
+        AppState.map.setView([lat, lng], AppState.zoom);
         
-        AppState.poiMarkers.push(marker);
-    });
-}
-/**
- * Hide Points of Interest
- */
-function hidePOIs() {
-    if (!AppState.map || !AppState.poiMarkers) return;
+        // Add or update location marker
+        if (AppState.locationMarker) {
+            AppState.map.removeLayer(AppState.locationMarker);
+        }
+        
+        AppState.locationMarker = L.marker([lat, lng])
+            .addTo(AppState.map)
+            .bindPopup('📍 Your location')
+            .openPopup();
+    }
     
-    AppState.poiMarkers.forEach(marker => AppState.map.removeLayer(marker));
-    AppState.poiMarkers = [];
+    updateStatus('Your location found');
+    console.log(`✅ Location acquired: ${lat.toFixed(4)}, ${lng.toFixed(4)} (±${Math.round(accuracy)}m)`);
 }
+
+/**
+ * Handle location error
+ */
+function handleLocationError(error) {
+    let message = 'Location unavailable';
+    
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            message = 'Location access denied';
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = 'Location unavailable';
+            break;
+        case error.TIMEOUT:
+            message = 'Location timeout';
+            break;
+    }
+    
+    updateStatus(message);
+    console.error('❌ Location error:', message);
+}
+
 /**
  * Initialize Rabbit Creations SDK
  */
@@ -279,36 +365,17 @@ function initializeRabbitSDK() {
                 features: ['gps', 'voice', 'hardware-buttons']
             });
             
-            // Setup hardware button listeners if available
-            setupHardwareButtons();
-            
-            updateStatus('R1 SDK aktiv');
+            updateStatus('R1 SDK active');
             console.log('✅ Rabbit SDK initialized');
         } catch (error) {
             console.error('❌ Rabbit SDK initialization failed:', error);
-            updateStatus('SDK Fehler');
+            updateStatus('SDK error');
         }
     } else {
         console.log('⚠️ Rabbit SDK not available (development mode)');
     }
 }
-/**
- * Setup hardware button listeners for R1
- */
-function setupHardwareButtons() {
-    if (AppState.isR1Device && window.RabbitCreations) {
-        try {
-            // Map hardware buttons to functions
-            window.RabbitCreations.onHardwareButton('action', handleLocationRequest);
-            window.RabbitCreations.onHardwareButton('scroll-up', handleZoomIn);
-            window.RabbitCreations.onHardwareButton('scroll-down', handleZoomOut);
-            
-            console.log('🔘 Hardware button listeners configured');
-        } catch (error) {
-            console.error('❌ Hardware button setup failed:', error);
-        }
-    }
-}
+
 /**
  * Show main app, hide loading screen
  */
@@ -320,6 +387,7 @@ function showApp() {
         Elements.app.style.display = 'block';
     }
 }
+
 /**
  * Update status display
  */
@@ -329,49 +397,48 @@ function updateStatus(message) {
         console.log(`📊 Status: ${message}`);
     }
 }
-/**
- * Search for places near current location
- */
-function searchNearbyPlaces(query) {
-    if (!AppState.currentLocation) {
-        updateStatus('Position benötigt für Suche');
-        return;
-    }
-    
-    console.log(`🔍 Searching for: ${query}`);
-    updateStatus(`Suche nach: ${query}`);
-    
-    // This would typically call a geocoding API
-    // For now, we'll simulate search results
-    setTimeout(() => {
-        updateStatus(`Suchergebnisse für: ${query}`);
-        console.log('✅ Search completed (simulated)');
-    }, 1000);
-}
+
 /**
  * Get current app state (for debugging)
  */
 function getAppState() {
     return { ...AppState };
 }
+
+/**
+ * Cleanup function
+ */
+function cleanup() {
+    if (AppState.watchId) {
+        navigator.geolocation.clearWatch(AppState.watchId);
+        AppState.watchId = null;
+    }
+}
+
 /**
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', cleanup);
+
 // Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
         AppState,
         Elements,
         initializeApp,
-        handleLocationRequest,
-        handleZoomIn,
-        handleZoomOut,
-        handlePOIToggle,
-        searchNearbyPlaces,
+        handleSearch,
+        selectSearchResult,
+        autoRequestLocation,
         getAppState,
-        updateStatus
+        updateStatus,
+        cleanup
     };
+    
+    // Make selectSearchResult globally available for onclick handlers
+    window.selectSearchResult = selectSearchResult;
     
     console.log('🗺️ R1 Map App ready for integration');
 }
