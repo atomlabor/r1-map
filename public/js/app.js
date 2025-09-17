@@ -372,3 +372,84 @@ if (typeof window !== 'undefined') {
     
     console.log('🗺️ R1 Map App ready for integration');
 }
+
+/**
+ * Erweiterte Standortlogik: Garantiert zur Location springen, Fallback auf Rabbit R1 Sensor
+ * Kann parallel zu deiner bisherigen autoRequestLocation() verwendet werden.
+ * Aufruf z.B. als: enhancedAutoRequestLocation();
+ */
+function enhancedAutoRequestLocation() {
+    if (!AppState.map) {
+        console.warn('⚠️ Map not initialized, cannot request location');
+        return;
+    }
+
+    console.log('📍 Requesting user location using Leaflet API...');
+    showPTTFeedback('Getting your location...', 'info');
+
+    // Garantiert immer zur gefundenen Location springen!
+    AppState.map.on('locationfound', (e) => {
+        const { latlng, accuracy } = e;
+        AppState.currentLocation = { lat: latlng.lat, lng: latlng.lng };
+
+        // Immer explizit springen, auch wenn setView genutzt wird
+        AppState.map.setView(latlng, 13, { animate: true, duration: 1.0 });
+
+        // Marker auf Userposition setzen
+        if (AppState.locationMarker) {
+            AppState.locationMarker.setLatLng(latlng);
+        } else {
+            AppState.locationMarker = L.marker(latlng)
+                .addTo(AppState.map)
+                .bindPopup(`Your location (±${Math.round(accuracy)}m)`);
+        }
+
+        showPTTFeedback(`Location found (±${Math.round(accuracy)}m)`, 'success');
+    });
+
+    // Location error + Rabbit R1 Sensorfallback!
+    AppState.map.on('locationerror', (e) => {
+        console.warn('⚠️ Location request failed, fallback:', e.message);
+
+        if (window.RabbitSDK && window.RabbitSDK.sensors && typeof window.RabbitSDK.sensors.getLocation === 'function') {
+            window.RabbitSDK.sensors.getLocation().then(pos => {
+                if (pos && pos.latitude && pos.longitude) {
+                    const latlng = [pos.latitude, pos.longitude];
+                    AppState.map.setView(latlng, 13, { animate: true, duration: 1.0 });
+                    if (AppState.locationMarker) {
+                        AppState.locationMarker.setLatLng(latlng);
+                    } else {
+                        AppState.locationMarker = L.marker(latlng)
+                            .addTo(AppState.map)
+                            .bindPopup('Rabbit R1 Sensor-Position');
+                    }
+                    showPTTFeedback('RabbitSDK Location', 'success');
+                    return;
+                }
+            }).catch(() => {
+                showPTTFeedback('Kein Standort über RabbitSDK', 'warning');
+                // Marker bleibt dann einfach in der Map-Mitte oder global.
+            });
+        } else {
+            // Wenn kein Sensor, Marker ins Karten-Zentrum
+            const center = AppState.map.getCenter();
+            if (AppState.locationMarker) {
+                AppState.locationMarker.setLatLng(center);
+            } else {
+                AppState.locationMarker = L.marker(center).addTo(AppState.map).bindPopup('Center marker');
+            }
+            showPTTFeedback('Location unavailable', 'warning');
+        }
+    });
+
+    // Leaflet-API für Standort holen
+    AppState.map.locate({
+        setView: true,
+        maxZoom: 13,
+        watch: false,
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000
+    });
+}
+
