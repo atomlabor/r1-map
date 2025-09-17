@@ -4,6 +4,7 @@
  * 
  * Features: Leaflet maps, R1 hardware scroll zoom, PTT feedback, minimal UI
  */
+
 // Application state
 const AppState = {
     isInitialized: false,
@@ -15,6 +16,7 @@ const AppState = {
     locationMarker: null,
     watchId: null
 };
+
 // DOM elements cache
 const Elements = {
     loading: null,
@@ -22,6 +24,7 @@ const Elements = {
     map: null,
     toast: null
 };
+
 /**
  * Initialize the R1 Map Application
  */
@@ -55,6 +58,7 @@ function initializeApp() {
     AppState.isInitialized = true;
     console.log('✅ R1 Map App initialized successfully');
 }
+
 /**
  * Cache DOM elements for performance
  */
@@ -65,6 +69,7 @@ function cacheElements() {
     
     console.log('📝 DOM elements cached');
 }
+
 /**
  * Check if running on Rabbit R1 device
  */
@@ -82,6 +87,7 @@ function checkR1Device() {
         console.log('💻 Running on non-R1 device');
     }
 }
+
 /**
  * Initialize Leaflet map with minimal config for maximum speed
  */
@@ -107,10 +113,11 @@ function initializeLeafletMap() {
             pinchZoom: true // Keep pinch zoom for touch devices
         });
         
-        // Add OpenStreetMap tiles without attribution for speed
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '', // Remove attribution for minimal UI
-            maxZoom: 19
+        // Add faster OSM-DE tiles with subdomains and crossOrigin
+        L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+            subdomains: ['a','b','c'],
+            maxZoom: 19,
+            crossOrigin: true
         }).addTo(AppState.map);
         
         console.log('🗺️ Leaflet map initialized with Wuppertal center and max speed settings');
@@ -118,6 +125,7 @@ function initializeLeafletMap() {
         console.error('❌ Failed to initialize map:', error);
     }
 }
+
 /**
  * Setup event listeners including R1 hardware events
  */
@@ -152,6 +160,7 @@ function setupEventListeners() {
     
     console.log('👂 Event listeners set up (R1 hardware focus)');
 }
+
 /**
  * Initialize Rabbit SDK if available
  */
@@ -191,6 +200,7 @@ function initializeRabbitSDK() {
         console.log('ℹ️ Rabbit SDK not available (running outside R1)');
     }
 }
+
 /**
  * Create toast element for PTT feedback
  */
@@ -202,6 +212,7 @@ function createToastElement() {
     Elements.toast = toast;
     console.log('🍞 Toast element created for PTT feedback');
 }
+
 /**
  * Show PTT feedback with toast and persistent marker
  */
@@ -232,6 +243,7 @@ function showPTTFeedback() {
     
     console.log('🎙️ PTT feedback shown with persistent marker');
 }
+
 /**
  * Auto-request user location on startup (fallback to Wuppertal)
  */
@@ -275,6 +287,7 @@ function autoRequestLocation() {
         }
     );
 }
+
 /**
  * Show the app and hide loading screen
  */
@@ -286,12 +299,14 @@ function showApp() {
         Elements.app.style.display = 'block';
     }
 }
+
 /**
  * Get current app state (for debugging)
  */
 function getAppState() {
     return { ...AppState };
 }
+
 /**
  * Cleanup function
  */
@@ -301,10 +316,12 @@ function cleanup() {
         AppState.watchId = null;
     }
 }
+
 /**
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
+
 // Native Rabbit R1 ScrollWheel Zoom
 if (window.r1app && window.r1app.events) {
   window.r1app.events.on('scroll', (delta) => {
@@ -315,10 +332,13 @@ if (window.r1app && window.r1app.events) {
     }
   });
 }
+
 // Fallback Browser/SDK
 // (bereits vorhanden lassen)
+
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
+
 // Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
