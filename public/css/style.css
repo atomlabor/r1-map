@@ -371,3 +371,27 @@ body {
         padding: 20px;
     }
 }
+
+#map, .map-area {
+  width: 100vw !important;
+  height: 80vh !important;
+  min-height: 380px;
+  min-width: 250px;
+  background: #1a1a1a;
+}
+
+/* Rabbit R1-Optimierung (Portrait-Touch, kleine Geräte) */
+@media screen and (max-width: 480px) {
+  #map, .map-area {
+    height: 74vh !important;
+    min-height: 240px !important;
+  }
+  .controls-container {
+    padding-bottom: 5px;
+  }
+  .control-btn {
+    width: 65px;
+    height: 65px;
+    font-size: 28px;
+  }
+}
