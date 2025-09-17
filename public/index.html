@@ -15,7 +15,7 @@
         <div class="loading-spinner"></div>
         <p>Karte wird geladen...</p>
     </div>
-
+    
     <!-- Main Application Container -->
     <div id="app" class="app-container" style="display: none;">
         <!-- Header -->
@@ -26,7 +26,10 @@
                 <span id="battery-status" class="status-indicator">100%</span>
             </div>
         </header>
-
+        
+        <!-- Status Element (Neu hinzugefügt) -->
+        <div id="status" class="status-indicator"></div>
+        
         <!-- Map Container -->
         <main class="map-container">
             <div id="map" class="map-area">
@@ -36,7 +39,7 @@
                 </div>
             </div>
         </main>
-
+        
         <!-- Control Panel -->
         <div class="controls-container">
             <div class="control-row">
@@ -52,6 +55,12 @@
                 <button id="btn-settings" class="control-btn" title="Einstellungen">
                     ⚙️
                 </button>
+                <button id="btn-zoom-in" class="control-btn" title="Zoom In">
+                    +
+                </button>
+                <button id="btn-zoom-out" class="control-btn" title="Zoom Out">
+                    -
+                </button>
             </div>
             
             <!-- Voice Control Indicator -->
@@ -61,18 +70,18 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Search Panel (hidden by default) -->
         <div id="search-panel" class="search-panel" style="display: none;">
-            <input type="text" id="search-input" placeholder="Adresse oder POI suchen..." />
+            <input id="search-input" type="text" placeholder="Adresse oder POI suchen...">
             <div id="search-results" class="search-results"></div>
         </div>
-
+        
         <!-- Route Panel (hidden by default) -->
         <div id="route-panel" class="route-panel" style="display: none;">
             <div class="route-inputs">
-                <input type="text" id="route-from" placeholder="Von..." />
-                <input type="text" id="route-to" placeholder="Nach..." />
+                <input id="route-from" type="text" placeholder="Von...">
+                <input id="route-to" type="text" placeholder="Nach...">
                 <select id="route-mode">
                     <option value="walking">🚶‍♂️ Zu Fuß</option>
                     <option value="cycling">🚴‍♂️ Fahrrad</option>
@@ -82,7 +91,7 @@
             <button id="btn-calculate-route" class="action-btn">Route berechnen</button>
         </div>
     </div>
-
+    
     <!-- Rabbit R1 Creations SDK -->
     <script src="https://unpkg.com/@rabbit-r1/creations-sdk@latest/dist/index.js"></script>
     
