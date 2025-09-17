@@ -239,7 +239,6 @@ function showPTTFeedback(message, type = 'info') {
     
     Elements.toast.style.backgroundColor = colors[type] || '#ff6b35';
     Elements.toast.textContent = message;
-
     // Place or update a marker at the current map center for visual/testing
     try {
         if (AppState.map) {
@@ -269,62 +268,63 @@ function showPTTFeedback(message, type = 'info') {
     console.log(`🔔 PTT Feedback: ${message} (${type})`);
 }
 /**
- * Auto-request user location and center map
+ * Auto-request user location and center map using Leaflet's map.locate()
  */
 function autoRequestLocation() {
-    if (!navigator.geolocation) {
-        console.warn('⚠️ Geolocation not supported, staying on global overview');
+    if (!AppState.map) {
+        console.warn('⚠️ Map not initialized, cannot request location');
         return;
     }
     
-    console.log('📍 Requesting user location...');
+    console.log('📍 Requesting user location using Leaflet API...');
     showPTTFeedback('Getting your location...', 'info');
     
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const { latitude, longitude } = position.coords;
-            AppState.currentLocation = { lat: latitude, lng: longitude };
-            
-            if (AppState.map) {
-                // Zoom to user location
-                AppState.map.setView([latitude, longitude], 13, {
-                    animate: true,
-                    duration: 1.0
-                });
-                
-                // Always keep marker at current map center (not user position)
-                const center = AppState.map.getCenter();
-                if (AppState.locationMarker) {
-                    AppState.locationMarker.setLatLng(center);
-                } else {
-                    AppState.locationMarker = L.marker(center)
-                        .addTo(AppState.map)
-                        .bindPopup('Center marker');
-                }
-                
-                console.log(`📍 Location acquired: ${latitude}, ${longitude}`);
-            }
-        },
-        (error) => {
-            console.warn('⚠️ Location request failed, staying on global overview:', error.message);
-            // Ensure marker exists at center even if location fails
-            try {
-                if (AppState.map) {
-                    const center = AppState.map.getCenter();
-                    if (AppState.locationMarker) {
-                        AppState.locationMarker.setLatLng(center);
-                    } else {
-                        AppState.locationMarker = L.marker(center).addTo(AppState.map);
-                    }
-                }
-            } catch (e) {}
-        },
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 60000
+    // Setup event listeners for location events
+    AppState.map.on('locationfound', (e) => {
+        const { latlng, accuracy } = e;
+        AppState.currentLocation = { lat: latlng.lat, lng: latlng.lng };
+        
+        // Place marker on actual user location (not map center)
+        if (AppState.locationMarker) {
+            AppState.locationMarker.setLatLng(latlng);
+        } else {
+            AppState.locationMarker = L.marker(latlng)
+                .addTo(AppState.map)
+                .bindPopup(`Your location (±${Math.round(accuracy)}m)`);
         }
-    );
+        
+        console.log(`📍 Location found: ${latlng.lat.toFixed(6)}, ${latlng.lng.toFixed(6)} (±${Math.round(accuracy)}m)`);
+        showPTTFeedback(`Location found (±${Math.round(accuracy)}m)`, 'success');
+    });
+    
+    AppState.map.on('locationerror', (e) => {
+        console.warn('⚠️ Location request failed, staying on global overview:', e.message);
+        showPTTFeedback('Location unavailable', 'warning');
+        
+        // Ensure marker exists at center even if location fails
+        try {
+            const center = AppState.map.getCenter();
+            if (AppState.locationMarker) {
+                AppState.locationMarker.setLatLng(center);
+            } else {
+                AppState.locationMarker = L.marker(center)
+                    .addTo(AppState.map)
+                    .bindPopup('Center marker');
+            }
+        } catch (err) {
+            console.warn('Failed to create fallback marker:', err);
+        }
+    });
+    
+    // Use Leaflet's locate() method with optimized options for Rabbit R1
+    AppState.map.locate({
+        setView: true,          // Automatically center map on user location
+        maxZoom: 13,           // Zoom to city/street level
+        watch: false,          // No continuous tracking
+        enableHighAccuracy: true,  // Best available accuracy
+        timeout: 10000,        // 10 second timeout
+        maximumAge: 60000      // Accept cached position up to 1 minute old
+    });
 }
 /**
  * Show the app and hide loading screen
