@@ -1,30 +1,29 @@
 /**
- * R1 Map - Main Application Controller
+ * R1 Map - Complete Application with Leaflet Integration
  * Rabbit R1 Creations App for Interactive Maps and Navigation
  * 
- * Based on the r1-flashlight app structure for Rabbit R1 hardware integration
+ * Features: Leaflet maps, POI search, Rabbit R1 hardware integration
  */
 
 // Application state
 const AppState = {
     isInitialized: false,
     isR1Device: false,
+    map: null,
     currentLocation: null,
-    mapLoaded: false,
+    zoom: 13,
+    markers: [],
     searchActive: false,
-    routeActive: false,
-    voiceActive: false
+    poiVisible: true
 };
 
-// DOM elements
-const elements = {
+// DOM elements cache
+const Elements = {
     loading: null,
     app: null,
     map: null,
-    searchPanel: null,
-    routePanel: null,
-    voiceIndicator: null,
-    statusElements: {}
+    status: null,
+    buttons: {}
 };
 
 /**
@@ -34,50 +33,94 @@ function initializeApp() {
     console.log('🗺️ R1 Map App starting...');
     
     // Cache DOM elements
-    elements.loading = document.getElementById('loading');
-    elements.app = document.getElementById('app');
-    elements.map = document.getElementById('map');
-    elements.searchPanel = document.getElementById('search-panel');
-    elements.routePanel = document.getElementById('route-panel');
-    elements.voiceIndicator = document.getElementById('voice-indicator');
-    
-    // Status elements
-    elements.statusElements.gps = document.getElementById('gps-status');
-    elements.statusElements.battery = document.getElementById('battery-status');
+    cacheElements();
     
     // Check if running on Rabbit R1
     checkR1Device();
     
+    // Initialize map with Leaflet
+    initializeLeafletMap();
+    
     // Setup event listeners
     setupEventListeners();
     
-    // Initialize Rabbit Creations SDK (if available)
+    // Initialize Rabbit SDK if available
     initializeRabbitSDK();
     
-    // Initialize map placeholder
-    initializeMapPlaceholder();
-    
-    // Show app, hide loading
+    // Show app
     showApp();
     
     AppState.isInitialized = true;
+    updateStatus('App initialisiert');
     console.log('✅ R1 Map App initialized successfully');
+}
+
+/**
+ * Cache DOM elements for better performance
+ */
+function cacheElements() {
+    Elements.loading = document.getElementById('loading');
+    Elements.app = document.getElementById('app');
+    Elements.map = document.getElementById('map');
+    Elements.status = document.getElementById('status');
+    
+    // Cache button elements
+    Elements.buttons.zoomIn = document.getElementById('btn-zoom-in');
+    Elements.buttons.zoomOut = document.getElementById('btn-zoom-out');
+    Elements.buttons.location = document.getElementById('btn-location');
+    Elements.buttons.poi = document.getElementById('btn-poi');
+}
+
+/**
+ * Initialize Leaflet map
+ */
+function initializeLeafletMap() {
+    console.log('🗺️ Initializing Leaflet map...');
+    
+    // Clear existing map placeholder
+    const mapContainer = Elements.map;
+    if (mapContainer) {
+        mapContainer.innerHTML = '';
+        
+        // Initialize Leaflet map
+        AppState.map = L.map('map').setView([52.5200, 13.4050], AppState.zoom); // Berlin default
+        
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18
+        }).addTo(AppState.map);
+        
+        // Add map event listeners
+        AppState.map.on('zoomend', function() {
+            AppState.zoom = AppState.map.getZoom();
+            updateStatus(`Zoom: ${AppState.zoom}`);
+        });
+        
+        AppState.map.on('moveend', function() {
+            const center = AppState.map.getCenter();
+            updateStatus(`Position: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`);
+        });
+        
+        console.log('✅ Leaflet map initialized');
+        updateStatus('Karte geladen');
+    }
 }
 
 /**
  * Check if running on Rabbit R1 device
  */
 function checkR1Device() {
-    // TODO: Implement proper R1 device detection
-    // This will be replaced with actual SDK detection
     AppState.isR1Device = typeof window.RabbitCreations !== 'undefined';
     
     if (AppState.isR1Device) {
         console.log('🐰 Running on Rabbit R1 device');
         document.body.classList.add('r1-device');
+        updateStatus('R1 Gerät erkannt');
     } else {
         console.log('🖥️ Running in browser (development mode)');
         document.body.classList.add('browser-mode');
+        updateStatus('Browser-Modus');
     }
 }
 
@@ -85,24 +128,152 @@ function checkR1Device() {
  * Setup event listeners for UI interactions
  */
 function setupEventListeners() {
-    // Control buttons
-    document.getElementById('btn-location')?.addEventListener('click', handleLocationRequest);
-    document.getElementById('btn-search')?.addEventListener('click', toggleSearch);
-    document.getElementById('btn-route')?.addEventListener('click', toggleRoute);
-    document.getElementById('btn-settings')?.addEventListener('click', handleSettings);
+    // Zoom controls
+    if (Elements.buttons.zoomIn) {
+        Elements.buttons.zoomIn.addEventListener('click', handleZoomIn);
+    }
     
-    // Search functionality
-    document.getElementById('search-input')?.addEventListener('input', handleSearch);
+    if (Elements.buttons.zoomOut) {
+        Elements.buttons.zoomOut.addEventListener('click', handleZoomOut);
+    }
     
-    // Route functionality
-    document.getElementById('btn-calculate-route')?.addEventListener('click', calculateRoute);
+    // Location button
+    if (Elements.buttons.location) {
+        Elements.buttons.location.addEventListener('click', handleLocationRequest);
+    }
     
-    // Voice control (R1 specific)
-    if (AppState.isR1Device) {
-        setupVoiceControls();
+    // POI toggle button
+    if (Elements.buttons.poi) {
+        Elements.buttons.poi.addEventListener('click', handlePOIToggle);
     }
     
     console.log('🎧 Event listeners setup complete');
+}
+
+/**
+ * Handle zoom in
+ */
+function handleZoomIn() {
+    if (AppState.map) {
+        AppState.map.zoomIn();
+        updateStatus('Zoom vergrößert');
+        console.log('🔍 Zoomed in');
+    }
+}
+
+/**
+ * Handle zoom out
+ */
+function handleZoomOut() {
+    if (AppState.map) {
+        AppState.map.zoomOut();
+        updateStatus('Zoom verkleinert');
+        console.log('🔍 Zoomed out');
+    }
+}
+
+/**
+ * Handle location request
+ */
+function handleLocationRequest() {
+    console.log('📍 Location requested');
+    updateStatus('Suche Position...');
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                AppState.currentLocation = { lat, lng };
+                
+                if (AppState.map) {
+                    AppState.map.setView([lat, lng], 15);
+                    
+                    // Add or update location marker
+                    if (AppState.locationMarker) {
+                        AppState.map.removeLayer(AppState.locationMarker);
+                    }
+                    
+                    AppState.locationMarker = L.marker([lat, lng])
+                        .addTo(AppState.map)
+                        .bindPopup('📍 Ihr Standort')
+                        .openPopup();
+                }
+                
+                updateStatus('Position gefunden');
+                console.log('✅ Location acquired:', AppState.currentLocation);
+            },
+            (error) => {
+                updateStatus('GPS Fehler');
+                console.error('❌ Location error:', error);
+            }
+        );
+    } else {
+        updateStatus('GPS nicht verfügbar');
+    }
+}
+
+/**
+ * Handle POI toggle
+ */
+function handlePOIToggle() {
+    AppState.poiVisible = !AppState.poiVisible;
+    
+    if (AppState.poiVisible) {
+        showPOIs();
+        updateStatus('POIs angezeigt');
+    } else {
+        hidePOIs();
+        updateStatus('POIs ausgeblendet');
+    }
+    
+    // Update button visual state
+    if (Elements.buttons.poi) {
+        Elements.buttons.poi.classList.toggle('active', AppState.poiVisible);
+    }
+    
+    console.log(`🏢 POI visibility: ${AppState.poiVisible}`);
+}
+
+/**
+ * Show Points of Interest
+ */
+function showPOIs() {
+    if (!AppState.map) return;
+    
+    // Sample POIs for demonstration
+    const samplePOIs = [
+        { lat: 52.5200, lng: 13.4050, name: '🏛️ Brandenburger Tor', type: 'landmark' },
+        { lat: 52.5186, lng: 13.4081, name: '🏛️ Reichstag', type: 'government' },
+        { lat: 52.5164, lng: 13.3777, name: '🗼 Fernsehturm', type: 'landmark' },
+        { lat: 52.5001, lng: 13.4200, name: '🏛️ Checkpoint Charlie', type: 'historic' },
+        { lat: 52.5208, lng: 13.4094, name: '☕ Café Einstein', type: 'restaurant' }
+    ];
+    
+    // Clear existing POI markers
+    AppState.poiMarkers = AppState.poiMarkers || [];
+    AppState.poiMarkers.forEach(marker => AppState.map.removeLayer(marker));
+    AppState.poiMarkers = [];
+    
+    // Add POI markers
+    samplePOIs.forEach(poi => {
+        const marker = L.marker([poi.lat, poi.lng])
+            .addTo(AppState.map)
+            .bindPopup(`<strong>${poi.name}</strong><br>Typ: ${poi.type}`);
+        
+        AppState.poiMarkers.push(marker);
+    });
+}
+
+/**
+ * Hide Points of Interest
+ */
+function hidePOIs() {
+    if (!AppState.map || !AppState.poiMarkers) return;
+    
+    AppState.poiMarkers.forEach(marker => AppState.map.removeLayer(marker));
+    AppState.poiMarkers = [];
 }
 
 /**
@@ -112,39 +283,43 @@ function initializeRabbitSDK() {
     if (typeof window.RabbitCreations !== 'undefined') {
         console.log('🐰 Initializing Rabbit Creations SDK...');
         
-        // TODO: Initialize SDK with proper configuration
-        // window.RabbitCreations.init({
-        //     appId: 'r1-map',
-        //     version: '1.0.0'
-        // });
-        
-        console.log('✅ Rabbit SDK initialized');
+        try {
+            // Initialize SDK with map app configuration
+            window.RabbitCreations.init({
+                appId: 'r1-map',
+                version: '1.0.0',
+                features: ['gps', 'voice', 'hardware-buttons']
+            });
+            
+            // Setup hardware button listeners if available
+            setupHardwareButtons();
+            
+            updateStatus('R1 SDK aktiv');
+            console.log('✅ Rabbit SDK initialized');
+        } catch (error) {
+            console.error('❌ Rabbit SDK initialization failed:', error);
+            updateStatus('SDK Fehler');
+        }
     } else {
         console.log('⚠️ Rabbit SDK not available (development mode)');
     }
 }
 
 /**
- * Initialize map placeholder
+ * Setup hardware button listeners for R1
  */
-function initializeMapPlaceholder() {
-    const mapElement = elements.map;
-    if (mapElement) {
-        // TODO: Replace with actual map library integration
-        // This is a placeholder for development
-        const placeholder = mapElement.querySelector('.map-placeholder');
-        if (placeholder) {
-            placeholder.innerHTML = `
-                <div class="map-status">
-                    🗺️ Kartenintegration in Entwicklung<br>
-                    📍 Organic Maps wird integriert<br>
-                    🔄 Platzhalter aktiv
-                </div>
-            `;
+function setupHardwareButtons() {
+    if (AppState.isR1Device && window.RabbitCreations) {
+        try {
+            // Map hardware buttons to functions
+            window.RabbitCreations.onHardwareButton('action', handleLocationRequest);
+            window.RabbitCreations.onHardwareButton('scroll-up', handleZoomIn);
+            window.RabbitCreations.onHardwareButton('scroll-down', handleZoomOut);
+            
+            console.log('🔘 Hardware button listeners configured');
+        } catch (error) {
+            console.error('❌ Hardware button setup failed:', error);
         }
-        
-        AppState.mapLoaded = true;
-        console.log('🗺️ Map placeholder initialized');
     }
 }
 
@@ -152,146 +327,49 @@ function initializeMapPlaceholder() {
  * Show main app, hide loading screen
  */
 function showApp() {
-    if (elements.loading) {
-        elements.loading.style.display = 'none';
+    if (Elements.loading) {
+        Elements.loading.style.display = 'none';
     }
-    if (elements.app) {
-        elements.app.style.display = 'block';
-    }
-}
-
-/**
- * Handle location request
- */
-function handleLocationRequest() {
-    console.log('📍 Location requested');
-    updateStatus('gps', 'Suche Position...');
-    
-    // TODO: Implement geolocation with Rabbit R1 integration
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                AppState.currentLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                updateStatus('gps', 'Position gefunden');
-                console.log('✅ Location acquired:', AppState.currentLocation);
-            },
-            (error) => {
-                updateStatus('gps', 'GPS Fehler');
-                console.error('❌ Location error:', error);
-            }
-        );
-    } else {
-        updateStatus('gps', 'GPS nicht verfügbar');
+    if (Elements.app) {
+        Elements.app.style.display = 'block';
     }
 }
 
 /**
- * Toggle search panel
+ * Update status display
  */
-function toggleSearch() {
-    AppState.searchActive = !AppState.searchActive;
-    
-    if (elements.searchPanel) {
-        elements.searchPanel.style.display = AppState.searchActive ? 'block' : 'none';
-    }
-    
-    // Hide route panel if search is activated
-    if (AppState.searchActive && AppState.routeActive) {
-        toggleRoute();
-    }
-    
-    console.log(`🔍 Search panel ${AppState.searchActive ? 'opened' : 'closed'}`);
-}
-
-/**
- * Toggle route panel
- */
-function toggleRoute() {
-    AppState.routeActive = !AppState.routeActive;
-    
-    if (elements.routePanel) {
-        elements.routePanel.style.display = AppState.routeActive ? 'block' : 'none';
-    }
-    
-    // Hide search panel if route is activated
-    if (AppState.routeActive && AppState.searchActive) {
-        toggleSearch();
-    }
-    
-    console.log(`🧭 Route panel ${AppState.routeActive ? 'opened' : 'closed'}`);
-}
-
-/**
- * Handle search input
- */
-function handleSearch(event) {
-    const query = event.target.value;
-    console.log('🔍 Search query:', query);
-    
-    // TODO: Implement search with map integration
-    // Placeholder for search functionality
-}
-
-/**
- * Calculate route
- */
-function calculateRoute() {
-    const fromInput = document.getElementById('route-from');
-    const toInput = document.getElementById('route-to');
-    const modeSelect = document.getElementById('route-mode');
-    
-    const routeData = {
-        from: fromInput?.value,
-        to: toInput?.value,
-        mode: modeSelect?.value
-    };
-    
-    console.log('🧭 Calculate route:', routeData);
-    
-    // TODO: Implement actual route calculation
-    // Placeholder for route calculation
-}
-
-/**
- * Handle settings
- */
-function handleSettings() {
-    console.log('⚙️ Settings requested');
-    
-    // TODO: Implement settings panel
-    alert('Settings panel - coming soon!');
-}
-
-/**
- * Setup voice controls for R1
- */
-function setupVoiceControls() {
-    console.log('🎙️ Setting up voice controls for R1');
-    
-    // TODO: Implement R1 voice integration
-    // This will use the Rabbit Creations SDK voice features
-    
-    if (elements.voiceIndicator) {
-        elements.voiceIndicator.addEventListener('click', () => {
-            AppState.voiceActive = !AppState.voiceActive;
-            elements.voiceIndicator.classList.toggle('active', AppState.voiceActive);
-            console.log(`🎙️ Voice control ${AppState.voiceActive ? 'activated' : 'deactivated'}`);
-        });
+function updateStatus(message) {
+    if (Elements.status) {
+        Elements.status.textContent = message;
+        console.log(`📊 Status: ${message}`);
     }
 }
 
 /**
- * Update status indicators
+ * Search for places near current location
  */
-function updateStatus(type, message) {
-    const statusElement = elements.statusElements[type];
-    if (statusElement) {
-        statusElement.textContent = message;
-        console.log(`📊 Status update [${type}]: ${message}`);
+function searchNearbyPlaces(query) {
+    if (!AppState.currentLocation) {
+        updateStatus('Position benötigt für Suche');
+        return;
     }
+    
+    console.log(`🔍 Searching for: ${query}`);
+    updateStatus(`Suche nach: ${query}`);
+    
+    // This would typically call a geocoding API
+    // For now, we'll simulate search results
+    setTimeout(() => {
+        updateStatus(`Suchergebnisse für: ${query}`);
+        console.log('✅ Search completed (simulated)');
+    }, 1000);
+}
+
+/**
+ * Get current app state (for debugging)
+ */
+function getAppState() {
+    return { ...AppState };
 }
 
 /**
@@ -299,14 +377,20 @@ function updateStatus(type, message) {
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
 
-// Export for testing and debugging
+// Export for testing and R1 integration
 if (typeof window !== 'undefined') {
     window.R1MapApp = {
         AppState,
-        elements,
+        Elements,
         initializeApp,
         handleLocationRequest,
-        toggleSearch,
-        toggleRoute
+        handleZoomIn,
+        handleZoomOut,
+        handlePOIToggle,
+        searchNearbyPlaces,
+        getAppState,
+        updateStatus
     };
+    
+    console.log('🗺️ R1 Map App ready for integration');
 }
