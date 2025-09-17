@@ -37,6 +37,9 @@ function initializeApp() {
     // Initialize map with Leaflet
     initializeLeafletMap();
     
+    // Add Rabbit R1 Scrollwheel Integration (after map initialization)
+    setupRabbitR1ScrollWheel();
+    
     // Setup event listeners
     setupEventListeners();
     
@@ -120,6 +123,43 @@ function initializeLeafletMap() {
     }
 }
 /**
+ * Setup Rabbit R1 Scrollwheel Integration
+ * This is placed after map initialization and before other scroll fallbacks
+ */
+function setupRabbitR1ScrollWheel() {
+    // Legacy R1 app events integration
+    if (window.r1app && window.r1app.events) {
+        window.r1app.events.on('scroll', (delta) => {
+            if (AppState.map) {
+                if (delta > 0) {
+                    AppState.map.zoomIn();
+                } else {
+                    AppState.map.zoomOut();
+                }
+            }
+        });
+        console.log('✅ R1 app scrollwheel integration enabled');
+    }
+    
+    // Modern RabbitSDK integration
+    if (typeof window.RabbitSDK !== 'undefined') {
+        window.RabbitSDK.onReady(() => {
+            if (window.RabbitSDK.hardware) {
+                window.RabbitSDK.hardware.on('scroll', (data) => {
+                    if (AppState.map && data && typeof data.delta !== 'undefined') {
+                        if (data.delta > 0) {
+                            AppState.map.zoomIn();
+                        } else {
+                            AppState.map.zoomOut();
+                        }
+                    }
+                });
+                console.log('✅ RabbitSDK scrollwheel integration enabled');
+            }
+        });
+    }
+}
+/**
  * Setup event listeners including R1 hardware events
  */
 function setupEventListeners() {
@@ -176,19 +216,6 @@ function initializeRabbitSDK() {
                 
                 // Register for hardware events
                 if (window.RabbitSDK.hardware) {
-                    // ScrollWheel events
-                    window.RabbitSDK.hardware.on('scroll', (data) => {
-                        console.log('🖱️ R1 ScrollWheel SDK:', data);
-                        if (AppState.map && data.delta) {
-                            const currentZoom = AppState.map.getZoom();
-                            if (data.delta > 0) {
-                                AppState.map.zoomIn();
-                            } else {
-                                AppState.map.zoomOut();
-                            }
-                        }
-                    });
-                    
                     // PTT Button events
                     window.RabbitSDK.hardware.on('ptt', (data) => {
                         console.log('🎙️ R1 PTT Button SDK:', data);
@@ -338,22 +365,6 @@ function cleanup() {
  * Initialize app when DOM is loaded
  */
 document.addEventListener('DOMContentLoaded', initializeApp);
-// Native Rabbit R1 ScrollWheel Zoom
-if (window.r1app && window.r1app.events) {
-  window.r1app.events.on('scroll', (delta) => {
-    if (AppState.map) {
-      const z = AppState.map.getZoom();
-      // Use both zoomIn/zoomOut and setZoom for robustness
-      if (delta > 0) {
-        AppState.map.zoomIn();
-      } else {
-        AppState.map.zoomOut();
-      }
-      const next = Math.max(1, Math.min(19, z + (delta > 0 ? 1 : -1)));
-      AppState.map.setZoom(next);
-    }
-  });
-}
 // Cleanup on page unload
 window.addEventListener('beforeunload', cleanup);
 // Export for testing and R1 integration
