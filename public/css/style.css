@@ -87,7 +87,7 @@ body {
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
-    z-index: 800; /* Below zoom controls (z-index 1000) but above map */
+    z-index: 800; /* Below zoom controls */
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
     height: 28px;
@@ -234,8 +234,10 @@ body {
 .leaflet-tile-container img {
     background: #ee530e !important;
 }
-/* Zoom Controls - Higher z-index than header button */
+/* Zoom Controls - Positioned top-left below header button */
 .leaflet-control-zoom {
+    left: 8px !important;
+    top: 40px !important;
     border: none;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     z-index: 1000 !important; /* Above header button */
@@ -293,6 +295,7 @@ body {
         min-height: 24px;
         border-radius: 10px;
         box-shadow: none;
+        z-index: 800;
     }
     
     #map-bg {
@@ -319,7 +322,8 @@ body {
     
     /* Zoom controls positioning for small screens */
     .leaflet-control-zoom {
-        margin-top: 32px !important; /* Space for header button */
+        left: 8px !important;
+        top: 32px !important; /* Space for header button */
     }
 }
 /* Extra small screens - Real Rabbit R1 dimensions */
@@ -334,6 +338,7 @@ body {
         height: 22px;
         min-height: 22px;
         box-shadow: none;
+        z-index: 800;
     }
     
     .toast {
@@ -344,7 +349,8 @@ body {
     }
     
     .leaflet-control-zoom {
-        margin-top: 30px !important;
+        left: 8px !important;
+        top: 30px !important;
     }
 }
 /* Animations */
