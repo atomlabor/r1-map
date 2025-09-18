@@ -72,29 +72,30 @@ body {
     text-align: center;
     pointer-events: none;
 }
-/* Header Button - Small and centered at top */
+/* Header Button - Extra compact and precisely centered at top */
 .header-button {
     position: fixed;
-    top: 10px;
+    top: 6px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(238, 83, 14, 0.9);
     color: white;
     border: none;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
     font-weight: 600;
     cursor: pointer;
     z-index: 1000;
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .header-button:hover {
     background: rgba(238, 83, 14, 1);
-    transform: translateX(-50%) translateY(-1px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 /* Popup Overlay */
 .popup-overlay {
@@ -256,9 +257,10 @@ body {
     }
     
     .header-button {
-        font-size: 10px;
-        padding: 3px 8px;
-        top: 8px;
+        font-size: 8px;
+        padding: 2px 6px;
+        top: 6px;
+        height: 20px;
     }
     
     #map-bg {
