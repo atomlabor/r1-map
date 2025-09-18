@@ -2,25 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>r1-map - Rabbit R1 Navigation</title>
-    <link rel="stylesheet" href="css/style.css"/>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <!-- Loading Indicator -->
-    <div id="loading" class="loading-container">
+    <div class="loading-container" id="loading">
         <div class="loading-spinner"></div>
         <p>Loading map...</p>
     </div>
     
     <!-- Main Application Container -->
-    <div id="app" class="app-container" style="display: none;">
+    <div class="app-container" id="app" style="display: none;">
         
         <!-- Map Container - First Element for Fast Loading -->
-        <div id="map" class="map-area">
+        <div class="map-area" id="map">
             <!-- Map renders directly here for maximum speed -->
         </div>
         
@@ -35,6 +35,5 @@
     
     <!-- Application Scripts -->
     <script src="js/app.js"></script>
-    <script src="js/map.js"></script>
 </body>
 </html>
