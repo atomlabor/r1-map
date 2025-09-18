@@ -12,3 +12,6 @@
 .leaflet-control-radar span, .leaflet-control-radar label, .leaflet-radar-toggle span {
   color: #ee530e !important;
 }
+.leaflet-radar-toggle span {
+    color: #fff !important;
+}
