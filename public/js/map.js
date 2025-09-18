@@ -1,5 +1,5 @@
 /*
- * r1-map – Rabbit R1 Karten- und Navigations-App
+ * r1-map – Rabbit R1 Karten-App
  * Copyright © 2025 atomlabor.de – https://atomlabor.de
  * 
  * Entwickelt für Rabbit R1 Creations Platform
@@ -7,10 +7,6 @@
  * Hardware-Support: Rabbit R1 Scrollwheel, PTT/SideButton, GPS
  * 
  * Features:
- * ✓ Interaktive Kartendarstellung mit OpenStreetMap
- * ✓ Live POI-Suche über Overpass API
- * ✓ GPS-Positionsbestimmung und Nutzer-Marker
- * ✓ Rabbit R1 Hardware-Events (Scrollrad für Zoom, PTT für Suche)
  * ✓ Touch-optimierte Benutzeroberfläche für 240x282px Display
  * ✓ Tile-Cache Clearing bei App-Start für frische Kartendaten
  * 
