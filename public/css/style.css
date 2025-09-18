@@ -1,347 +1,165 @@
 /**
- * R1 Map - Minimal UI Styles
- * Optimized for Rabbit R1 device (240x282px) with responsive fallbacks
- */
-/* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+        
+font-size: 10px;
+        
+padding: 3px 6px;
+        
+top: 8px;
+    
 }
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #000;
-    color: #fff;
-    overflow: hidden;
-    width: 100vw;
-    height: 100vh;
-    position: relative;
+    
+    .header-button 
+{
+        
+font-size: 9px;
+        
+padding: 2px 10px;
+        
+height: 18px;
+        
+min-height: 18px;
+        
+border-radius: 10px;
+    
 }
-/* Loading Screen */
-.loading-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    z-index: 9999;
+    
+    #map-bg 
+{
+        
+max-width: 150px;
+        
+max-height: 150px;
+    
 }
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(238, 83, 14, 0.3);
-    border-top: 3px solid #ee530e;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 20px;
+    
+    .toast 
+{
+        
+top: calc(18px + 4px); /* Below smaller header button height + gap */
+        
+font-size: 11px;
+        
+padding: 6px 12px;
+        
+max-width: 160px;
+    
 }
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    
+    .popup-dialog 
+{
+        
+max-width: 220px;
+        
+padding: 15px;
+    
 }
-/* App Container */
-.app-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #000;
+    
+    .popup-title 
+{
+        
+font-size: 11px;
+        
+margin-bottom: 12px;
+    
 }
-/* App Header - Rabbit Orange background, white text, centered, compact */
-.app-header {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    background: #ee530e; /* Rabbit Orange background */
-    color: #fff; /* White text */
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-weight: bold;
-    font-size: 12px;
-    text-align: center;
-    pointer-events: none;
 }
-/* Header Button - Repositioned to top right, elegant & slim */
-.header-button {
-    position: fixed;
-    top: 10;
-    right: 12px;
-    left: auto;
-    transform: none;
-    padding: 2px 12px;
-    border-radius: 12px;
-    font-size: 10px;
-    font-weight: 600;
-    color: white;
-    background: rgba(238, 83, 14, 0.95);
-    pointer-events: auto;
-    margin: 0;
-    box-shadow: none;
-    height: 20px;
-    min-height: 20px;
-    border: none;
-    z-index: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Extra small screens - Real Rabbit R1 dimensions */
+@media (max-width: 240px) and (max-height: 282px) 
+{
+    .header-button 
+{
+        
+font-size: 8px;
+        
+padding: 2px 8px;
+        
+height: 16px;
+        
+min-height: 16px;
+    
 }
-.header-button:hover {
-    background: rgba(238, 83, 14, 1);
-    transform: scale(1.05);
+    
+    .toast 
+{
+        
+top: calc(16px + 4px); /* Below smaller header button + gap */
+        
+font-size: 10px;
+        
+padding: 5px 10px;
+        
+max-width: 140px;
+    
 }
-.header-button:active {
-    transform: scale(0.98);
 }
-/* Popup Overlay */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: none;
-    z-index: 2000;
-    backdrop-filter: blur(5px);
+/* Animations */
+.fade-in 
+{
+    
+animation: fadeIn 0.3s ease-in;
 }
-/* Popup Dialog - More compact */
-.popup-dialog {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    max-width: 240px;
-    width: 65%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    text-align: center;
+@keyframes fadeIn 
+{
+    
+from { opacity: 0; }
+    
+to { opacity: 1; }
 }
-/* Popup Close Button */
-.popup-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #999;
-    cursor: pointer;
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+.slide-up 
+{
+    
+animation: slideUp 0.3s ease-out;
 }
-.popup-close:hover {
-    background: #f0f0f0;
-    color: #FF6B35;
+@keyframes slideUp 
+{
+    
+from {
+        
+transform: translateY(20px);
+        
+opacity: 0;
+    
 }
-/* Popup Title - Smaller text */
-.popup-title {
-    color: #FF6B35;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    line-height: 1.3;
+    
+to {
+        
+transform: translateY(0);
+        
+opacity: 1;
+    
 }
-/* Popup Logo */
-.popup-logo {
-    max-width: 80px;
-    width: 100%;
-    height: auto;
-    border-radius: 6px;
-    display: block;
-    margin: 0 auto;
 }
-/* Map Background Image */
-#map-bg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 200px;
-    max-height: 200px;
-    opacity: 0.4;
-    z-index: 1;
-    pointer-events: none;
-    content: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iODAiIHN0cm9rZT0iI2VlNTMwZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjMiLz4KPHN0cm9rZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI0MCIgc3Ryb2tlPSIjZWU1MzBlIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQiIGZpbGw9IiNlZTUzMGUiLz4KPC9zdmc+');
+/* Performance Optimizations */
+.leaflet-container,
+.leaflet-tile,
+.leaflet-marker-icon 
+{
+    
+image-rendering: optimizeSpeed;
+    
+image-rendering: -webkit-optimize-contrast;
+    
+image-rendering: optimize-contrast;
 }
-/* Map Area - Full Screen with R1 Constraints */
-.map-area {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-#map {
-    width: 100vw;
-    height: 100vh;
-    max-width: 240px;
-    max-height: 282px;
-    border-radius: 0;
-    box-shadow: none;
-    z-index: 10;
-}
-/* Leaflet Map Customization - Consistent Rabbit Orange everywhere */
-.leaflet-container {
-    background: #ee530e !important; /* Rabbit Orange background for all map states */
-    font-family: inherit;
-}
-/* Ensure all map backgrounds are Rabbit Orange */
-.leaflet-tile-container {
-    background: #ee530e !important;
-}
-.leaflet-tile-pane {
-    background: #ee530e !important;
-}
-.leaflet-map-pane {
-    background: #ee530e !important;
-}
-.leaflet-layer {
-    background: #ee530e !important;
-}
-.leaflet-overlay-pane {
-    background: transparent !important;
-}
+/* Leaflet Tile Background - Rabbit Neon Orange */
+.leaflet-container,
+.leaflet-tile,
+.leaflet-tile-pane,
+.leaflet-tile-container,
+.leaflet-map-pane,
+.leaflet-layer,
 .leaflet-tile-loaded {
-    background: #ee530e !important;
-}
-/* Handle missing/loading tiles */
-.leaflet-tile {
     background: #ee530e !important;
 }
 .leaflet-tile-container img {
     background: #ee530e !important;
 }
-.leaflet-control-attribution {
-    background: rgba(0,0,0,0.7);
-    color: #ccc;
-    font-size: 10px;
-    z-index: 940;
-}
-/* Toast Notifications */
-.toast {
-    position: fixed;
-    top: calc(20px + 4px); /* Below header button height + small gap */
-    left: 50%;
-    transform: translateX(-50%) translateY(0px);
-    background: #ee530e; /* Rabbit Orange */
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 12px;
-    z-index: 960;
-    opacity: 0;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    max-width: 180px;
-    word-break: break-word;
-    backdrop-filter: blur(5px);
-}
-/* Responsive Design for Rabbit R1 (240x282px) */
-@media (max-width: 280px), (max-height: 300px) {
-    .app-header {
-        font-size: 10px;
-        padding: 3px 6px;
-        top: 8px;
-    }
-    
-    .header-button {
-        font-size: 9px;
-        padding: 2px 10px;
-        height: 18px;
-        min-height: 18px;
-        border-radius: 10px;
-    }
-    
-    #map-bg {
-        max-width: 150px;
-        max-height: 150px;
-    }
-    
-    .toast {
-        top: calc(18px + 4px); /* Below smaller header button height + gap */
-        font-size: 11px;
-        padding: 6px 12px;
-        max-width: 160px;
-    }
-    
-    .popup-dialog {
-        max-width: 220px;
-        padding: 15px;
-    }
-    
-    .popup-title {
-        font-size: 11px;
-        margin-bottom: 12px;
-    }
-}
-/* Extra small screens - Real Rabbit R1 dimensions */
-@media (max-width: 240px) and (max-height: 282px) {
-    .header-button {
-        font-size: 8px;
-        padding: 2px 8px;
-        height: 16px;
-        min-height: 16px;
-    }
-    
-    .toast {
-        top: calc(16px + 4px); /* Below smaller header button + gap */
-        font-size: 10px;
-        padding: 5px 10px;
-        max-width: 140px;
-    }
-}
-/* Animations */
-.fade-in {
-    animation: fadeIn 0.3s ease-in;
-}
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-.slide-up {
-    animation: slideUp 0.3s ease-out;
-}
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-/* Performance Optimizations */
-.leaflet-container,
-.leaflet-tile,
-.leaflet-marker-icon {
-    image-rendering: optimizeSpeed;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: optimize-contrast;
-}
 /* Hardware Acceleration */
 #map,
-.app-container {
-    transform: translateZ(0);
-    will-change: transform;
+.app-container 
+{
+    
+transform: translateZ(0);
+    
+will-change: transform;
 }
