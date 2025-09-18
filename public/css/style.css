@@ -68,7 +68,6 @@ General app styles
     transform: translateZ(0);
     will-change: transform;
 }
-
 /* Optimized Leaflet Radar Control Styles */
 .leaflet-control-radar {
     max-width: 60px !important;
@@ -88,11 +87,9 @@ General app styles
     min-height: auto !important;
     height: auto !important;
 }
-
 .leaflet-control-radar * {
     box-sizing: border-box !important;
 }
-
 /* Radar Toggle Container */
 .leaflet-radar-toggle {
     display: flex !important;
@@ -101,12 +98,11 @@ General app styles
     margin-bottom: 3px !important;
     padding: 0 !important;
 }
-
 /* Radar Text Label */
 .leaflet-control-radar span,
 .leaflet-control-radar label,
 .leaflet-radar-toggle span {
-    color: #ee530e !important;
+    color: #111 !important;
     font-size: 10px !important;
     font-weight: 500 !important;
     text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
@@ -114,7 +110,6 @@ General app styles
     padding: 0 !important;
     white-space: nowrap !important;
 }
-
 /* Checkbox Styling */
 .leaflet-control-radar input[type="checkbox"] {
     width: 12px !important;
@@ -127,14 +122,12 @@ General app styles
     border-radius: 2px !important;
     cursor: pointer !important;
 }
-
 /* Slider Container */
 .leaflet-radar-slider {
     margin: 2px 0 !important;
     padding: 0 !important;
     width: 100% !important;
 }
-
 /* Slider Styling */
 .leaflet-control-radar input[type="range"],
 .leaflet-radar-slider input[type="range"] {
@@ -150,7 +143,6 @@ General app styles
     appearance: none !important;
     cursor: pointer !important;
 }
-
 /* Slider Track */
 .leaflet-control-radar input[type="range"]::-webkit-slider-track {
     height: 4px !important;
@@ -158,14 +150,12 @@ General app styles
     border-radius: 2px !important;
     border: none !important;
 }
-
 .leaflet-control-radar input[type="range"]::-moz-range-track {
     height: 4px !important;
     background: #333 !important;
     border-radius: 2px !important;
     border: none !important;
 }
-
 /* Slider Thumb */
 .leaflet-control-radar input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none !important;
@@ -177,7 +167,6 @@ General app styles
     cursor: pointer !important;
     box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
 }
-
 .leaflet-control-radar input[type="range"]::-moz-range-thumb {
     width: 10px !important;
     height: 10px !important;
@@ -187,7 +176,6 @@ General app styles
     cursor: pointer !important;
     box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
 }
-
 /* Timestamp Display */
 .leaflet-radar-timestamp {
     color: #ee530e !important;
@@ -199,31 +187,25 @@ General app styles
     text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
     opacity: 0.9 !important;
 }
-
 /* Disabled State */
 .leaflet-control-radar input:disabled {
     opacity: 0.5 !important;
     cursor: not-allowed !important;
 }
-
 /* Hover Effects */
 .leaflet-control-radar:hover {
     box-shadow: 0 3px 12px rgba(238, 83, 14, 0.4) !important;
     border-color: #ff6b1a !important;
 }
-
 .leaflet-control-radar input[type="checkbox"]:hover {
     border-color: #ff6b1a !important;
 }
-
 .leaflet-control-radar input[type="range"]:hover::-webkit-slider-thumb {
     background: #ff6b1a !important;
 }
-
 .leaflet-control-radar input[type="range"]:hover::-moz-range-thumb {
     background: #ff6b1a !important;
 }
-
 /* Remove any default borders and backgrounds */
 .leaflet-control-radar,
 .leaflet-control-radar div,
@@ -232,7 +214,6 @@ General app styles
     background: none;
     outline: none;
 }
-
 /* Override any Leaflet default control styles */
 .leaflet-control-radar.leaflet-control {
     border: 1px solid #ee530e !important;
