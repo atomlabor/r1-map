@@ -10,6 +10,104 @@
     
     <!-- App CSS -->
     <link rel="stylesheet" href="css/style.css" />
+    
+    <style>
+        /* Rabbit-style button for header */
+        .header-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #FF6B35, #FF8C42);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .header-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+            background: linear-gradient(135deg, #FF8C42, #FF6B35);
+        }
+        
+        /* Modern popup dialog */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+        }
+        
+        .popup-dialog {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-close:hover {
+            background: #f0f0f0;
+            color: #FF6B35;
+        }
+        
+        .popup-title {
+            color: #FF6B35;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .popup-logo {
+            max-width: 120px;
+            width: 80%;
+            height: auto;
+            border-radius: 8px;
+        }
+        
+        /* Hide original header */
+        .app-header {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -20,7 +118,19 @@
     <!-- Map Container -->
     <div id="map" style="width:100vw;height:100vh"></div>
     
-    <!-- Header -->
+    <!-- Header Button -->
+    <button class="header-button" onclick="openPopup()">r1 map</button>
+    
+    <!-- Popup Dialog -->
+    <div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
+        <div class="popup-dialog" onclick="event.stopPropagation()">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <div class="popup-title">proudly made for the r1 community from atomlabor.de</div>
+            <img src="r1-map.png" alt="r1 map logo" class="popup-logo" />
+        </div>
+    </div>
+    
+    <!-- Original Header (hidden) -->
     <header class="app-header">
         r1 map
     </header>
@@ -30,5 +140,23 @@
     
     <!-- App JS -->
     <script src="js/app.js"></script>
+    
+    <!-- Popup functionality -->
+    <script>
+        function openPopup() {
+            document.getElementById('popupOverlay').style.display = 'block';
+        }
+        
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+        
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closePopup();
+            }
+        });
+    </script>
 </body>
 </html>
