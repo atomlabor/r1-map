@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>r1 map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <style>
         body {
             margin: 0;
@@ -30,15 +30,15 @@
         
         .header-button {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 0;
+            right: 12px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: normal;
             background: rgba(255, 107, 53, 0.9);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
             z-index: 1000;
             backdrop-filter: blur(10px);
@@ -145,18 +145,11 @@
                 ×
             </button>
             <div class="popup-title">
-                made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" target="_blank" style="color: #FF6B35; text-decoration: underline;">https://ko-fi.com/atomlabor</a>
+                made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #FF6B35; text-decoration: underline;" target="_blank">https://ko-fi.com/atomlabor</a>
             </div>
-            <img src="./r1-map.png" alt="r1 map logo" class="popup-logo"/>
+            <img src="https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true" alt="r1 map logo" class="popup-logo" />
         </div>
     </div>
-    
-    <!-- Original Header (hidden) -->
-    <header class="app-header">
-        <h1>
-            r1 map
-        </h1>
-    </header>
     
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
