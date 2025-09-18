@@ -19,21 +19,19 @@
     <!-- Main Application Container -->
     <div class="app-container" id="app">
         
-        <!-- Map Container - First Element for Fast Loading -->
-        <div class="map-area" id="map">
-            <!-- Map renders directly here for maximum speed -->
-        </div>
+        <!-- Map Container with explicit dimensions -->
+        <div id="map" style="width:100vw;height:100vh;"></div>
         
-        <!-- Minimal UI Overlay - After Map -->
+        <!-- Minimal UI Overlay - Header centered at top -->
         <header class="app-header">
-            r1 maps
+            <h1>r1 map</h1>
         </header>
     </div>
     
     <!-- Rabbit R1 Creations SDK -->
     <script src="https://unpkg.com/@rabbit-r1/creations-sdk@latest/dist/index.js"></script>
     
-    <!-- Application Scripts -->
+    <!-- Application Scripts - loaded after Leaflet -->
     <script src="js/app.js"></script>
 </body>
 </html>
