@@ -2,12 +2,14 @@
  * R1 Map - Minimal UI Styles
  * Optimized for Rabbit R1 device (240x282px) with responsive fallbacks
  */
+
 /* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #000;
@@ -17,6 +19,7 @@ body {
     height: 100vh;
     position: relative;
 }
+
 /* Loading Screen */
 .loading-container {
     position: fixed;
@@ -32,19 +35,22 @@ body {
     color: #fff;
     z-index: 9999;
 }
+
 .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid rgba(255, 107, 53, 0.3);
-    border-top: 3px solid #ff6b35;
+    border: 3px solid rgba(238, 83, 14, 0.3);
+    border-top: 3px solid #ee530e;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
 }
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
 /* App Container */
 .app-container {
     position: relative;
@@ -56,23 +62,24 @@ body {
     justify-content: center;
     background: #000;
 }
-/* App Header - Minimal */
+
+/* App Header - Rabbit Orange background, white text, centered */
 .app-header {
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000; /* keep header above map but below toast */
-    background: rgba(0, 0, 0, 0.7);
-    color: #ff6b35;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
+    z-index: 1000;
+    background: #ee530e; /* Rabbit Orange background */
+    color: #fff; /* White text */
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
     text-align: center;
     pointer-events: none;
-    backdrop-filter: blur(4px);
 }
+
 /* Map Background Image */
 #map-bg {
     position: absolute;
@@ -84,18 +91,20 @@ body {
     opacity: 0.4;
     z-index: 1;
     pointer-events: none;
-    content: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iODAiIHN0cm9rZT0iI2ZmNmIzNSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjMiLz4KPHN0cm9rZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI0MCIgc3Ryb2tlPSIjZmY2YjM1IiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQiIGZpbGw9IiNmZjZiMzUiLz4KPC9zdmc+');
+    content: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iODAiIHN0cm9rZT0iI2VlNTMwZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwLjMiLz4KPHN0cm9rZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI0MCIgc3Ryb2tlPSIjZWU1MzBlIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIG9wYWNpdHk9IjAuNSIvPgo8Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjQiIGZpbGw9IiNlZTUzMGUiLz4KPC9zdmc+');
 }
+
 /* Map Area - Full Screen with R1 Constraints */
 .map-area {
     position: relative;
     width: 100vw;
     height: 100vh;
-    z-index: 10; /* map base layer */
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 #map {
     width: 100vw;
     height: 100vh;
@@ -105,50 +114,70 @@ body {
     box-shadow: none;
     z-index: 10;
 }
-/* Leaflet Map Customization */
+
+/* Leaflet Map Customization with Rabbit Orange */
 .leaflet-container {
-    background: #1a1a1a;
+    background: #ee530e !important; /* Rabbit Orange background for tile gaps */
     font-family: inherit;
 }
+
+/* Leaflet Tile Container - Rabbit Orange background for loading/empty tiles */
+.leaflet-tile-container {
+    background: #ee530e !important;
+}
+
+.leaflet-tile-pane {
+    background: #ee530e !important;
+}
+
+.leaflet-map-pane {
+    background: #ee530e !important;
+}
+
 .leaflet-control-zoom {
     border: none;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    z-index: 940; /* keep below toast */
+    z-index: 940;
 }
+
 .leaflet-control-zoom a {
     background: rgba(0,0,0,0.8);
     color: #fff;
     border: 1px solid #333;
 }
+
 .leaflet-control-zoom a:hover {
-    background: rgba(255, 107, 53, 0.8);
+    background: rgba(238, 83, 14, 0.8); /* Rabbit Orange on hover */
     color: #fff;
 }
+
 .leaflet-control-attribution {
     background: rgba(0,0,0,0.7);
     color: #ccc;
     font-size: 10px;
-    z-index: 940; /* keep below toast */
+    z-index: 940;
 }
+
 /* Toast Notifications */
 .toast {
     position: fixed;
     top: 52px;
     left: 50%;
     transform: translateX(-50%) translateY(-20px);
-    background: #ff6b35; /* orange */
+    background: #ee530e; /* Rabbit Orange */
     color: #fff;
     padding: 8px 16px;
     border-radius: 8px;
     font-size: 12px;
-    z-index: 950; /* above header and controls, below modals */
+    z-index: 950;
     opacity: 0;
-    transition: all 0.3s ease; /* keep transition */
+    transition: all 0.3s ease;
     pointer-events: none;
     max-width: 180px;
     word-break: break-word;
-    backdrop-filter: blur(5px); /* keep backdrop-filter */
+    backdrop-filter: blur(5px);
 }
+
 /* Responsive Design for Rabbit R1 */
 @media (max-width: 280px) {
     .app-header {
@@ -156,14 +185,14 @@ body {
         padding: 3px 6px;
         top: 8px;
     }
-
+    
     #map-bg {
         max-width: 150px;
         max-height: 150px;
     }
-
+    
     .toast {
-        top: 52px; /* keep offset consistent */
+        top: 52px;
         left: 50%;
         right: auto;
         transform: translateX(-50%) translateY(-20px);
@@ -172,17 +201,21 @@ body {
         max-width: 180px;
     }
 }
+
 /* Animations */
 .fade-in {
     animation: fadeIn 0.3s ease-in;
 }
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+
 .slide-up {
     animation: slideUp 0.3s ease-out;
 }
+
 @keyframes slideUp {
     from {
         transform: translateY(20px);
@@ -193,6 +226,7 @@ body {
         opacity: 1;
     }
 }
+
 /* Performance Optimizations */
 .leaflet-container,
 .leaflet-tile,
@@ -201,6 +235,7 @@ body {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: optimize-contrast;
 }
+
 /* Hardware Acceleration */
 #map,
 .app-container {
