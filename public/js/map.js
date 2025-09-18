@@ -15,11 +15,9 @@
  * 
  * Made with ❤️ by atomlabor.de – Rabbit R1 Community
  */
-
 // === GLOBALE VARIABLEN ===
 let map, userMarker, currentPOIMarkers = [];
 let isInitialized = false;
-
 // === HAUPTINITIALISIERUNG ===
 document.addEventListener('DOMContentLoaded', () => {
   try {
@@ -34,20 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('r1-map Init Error:', error);
   }
 });
-
 // === KARTEN-INITIALISIERUNG ===
 function initializeMap() {
   // Leaflet Map erstellen (optimiert für Rabbit R1 Display)
   map = L.map('map', {
-    center: [51.256211, 7.150764], // Wuppertal, Deutschland
-    zoom: 13,
+    center: [51.1657, 10.4515], // Deutschland (Ländermitte)
+    zoom: 6,
     minZoom: 8,
     maxZoom: 18,
     zoomControl: false,
     attributionControl: false,
     preferCanvas: true // Performance-Optimierung
   });
-
   // OpenStreetMap Tile Layer mit Buffer-Optimierung
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -56,12 +52,11 @@ function initializeMap() {
     unloadInvisibleTiles: false,
     reuseTiles: true
   }).addTo(map);
-
   // Map Event Listeners
   map.on('moveend', () => {
     setStatus(`Zoom: ${map.getZoom()} | Zentrum aktualisiert`);
   });
-
   map.on('click', (e) => {
     setStatus(`Koordinaten: ${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`);
   });
+}
