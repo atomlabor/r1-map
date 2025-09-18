@@ -72,30 +72,37 @@ body {
     text-align: center;
     pointer-events: none;
 }
-/* Header Button - Extra compact and precisely centered at top */
+/* Header Button - Touch-friendly positioning above map but below zoom controls */
 .header-button {
     position: fixed;
-    top: 6px;
+    top: 2vw;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(238, 83, 14, 0.9);
+    background: rgba(238, 83, 14, 0.95);
     color: white;
     border: none;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 10px;
+    padding: 6px 16px;
+    border-radius: 12px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
-    z-index: 1000;
+    z-index: 950; /* Below zoom controls (z-index 1000) but above map */
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
-    height: 24px;
+    height: 28px;
+    min-height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation; /* Better touch response */
+    -webkit-tap-highlight-color: transparent;
 }
 .header-button:hover {
     background: rgba(238, 83, 14, 1);
+    transform: translateX(-50%) scale(1.05);
+}
+.header-button:active {
+    transform: translateX(-50%) scale(0.98);
 }
 /* Popup Overlay */
 .popup-overlay {
@@ -194,12 +201,12 @@ body {
     box-shadow: none;
     z-index: 10;
 }
-/* Leaflet Map Customization with Rabbit Orange */
+/* Leaflet Map Customization - Consistent Rabbit Orange everywhere */
 .leaflet-container {
-    background: #ee530e !important; /* Rabbit Orange background for tile gaps */
+    background: #ee530e !important; /* Rabbit Orange background for all map states */
     font-family: inherit;
 }
-/* Leaflet Tile Container - Rabbit Orange background for loading/empty tiles */
+/* Ensure all map backgrounds are Rabbit Orange */
 .leaflet-tile-container {
     background: #ee530e !important;
 }
@@ -209,10 +216,27 @@ body {
 .leaflet-map-pane {
     background: #ee530e !important;
 }
+.leaflet-layer {
+    background: #ee530e !important;
+}
+.leaflet-overlay-pane {
+    background: transparent !important;
+}
+.leaflet-tile-loaded {
+    background: #ee530e !important;
+}
+/* Handle missing/loading tiles */
+.leaflet-tile {
+    background: #ee530e !important;
+}
+.leaflet-tile-container img {
+    background: #ee530e !important;
+}
+/* Zoom Controls - Higher z-index than header button */
 .leaflet-control-zoom {
     border: none;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    z-index: 940;
+    z-index: 1000 !important; /* Above header button */
 }
 .leaflet-control-zoom a {
     background: rgba(0,0,0,0.8);
@@ -232,15 +256,15 @@ body {
 /* Toast Notifications */
 .toast {
     position: fixed;
-    top: 52px;
+    top: calc(2vw + 36px); /* Below header button */
     left: 50%;
-    transform: translateX(-50%) translateY(-20px);
+    transform: translateX(-50%) translateY(0px);
     background: #ee530e; /* Rabbit Orange */
     color: #fff;
     padding: 8px 16px;
     border-radius: 8px;
     font-size: 12px;
-    z-index: 950;
+    z-index: 960;
     opacity: 0;
     transition: all 0.3s ease;
     pointer-events: none;
@@ -248,8 +272,8 @@ body {
     word-break: break-word;
     backdrop-filter: blur(5px);
 }
-/* Responsive Design for Rabbit R1 */
-@media (max-width: 280px) {
+/* Responsive Design for Rabbit R1 (240x282px) */
+@media (max-width: 280px), (max-height: 300px) {
     .app-header {
         font-size: 10px;
         padding: 3px 6px;
@@ -257,10 +281,12 @@ body {
     }
     
     .header-button {
-        font-size: 8px;
-        padding: 2px 6px;
-        top: 6px;
-        height: 20px;
+        top: 4px; /* Fixed pixel value for precise positioning on R1 */
+        font-size: 10px;
+        padding: 4px 12px;
+        height: 24px;
+        min-height: 24px;
+        border-radius: 10px;
     }
     
     #map-bg {
@@ -269,23 +295,46 @@ body {
     }
     
     .toast {
-        top: 52px;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%) translateY(-20px);
-        font-size: 12px;
-        padding: 8px 16px;
-        max-width: 180px;
+        top: 32px; /* Adjusted for smaller header button */
+        font-size: 11px;
+        padding: 6px 12px;
+        max-width: 160px;
     }
     
     .popup-dialog {
-        max-width: 250px;
+        max-width: 220px;
         padding: 15px;
     }
     
     .popup-title {
-        font-size: 12px;
+        font-size: 11px;
         margin-bottom: 12px;
+    }
+    
+    /* Zoom controls positioning for small screens */
+    .leaflet-control-zoom {
+        margin-top: 40px !important; /* Space for header button */
+    }
+}
+/* Extra small screens - Real Rabbit R1 dimensions */
+@media (max-width: 240px) and (max-height: 282px) {
+    .header-button {
+        top: 2px;
+        font-size: 9px;
+        padding: 3px 10px;
+        height: 22px;
+        min-height: 22px;
+    }
+    
+    .toast {
+        top: 28px;
+        font-size: 10px;
+        padding: 5px 10px;
+        max-width: 140px;
+    }
+    
+    .leaflet-control-zoom {
+        margin-top: 32px !important;
     }
 }
 /* Animations */
