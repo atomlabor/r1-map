@@ -42,16 +42,9 @@ L.Control.Radar = L.Control.extend({
         let checkbox_label = document.createElement(`span`);
         checkbox_label.innerText = `US Radar`;
         checkbox_div.appendChild(checkbox_label);
-        let slider_div = L.DomUtil.create(
-            `div`,
-            `leaflet-radar-slider`,
-            this.container
-        );
-        this.slider = document.createElement(`input`);
-        this.slider.id = `leaflet-radar-slider`;
-        this.slider.type = `range`;
-        this.slider.min = 0;
-        slider_div.appendChild(this.slider);
+        
+        // Removed slider creation code
+        
         this.timestamp_div = L.DomUtil.create(
             `div`,
             `leaflet-radar-timestamp`,
@@ -72,7 +65,7 @@ L.Control.Radar = L.Control.extend({
         this.timestamp_div.innerHTML = this.timeLayers[index].timestamp;
     },
     setDisabled: function (disabled) {
-        this.slider.disabled = disabled;
+        // Removed slider disable logic
         this.timestamp_div.innerText = ``;
     },
     toggle: function () {
@@ -84,15 +77,11 @@ L.Control.Radar = L.Control.extend({
         this.setDisabled(false);
         // Create simple radar layer with new tile source
         this.createRadarLayer();
-        this.slider.max = `${this.timeLayers.length - 1}`;
+        
+        // Removed slider max setting and slider input event listener
+        
         this.timeLayerIndex = 0;
         this.isPaused = false;
-        this.slider.oninput = () => {
-            this.hideLayerByIndex(this.timeLayerIndex);
-            this.timeLayerIndex = +this.slider.value;
-            this.showLayerByIndex(this.timeLayerIndex);
-            this.isPaused = true;
-        };
         this.setTransitionTimer();
     },
     createRadarLayer: function() {
@@ -125,7 +114,9 @@ L.Control.Radar = L.Control.extend({
                 this.hideLayerByIndex(this.timeLayerIndex);
                 this.incrementLayerIndex();
                 this.showLayerByIndex(this.timeLayerIndex);
-                this.slider.value = `${this.timeLayerIndex}`;
+                
+                // Removed slider value update
+                
                 this.setTransitionTimer();
             } else {
                 this.setDisabled(true);
