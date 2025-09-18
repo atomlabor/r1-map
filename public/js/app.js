@@ -3,11 +3,9 @@
  * Basic map initialization with Germany as starting point
  * Version 1.5 | Atomlabor.de Design
  */
-
 // Global variables
 let map;
 let popup;
-
 // Style .app-header element for top-right positioning
 function styleAppHeader() {
     const appHeader = document.querySelector('.app-header');
@@ -19,7 +17,7 @@ function styleAppHeader() {
         
         // Set fixed position in top-right corner
         appHeader.style.position = 'fixed';
-        appHeader.style.top = '0';
+        appHeader.style.top = '5px';
         appHeader.style.right = '12px';
         appHeader.style.zIndex = '1000';
         
@@ -32,7 +30,6 @@ function styleAppHeader() {
         console.log('.app-header styled for top-right positioning');
     }
 }
-
 // Show elegant info popup
 function showInfoPopup() {
     // Remove existing popup if any
@@ -98,7 +95,6 @@ function showInfoPopup() {
     // Add to body
     document.body.appendChild(popup);
 }
-
 // Hide info popup
 function hideInfoPopup() {
     if (popup) {
@@ -106,7 +102,6 @@ function hideInfoPopup() {
         popup = null;
     }
 }
-
 // Hide loading screen
 function hideLoadingScreen() {
     const loading = document.getElementById('loading');
@@ -114,7 +109,6 @@ function hideLoadingScreen() {
         loading.style.display = 'none';
     }
 }
-
 // Initialize map
 function initMap() {
     // Create map centered on Germany with OSM.DE tiles
@@ -132,7 +126,6 @@ function initMap() {
     console.log('Map initialized successfully');
     hideLoadingScreen();
 }
-
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
@@ -151,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initMap();
 });
-
 // Close popup when clicking outside
 document.addEventListener('click', function(event) {
     if (popup && !popup.contains(event.target) && !event.target.classList.contains('app-header')) {
