@@ -1,10 +1,10 @@
-# r1-map
+# r1-map (Update V 1.5 )
 
 ## ENG
 
 ### Minimal Rabbit R1 Map App
 
-A minimalist navigation app designed for the Rabbit R1 device. Based on OpenStreetMap and Leaflet, with touch and pinch-to-zoom support. UI is intentionally minimal — no search or overlays, no offline mode, hardware controls are in preparation.
+A minimalist map app designed for the Rabbit R1 device. Based on OpenStreetMap and Leaflet, with touch and pinch-to-zoom support. UI is intentionally minimal — no search or overlays, no offline mode, hardware controls are in preparation.
 
 **Current Status:** Reset to stable Leaflet 1.9.4 base implementation with clean HTML structure.
 
@@ -15,7 +15,7 @@ A minimalist navigation app designed for the Rabbit R1 device. Based on OpenStre
 - ⚡ Loading screen while map initializes
 - ✅ Functional map controls (zoom, drag)
 
-**Hardware integration (planned):**
+**Hardware integration (planned, when supported by rabbit.tech):**
 - ScrollWheel: zoom in/out the map (planned)
 - PTT Button: visual feedback on map (planned)
 - Touch: drag/pinch to pan & zoom (implemented)
@@ -30,7 +30,7 @@ A minimalist navigation app designed for the Rabbit R1 device. Based on OpenStre
 
 ## DEU
 
-### Minimalistische Navigations-App für das Rabbit R1
+### Minimalistische Karten-App für das Rabbit R1 (Update V 1.5 )
 
 Eine ultraleichte Karten-App für das Rabbit R1. OpenStreetMap & Leaflet, Touch- und Pinch-Zoom-Bedienung. UI und Steuerung sind minimal – keine Suche, keine Overlays, kein Offline-Modus, Hardware-Steuerung in Vorbereitung.
 
@@ -43,7 +43,7 @@ Eine ultraleichte Karten-App für das Rabbit R1. OpenStreetMap & Leaflet, Touch-
 - ⚡ Ladebildschirm während Karteninitialisierung
 - ✅ Funktionale Kartensteuerung (Zoom, Verschieben)
 
-**Hardware-Integration (in Vorbereitung):**
+**Hardware-Integration (in Vorbereitung, wenn rabbit tech es unterstützt):**
 - ScrollWheel: Zoom der Karte (geplant)
 - PTT-Button: Visuelle Rückmeldung auf der Map (geplant)
 - Touch: Bewegen & Zoomen der Karte (implementiert)
