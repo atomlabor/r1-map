@@ -72,16 +72,17 @@ body {
     text-align: center;
     pointer-events: none;
 }
-/* Header Button - Touch-friendly positioning above map but below zoom controls */
+/* Header Button - Perfect center at top edge for Rabbit R1 */
 .header-button {
     position: fixed;
-    top: 2vw;
-    left: 200px;
+    top: 0;
+    left: 50%;
     transform: translateX(-50%);
     background: rgba(238, 83, 14, 0.95);
     color: white;
     border: none;
     padding: 6px 16px;
+    margin: 0;
     border-radius: 12px;
     font-size: 11px;
     font-weight: 600;
@@ -96,6 +97,7 @@ body {
     justify-content: center;
     touch-action: manipulation; /* Better touch response */
     -webkit-tap-highlight-color: transparent;
+    box-shadow: none;
 }
 .header-button:hover {
     background: rgba(238, 83, 14, 1);
@@ -256,7 +258,7 @@ body {
 /* Toast Notifications */
 .toast {
     position: fixed;
-    top: calc(2vw + 36px); /* Below header button */
+    top: calc(28px + 4px); /* Below header button height + small gap */
     left: 50%;
     transform: translateX(-50%) translateY(0px);
     background: #ee530e; /* Rabbit Orange */
@@ -281,12 +283,16 @@ body {
     }
     
     .header-button {
-        top: 4px; /* Fixed pixel value for precise positioning on R1 */
+        top: 0; /* Always at top edge for R1 */
+        left: 50%;
+        transform: translateX(-50%);
         font-size: 10px;
         padding: 4px 12px;
+        margin: 0;
         height: 24px;
         min-height: 24px;
         border-radius: 10px;
+        box-shadow: none;
     }
     
     #map-bg {
@@ -295,7 +301,7 @@ body {
     }
     
     .toast {
-        top: 32px; /* Adjusted for smaller header button */
+        top: calc(24px + 4px); /* Below smaller header button height + gap */
         font-size: 11px;
         padding: 6px 12px;
         max-width: 160px;
@@ -313,28 +319,32 @@ body {
     
     /* Zoom controls positioning for small screens */
     .leaflet-control-zoom {
-        margin-top: 40px !important; /* Space for header button */
+        margin-top: 32px !important; /* Space for header button */
     }
 }
 /* Extra small screens - Real Rabbit R1 dimensions */
 @media (max-width: 240px) and (max-height: 282px) {
     .header-button {
-        top: 2px;
+        top: 0; /* Pixel-perfect at top edge */
+        left: 50%;
+        transform: translateX(-50%);
         font-size: 9px;
         padding: 3px 10px;
+        margin: 0;
         height: 22px;
         min-height: 22px;
+        box-shadow: none;
     }
     
     .toast {
-        top: 28px;
+        top: calc(22px + 4px); /* Below smaller header button + gap */
         font-size: 10px;
         padding: 5px 10px;
         max-width: 140px;
     }
     
     .leaflet-control-zoom {
-        margin-top: 32px !important;
+        margin-top: 30px !important;
     }
 }
 /* Animations */
