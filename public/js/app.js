@@ -3,9 +3,35 @@
  * Basic map initialization with Germany as starting point
  * Version 1.5 | Atomlabor.de Design
  */
+
 // Global variables
 let map;
 let popup;
+
+// Style .app-header element for top-right positioning
+function styleAppHeader() {
+    const appHeader = document.querySelector('.app-header');
+    if (appHeader) {
+        // Remove any existing left/center positioning
+        appHeader.style.left = 'auto';
+        appHeader.style.transform = 'none';
+        appHeader.style.margin = '0';
+        
+        // Set fixed position in top-right corner
+        appHeader.style.position = 'fixed';
+        appHeader.style.top = '0';
+        appHeader.style.right = '12px';
+        appHeader.style.zIndex = '1000';
+        
+        // Compact, subtle styling
+        appHeader.style.padding = '3px 10px';
+        appHeader.style.borderRadius = '12px';
+        appHeader.style.fontSize = '12px';
+        appHeader.style.fontWeight = 'normal';
+        
+        console.log('.app-header styled for top-right positioning');
+    }
+}
 
 // Show elegant info popup
 function showInfoPopup() {
@@ -107,6 +133,9 @@ function initMap() {
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
+    
+    // Style the app header for top-right positioning
+    styleAppHeader();
     
     // Attach popup functionality to existing .app-header
     const appHeader = document.querySelector('.app-header');
