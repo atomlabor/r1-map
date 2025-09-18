@@ -15,3 +15,12 @@
 .leaflet-radar-toggle span {
     color: #fff !important;
 }
+.leaflet-radar-slider input[type="range"] {
+  background: #111 !important;
+}
+.leaflet-radar-slider input[type="range"]::-webkit-slider-track {
+  background: #111 !important;
+}
+.leaflet-radar-slider input[type="range"]::-moz-range-track {
+  background: #111 !important;
+}
