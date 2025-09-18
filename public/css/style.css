@@ -1,81 +1,4 @@
 /**
-General app styles
-*/
-.fade-in {
-    animation: fadeIn 0.3s ease-in;
-}
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-.slide-up {
-    animation: slideUp 0.3s ease-out;
-}
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-@keyframes popupAppear {
-    from {
-        transform: scale(0.8) translateY(-20px);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-    }
-}
-/* Performance Optimizations */
-.leaflet-container,
-.leaflet-tile,
-.leaflet-marker-icon {
-    image-rendering: optimizeSpeed;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: optimize-contrast;
-}
-/* Leaflet Tile Background - Rabbit Neon Orange */
-.leaflet-container,
-.leaflet-tile,
-.leaflet-tile-pane,
-.leaflet-tile-container,
-.leaflet-map-pane,
-.leaflet-layer,
-.leaflet-tile-loaded {
-    background: #ee530e !important;
-}
-.leaflet-tile-container img {
-    background: #ee530e !important;
-}
-/* Hardware Acceleration */
-#map,
-.app-container {
-    transform: translateZ(0);
-    will-change: transform;
-}
-/* Optimized Leaflet Radar Control Styles */
-.leaflet-control-radar {
-    max-width: 60px !important;
-    transform: scale(0.85) !important;
-    transform-origin: top right !important;
-    background: rgba(26, 26, 26, 0.9) !important;
-    border: 1px solid #ee530e !important;
-    border-radius: 8px !important;
     box-shadow: 0 2px 8px rgba(238, 83, 14, 0.3) !important;
     padding: 4px 6px !important;
     margin: 0 !important;
@@ -118,7 +41,7 @@ General app styles
     padding: 0 !important;
     accent-color: #ee530e !important;
     background: #111 !important;
-    border: 1px solid #ee530e !important;
+    /* border: 1px solid #ee530e !important; */
     border-radius: 2px !important;
     cursor: pointer !important;
 }
@@ -163,59 +86,3 @@ General app styles
     height: 10px !important;
     border-radius: 50% !important;
     background: #ee530e !important;
-    border: 1px solid #111 !important;
-    cursor: pointer !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
-}
-.leaflet-control-radar input[type="range"]::-moz-range-thumb {
-    width: 10px !important;
-    height: 10px !important;
-    border-radius: 50% !important;
-    background: #ee530e !important;
-    border: 1px solid #111 !important;
-    cursor: pointer !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
-}
-/* Timestamp Display */
-.leaflet-radar-timestamp {
-    color: #ee530e !important;
-    font-size: 9px !important;
-    text-align: center !important;
-    margin: 2px 0 0 0 !important;
-    padding: 0 !important;
-    line-height: 1.1 !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
-    opacity: 0.9 !important;
-}
-/* Disabled State */
-.leaflet-control-radar input:disabled {
-    opacity: 0.5 !important;
-    cursor: not-allowed !important;
-}
-/* Hover Effects */
-.leaflet-control-radar:hover {
-    box-shadow: 0 3px 12px rgba(238, 83, 14, 0.4) !important;
-    border-color: #ff6b1a !important;
-}
-.leaflet-control-radar input[type="checkbox"]:hover {
-    border-color: #ff6b1a !important;
-}
-.leaflet-control-radar input[type="range"]:hover::-webkit-slider-thumb {
-    background: #ff6b1a !important;
-}
-.leaflet-control-radar input[type="range"]:hover::-moz-range-thumb {
-    background: #ff6b1a !important;
-}
-/* Remove any default borders and backgrounds */
-.leaflet-control-radar,
-.leaflet-control-radar div,
-.leaflet-control-radar span {
-    border: none;
-    background: none;
-    outline: none;
-}
-/* Override any Leaflet default control styles */
-.leaflet-control-radar.leaflet-control {
-    border: 1px solid #ee530e !important;
-    background: rgba(26, 26, 26, 0.9) !important;
-}
