@@ -72,23 +72,24 @@ body {
     text-align: center;
     pointer-events: none;
 }
-/* Header Button - Restored to original state */
+/* Header Button - Repositioned to top right, elegant & slim */
 .header-button {
     position: fixed;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 11px;
+    right: 12px;
+    left: auto;
+    transform: none;
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 10px;
     font-weight: 600;
     color: white;
     background: rgba(238, 83, 14, 0.95);
     pointer-events: auto;
     margin: 0;
     box-shadow: none;
-    height: 24px;
-    min-height: 24px;
+    height: 20px;
+    min-height: 20px;
     border: none;
     z-index: 500;
     display: flex;
@@ -97,10 +98,10 @@ body {
 }
 .header-button:hover {
     background: rgba(238, 83, 14, 1);
-    transform: translateX(-50%) scale(1.05);
+    transform: scale(1.05);
 }
 .header-button:active {
-    transform: translateX(-50%) scale(0.98);
+    transform: scale(0.98);
 }
 /* Popup Overlay */
 .popup-overlay {
@@ -239,7 +240,7 @@ body {
 /* Toast Notifications */
 .toast {
     position: fixed;
-    top: calc(24px + 4px); /* Below header button height + small gap */
+    top: calc(20px + 4px); /* Below header button height + small gap */
     left: 50%;
     transform: translateX(-50%) translateY(0px);
     background: #ee530e; /* Rabbit Orange */
@@ -264,10 +265,10 @@ body {
     }
     
     .header-button {
-        font-size: 10px;
-        padding: 3px 8px;
-        height: 22px;
-        min-height: 22px;
+        font-size: 9px;
+        padding: 2px 10px;
+        height: 18px;
+        min-height: 18px;
         border-radius: 10px;
     }
     
@@ -277,7 +278,7 @@ body {
     }
     
     .toast {
-        top: calc(22px + 4px); /* Below smaller header button height + gap */
+        top: calc(18px + 4px); /* Below smaller header button height + gap */
         font-size: 11px;
         padding: 6px 12px;
         max-width: 160px;
@@ -296,14 +297,14 @@ body {
 /* Extra small screens - Real Rabbit R1 dimensions */
 @media (max-width: 240px) and (max-height: 282px) {
     .header-button {
-        font-size: 9px;
-        padding: 3px 8px;
-        height: 20px;
-        min-height: 20px;
+        font-size: 8px;
+        padding: 2px 8px;
+        height: 16px;
+        min-height: 16px;
     }
     
     .toast {
-        top: calc(20px + 4px); /* Below smaller header button + gap */
+        top: calc(16px + 4px); /* Below smaller header button + gap */
         font-size: 10px;
         padding: 5px 10px;
         max-width: 140px;
