@@ -6,35 +6,7 @@
 // Global variables
 let map;
 let popup;
-// Create and position header button
-function createHeaderButton() {
-    // Remove any existing header buttons to prevent duplicates
-    const existingButtons = document.querySelectorAll('.header-button');
-    existingButtons.forEach(button => button.remove());
-    
-    // Create new header button
-    const headerButton = document.createElement('button');
-    headerButton.className = 'header-button';
-    headerButton.textContent = 'r1 map';
-    
-    // Set positioning styles (right top corner, text-width only)
-    headerButton.style.position = 'fixed';
-    headerButton.style.right = '12px';
-    headerButton.style.top = '0';
-    headerButton.style.zIndex = '1000';
-    headerButton.style.padding = '0 6px';
-    headerButton.style.border = 'none';
-    headerButton.style.background = 'transparent';
-    headerButton.style.cursor = 'pointer';
-    
-    // Add click event for popup
-    headerButton.addEventListener('click', showInfoPopup);
-    
-    // Add button to body
-    document.body.appendChild(headerButton);
-    
-    console.log('Header button created and positioned');
-}
+
 // Show elegant info popup
 function showInfoPopup() {
     // Remove existing popup if any
@@ -100,6 +72,7 @@ function showInfoPopup() {
     // Add to body
     document.body.appendChild(popup);
 }
+
 // Hide info popup
 function hideInfoPopup() {
     if (popup) {
@@ -107,6 +80,7 @@ function hideInfoPopup() {
         popup = null;
     }
 }
+
 // Hide loading screen
 function hideLoadingScreen() {
     const loading = document.getElementById('loading');
@@ -114,6 +88,7 @@ function hideLoadingScreen() {
         loading.style.display = 'none';
     }
 }
+
 // Initialize map
 function initMap() {
     // Create map centered on Germany with OSM.DE tiles
@@ -128,15 +103,26 @@ function initMap() {
     console.log('Map initialized successfully');
     hideLoadingScreen();
 }
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
-    createHeaderButton(); // Create header button first
+    
+    // Attach popup functionality to existing .app-header
+    const appHeader = document.querySelector('.app-header');
+    if (appHeader) {
+        appHeader.addEventListener('click', showInfoPopup);
+        console.log('Popup event listener attached to .app-header');
+    } else {
+        console.warn('.app-header element not found');
+    }
+    
     initMap();
 });
+
 // Close popup when clicking outside
 document.addEventListener('click', function(event) {
-    if (popup && !popup.contains(event.target) && !event.target.classList.contains('header-button')) {
+    if (popup && !popup.contains(event.target) && !event.target.classList.contains('app-header')) {
         hideInfoPopup();
     }
 });
