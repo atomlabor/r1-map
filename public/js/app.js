@@ -1,6 +1,7 @@
 /**
  * R1 Map - Clean Leaflet 1.9.4 Application
  * Basic map initialization with Germany as starting point
+ * Version 1.5 | Atomlabor.de Design
  */
 
 // Global variables
