@@ -20,11 +20,12 @@ body {
  * Header Styling
  */
 .header {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.95);
     padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     z-index: 1001;
     border-bottom: 1px solid #333;
     backdrop-filter: blur(10px);
