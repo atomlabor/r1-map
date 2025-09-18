@@ -170,6 +170,63 @@ body {
     color: #fff;
 }
 /**
+ * Leaflet Radar Control - Rabbit R1 Style
+ */
+.leaflet-control-radar {
+    background: rgba(238, 83, 14, 0.15) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 2px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+}
+.leaflet-control-radar > * {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 2px 4px !important;
+    margin: 1px !important;
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+    color: #fff !important;
+    transition: all 0.15s ease !important;
+}
+.leaflet-control-radar button {
+    background: rgba(238, 83, 14, 0.2) !important;
+    border: none !important;
+    border-radius: 3px !important;
+    padding: 1px 3px !important;
+    margin: 0.5px !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+    color: #fff !important;
+    min-width: 12px !important;
+    min-height: 12px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+.leaflet-control-radar button:hover {
+    background: rgba(238, 83, 14, 0.4) !important;
+    color: #fff !important;
+    transform: scale(1.05) !important;
+}
+.leaflet-control-radar button:active {
+    background: #ee530e !important;
+    transform: scale(0.95) !important;
+}
+.leaflet-control-radar .leaflet-radar-icon {
+    color: #fff !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+}
+.leaflet-control-radar .leaflet-radar-text {
+    color: #fff !important;
+    font-size: 7px !important;
+    line-height: 1 !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5) !important;
+}
+/**
  * Responsive Design
  */
 /* Small screens */
@@ -208,6 +265,18 @@ body {
         font-size: 14px;
         margin-bottom: 12px;
     }
+    
+    .leaflet-control-radar {
+        padding: 1px !important;
+        border-radius: 4px !important;
+    }
+    
+    .leaflet-control-radar button {
+        font-size: 7px !important;
+        min-width: 10px !important;
+        min-height: 10px !important;
+        padding: 1px 2px !important;
+    }
 }
 /* Very small screens */
 @media (max-width: 320px) {
@@ -239,6 +308,18 @@ body {
     .popup-title {
         font-size: 12px;
         margin-bottom: 10px;
+    }
+    
+    .leaflet-control-radar {
+        padding: 1px !important;
+        border-radius: 3px !important;
+    }
+    
+    .leaflet-control-radar button {
+        font-size: 6px !important;
+        min-width: 8px !important;
+        min-height: 8px !important;
+        padding: 0.5px 1px !important;
     }
 }
 /* Extra small screens - Real Rabbit R1 dimensions */
@@ -279,6 +360,19 @@ body {
         padding: 4px 8px;
         font-size: 9px;
         border-radius: 3px;
+    }
+    
+    .leaflet-control-radar {
+        padding: 0.5px !important;
+        border-radius: 2px !important;
+    }
+    
+    .leaflet-control-radar button {
+        font-size: 5px !important;
+        min-width: 6px !important;
+        min-height: 6px !important;
+        padding: 0.5px !important;
+        margin: 0.2px !important;
     }
 }
 /* Animations */
