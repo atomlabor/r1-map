@@ -72,7 +72,7 @@ body {
     text-align: center;
     pointer-events: none;
 }
-/* Header Button - Perfect center at top edge for Rabbit R1 */
+/* Header Button - Restored to original state */
 .header-button {
     position: fixed;
     top: 0;
@@ -239,7 +239,7 @@ body {
 /* Toast Notifications */
 .toast {
     position: fixed;
-    top: calc(28px + 4px); /* Below header button height + small gap */
+    top: calc(24px + 4px); /* Below header button height + small gap */
     left: 50%;
     transform: translateX(-50%) translateY(0px);
     background: #ee530e; /* Rabbit Orange */
