@@ -15,9 +15,20 @@
  * 
  * Made with ❤️ by atomlabor.de – Rabbit R1 Community
  */
+
+// === CSS STYLING ===
+const style = document.createElement('style');
+style.textContent = `
+  .leaflet-container {
+    background: #ee530e !important;
+  }
+`;
+document.head.appendChild(style);
+
 // === GLOBALE VARIABLEN ===
 let map, userMarker, currentPOIMarkers = [];
 let isInitialized = false;
+
 // === HAUPTINITIALISIERUNG ===
 document.addEventListener('DOMContentLoaded', () => {
   try {
@@ -32,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('r1-map Init Error:', error);
   }
 });
+
 // === KARTEN-INITIALISIERUNG ===
 function initializeMap() {
   // Leaflet Map erstellen (optimiert für Rabbit R1 Display)
@@ -44,6 +56,7 @@ function initializeMap() {
     attributionControl: false,
     preferCanvas: true // Performance-Optimierung
   });
+
   // OpenStreetMap Tile Layer mit Buffer-Optimierung
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -52,10 +65,12 @@ function initializeMap() {
     unloadInvisibleTiles: false,
     reuseTiles: true
   }).addTo(map);
+
   // Map Event Listeners
   map.on('moveend', () => {
     setStatus(`Zoom: ${map.getZoom()} | Zentrum aktualisiert`);
   });
+
   map.on('click', (e) => {
     setStatus(`Koordinaten: ${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)}`);
   });
