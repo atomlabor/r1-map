@@ -44,9 +44,10 @@ function showInfoPopup() {
     popup = document.createElement('div');
     popup.className = 'info-popup';
     popup.style.position = 'fixed';
-    popup.style.top = '30px';
-    popup.style.right = '12px';
-    popup.style.width = '220px';
+    popup.style.top = '50%';
+    popup.style.left = '50%';
+    popup.style.transform = 'translate(-50%, -50%)';
+    popup.style.maxWidth = '220px';
     popup.style.backgroundColor = 'white';
     popup.style.border = '1px solid #ddd';
     popup.style.borderRadius = '8px';
@@ -83,8 +84,8 @@ function showInfoPopup() {
     
     // Create logo image
     const logo = document.createElement('img');
-    logo.src = 'public/r1-map.png';
-    logo.style.maxWidth = '70px';
+    logo.src = 'https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true';
+    logo.style.maxWidth = '54px';
     logo.style.height = 'auto';
     logo.style.display = 'block';
     logo.style.margin = '0 auto';
