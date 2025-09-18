@@ -6,7 +6,6 @@
 // Global variables
 let map;
 let popup;
-
 // Create and position header button
 function createHeaderButton() {
     // Remove any existing header buttons to prevent duplicates
@@ -36,7 +35,6 @@ function createHeaderButton() {
     
     console.log('Header button created and positioned');
 }
-
 // Show elegant info popup
 function showInfoPopup() {
     // Remove existing popup if any
@@ -58,6 +56,7 @@ function showInfoPopup() {
     popup.style.fontSize = '14px';
     popup.style.fontFamily = 'Arial, sans-serif';
     popup.style.lineHeight = '1.4';
+    popup.style.color = '#222';
     
     // Create close button
     const closeButton = document.createElement('button');
@@ -74,8 +73,9 @@ function showInfoPopup() {
     
     // Create text content
     const textContent = document.createElement('div');
-    textContent.innerHTML = 'made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" target="_blank" style="color: #0066cc;">https://ko-fi.com/atomlabor</a>';
+    textContent.innerHTML = 'made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #222;" target="_blank">https://ko-fi.com/atomlabor</a>';
     textContent.style.marginBottom = '15px';
+    textContent.style.color = '#222';
     
     // Create logo container
     const logoContainer = document.createElement('div');
@@ -99,7 +99,6 @@ function showInfoPopup() {
     // Add to body
     document.body.appendChild(popup);
 }
-
 // Hide info popup
 function hideInfoPopup() {
     if (popup) {
@@ -107,7 +106,6 @@ function hideInfoPopup() {
         popup = null;
     }
 }
-
 // Hide loading screen
 function hideLoadingScreen() {
     const loading = document.getElementById('loading');
@@ -115,7 +113,6 @@ function hideLoadingScreen() {
         loading.style.display = 'none';
     }
 }
-
 // Initialize map
 function initMap() {
     // Create map centered on Germany with OSM.DE tiles
@@ -130,14 +127,12 @@ function initMap() {
     console.log('Map initialized successfully');
     hideLoadingScreen();
 }
-
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
     createHeaderButton(); // Create header button first
     initMap();
 });
-
 // Close popup when clicking outside
 document.addEventListener('click', function(event) {
     if (popup && !popup.contains(event.target) && !event.target.classList.contains('header-button')) {
