@@ -78,26 +78,22 @@ body {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(238, 83, 14, 0.95);
-    color: white;
-    border: none;
-    padding: 6px 16px;
-    margin: 0;
-    border-radius: 12px;
+    padding: 3px 8px;
+    border-radius: 10px;
     font-size: 11px;
     font-weight: 600;
-    cursor: pointer;
-    z-index: 800; /* Below zoom controls */
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    height: 28px;
-    min-height: 28px;
+    color: white;
+    background: rgba(238, 83, 14, 0.95);
+    pointer-events: auto;
+    margin: 0;
+    box-shadow: none;
+    height: 24px;
+    min-height: 24px;
+    border: none;
+    z-index: 500;
     display: flex;
     align-items: center;
     justify-content: center;
-    touch-action: manipulation; /* Better touch response */
-    -webkit-tap-highlight-color: transparent;
-    box-shadow: none;
 }
 .header-button:hover {
     background: rgba(238, 83, 14, 1);
@@ -234,23 +230,6 @@ body {
 .leaflet-tile-container img {
     background: #ee530e !important;
 }
-/* Zoom Controls - Positioned top-left below header button */
-.leaflet-control-zoom {
-    left: 8px !important;
-    top: 40px !important;
-    border: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    z-index: 1000 !important; /* Above header button */
-}
-.leaflet-control-zoom a {
-    background: rgba(0,0,0,0.8);
-    color: #fff;
-    border: 1px solid #333;
-}
-.leaflet-control-zoom a:hover {
-    background: rgba(238, 83, 14, 0.8); /* Rabbit Orange on hover */
-    color: #fff;
-}
 .leaflet-control-attribution {
     background: rgba(0,0,0,0.7);
     color: #ccc;
@@ -285,17 +264,11 @@ body {
     }
     
     .header-button {
-        top: 0; /* Always at top edge for R1 */
-        left: 50%;
-        transform: translateX(-50%);
         font-size: 10px;
-        padding: 4px 12px;
-        margin: 0;
-        height: 24px;
-        min-height: 24px;
+        padding: 3px 8px;
+        height: 22px;
+        min-height: 22px;
         border-radius: 10px;
-        box-shadow: none;
-        z-index: 800;
     }
     
     #map-bg {
@@ -304,7 +277,7 @@ body {
     }
     
     .toast {
-        top: calc(24px + 4px); /* Below smaller header button height + gap */
+        top: calc(22px + 4px); /* Below smaller header button height + gap */
         font-size: 11px;
         padding: 6px 12px;
         max-width: 160px;
@@ -319,38 +292,21 @@ body {
         font-size: 11px;
         margin-bottom: 12px;
     }
-    
-    /* Zoom controls positioning for small screens */
-    .leaflet-control-zoom {
-        left: 8px !important;
-        top: 32px !important; /* Space for header button */
-    }
 }
 /* Extra small screens - Real Rabbit R1 dimensions */
 @media (max-width: 240px) and (max-height: 282px) {
     .header-button {
-        top: 0; /* Pixel-perfect at top edge */
-        left: 50%;
-        transform: translateX(-50%);
         font-size: 9px;
-        padding: 3px 10px;
-        margin: 0;
-        height: 22px;
-        min-height: 22px;
-        box-shadow: none;
-        z-index: 800;
+        padding: 3px 8px;
+        height: 20px;
+        min-height: 20px;
     }
     
     .toast {
-        top: calc(22px + 4px); /* Below smaller header button + gap */
+        top: calc(20px + 4px); /* Below smaller header button + gap */
         font-size: 10px;
         padding: 5px 10px;
         max-width: 140px;
-    }
-    
-    .leaflet-control-zoom {
-        left: 8px !important;
-        top: 30px !important;
     }
 }
 /* Animations */
