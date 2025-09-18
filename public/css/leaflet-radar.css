@@ -1,7 +1,6 @@
 .leaflet-radar {
     /* border-radius: 5px; */
     background: #ff6b35;
-    border: 2px solid rgba(0, 0, 0, 0.2);
     background-clip: padding-box;
     padding: 5px;
     height: 35px;
