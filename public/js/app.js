@@ -3,33 +3,11 @@
  * Basic map initialization with Germany as starting point
  * Version 1.5 | Atomlabor.de Design
  */
+
 // Global variables
 let map;
 let popup;
-// Style .app-header element for top-right positioning
-function styleAppHeader() {
-    const appHeader = document.querySelector('.app-header');
-    if (appHeader) {
-        // Remove any existing left/center positioning
-        appHeader.style.left = 'auto';
-        appHeader.style.transform = 'none';
-        appHeader.style.margin = '0';
-        
-        // Set fixed position in top-right corner
-        appHeader.style.position = 'fixed';
-        appHeader.style.top = '10px';
-        appHeader.style.right = '12px';
-        appHeader.style.zIndex = '1000';
-        
-        // Compact, subtle styling
-        appHeader.style.padding = '3px 10px';
-        appHeader.style.borderRadius = '12px';
-        appHeader.style.fontSize = '12px';
-        appHeader.style.fontWeight = 'normal';
-        
-        console.log('.app-header styled for top-right positioning');
-    }
-}
+
 // Show elegant info popup
 function showInfoPopup() {
     // Remove existing popup if any
@@ -95,6 +73,7 @@ function showInfoPopup() {
     // Add to body
     document.body.appendChild(popup);
 }
+
 // Hide info popup
 function hideInfoPopup() {
     if (popup) {
@@ -102,6 +81,7 @@ function hideInfoPopup() {
         popup = null;
     }
 }
+
 // Hide loading screen
 function hideLoadingScreen() {
     const loading = document.getElementById('loading');
@@ -109,6 +89,7 @@ function hideLoadingScreen() {
         loading.style.display = 'none';
     }
 }
+
 // Initialize map
 function initMap() {
     // Create map centered on Germany with OSM.DE tiles
@@ -132,27 +113,17 @@ function initMap() {
     console.log('Map initialized successfully');
     hideLoadingScreen();
 }
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
     
-    // Style the app header for top-right positioning
-    styleAppHeader();
-    
-    // Attach popup functionality to existing .app-header
-    const appHeader = document.querySelector('.app-header');
-    if (appHeader) {
-        appHeader.addEventListener('click', showInfoPopup);
-        console.log('Popup event listener attached to .app-header');
-    } else {
-        console.warn('.app-header element not found');
-    }
-    
     initMap();
 });
+
 // Close popup when clicking outside
 document.addEventListener('click', function(event) {
-    if (popup && !popup.contains(event.target) && !event.target.classList.contains('app-header')) {
+    if (popup && !popup.contains(event.target)) {
         hideInfoPopup();
     }
 });
