@@ -42,27 +42,27 @@ function showInfoPopup() {
     popup.style.top = '50%';
     popup.style.left = '50%';
     popup.style.transform = 'translate(-50%, -50%)';
-    popup.style.maxWidth = '220px';
+    popup.style.maxWidth = '132px';
     popup.style.backgroundColor = 'white';
     popup.style.border = '1px solid #ddd';
-    popup.style.borderRadius = '8px';
-    popup.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-    popup.style.padding = '15px';
+    popup.style.borderRadius = '5px';
+    popup.style.boxShadow = '0 2px 7px rgba(0, 0, 0, 0.15)';
+    popup.style.padding = '8px';
     popup.style.zIndex = '1001';
-    popup.style.fontSize = '14px';
+    popup.style.fontSize = '9px';
     popup.style.fontFamily = 'Arial, sans-serif';
-    popup.style.lineHeight = '1.4';
+    popup.style.lineHeight = '1.3';
     popup.style.color = '#222';
     
     // Create close button
     const closeButton = document.createElement('button');
     closeButton.innerHTML = '×';
     closeButton.style.position = 'absolute';
-    closeButton.style.top = '5px';
-    closeButton.style.right = '8px';
+    closeButton.style.top = '2px';
+    closeButton.style.right = '5px';
     closeButton.style.border = 'none';
     closeButton.style.background = 'transparent';
-    closeButton.style.fontSize = '18px';
+    closeButton.style.fontSize = '12px';
     closeButton.style.cursor = 'pointer';
     closeButton.style.color = '#666';
     closeButton.addEventListener('click', hideInfoPopup);
@@ -70,7 +70,7 @@ function showInfoPopup() {
     // Create text content
     const textContent = document.createElement('div');
     textContent.innerHTML = 'made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #222;" target="_blank">https://ko-fi.com/atomlabor</a>';
-    textContent.style.marginBottom = '15px';
+    textContent.style.marginBottom = '8px';
     textContent.style.color = '#222';
     
     // Create logo container
@@ -80,7 +80,7 @@ function showInfoPopup() {
     // Create logo image
     const logo = document.createElement('img');
     logo.src = 'https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true';
-    logo.style.maxWidth = '54px';
+    logo.style.maxWidth = '32px';
     logo.style.height = 'auto';
     logo.style.display = 'block';
     logo.style.margin = '0 auto';
