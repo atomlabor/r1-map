@@ -3,6 +3,7 @@
  * Basic map initialization with Germany as starting point
  * Version 1.5 | Atomlabor.de Design
  */
+
 // Global variables
 let map;
 
@@ -15,7 +16,7 @@ function createHeaderButton() {
     // Create new header button
     const headerButton = document.createElement('button');
     headerButton.className = 'header-button';
-    headerButton.textContent = 'Menu';
+    headerButton.textContent = 'r1 map';
     
     // Set positioning styles (right top corner, narrow)
     headerButton.style.position = 'fixed';
