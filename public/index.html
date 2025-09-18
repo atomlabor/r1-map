@@ -14,16 +14,17 @@
     <style>
         /* Rabbit-style button for header */
         .header-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 1000;
             background: linear-gradient(135deg, #FF6B35, #FF8C42);
             color: white;
             border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-size: 18px;
+            border-radius: 14px;
+            padding: 4px 16px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
@@ -32,7 +33,7 @@
         }
         
         .header-button:hover {
-            transform: translateY(-2px);
+            transform: translateX(-50%) translateY(-2px);
             box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
             background: linear-gradient(135deg, #FF8C42, #FF6B35);
         }
@@ -124,15 +125,15 @@
     <!-- Popup Dialog -->
     <div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
         <div class="popup-dialog" onclick="event.stopPropagation()">
-            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <button class="popup-close" onclick="closePopup()">×</button>
             <div class="popup-title">proudly made for the r1 community from atomlabor.de</div>
-            <img src="r1-map.png" alt="r1 map logo" class="popup-logo" />
+            <img src="" alt="r1 map logo" class="popup-logo"/>
         </div>
     </div>
     
     <!-- Original Header (hidden) -->
     <header class="app-header">
-        r1 map
+        <h1>r1 map</h1>
     </header>
     
     <!-- Leaflet JS -->
