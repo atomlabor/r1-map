@@ -1,22 +1,14 @@
-.leaflet-radar 
-{
-       
-        
-/* from leaflet-control-layers */
-        
-border-radius: 0px;
-        background: #fff;
-        border: 2px solid rgba(0, 0, 0, 0.2);
-        background-clip: padding-box;
-        
-        padding: 0px;
-        height: 20px;
+.leaflet-radar {
+    /* border-radius: 5px; */
+    background: #ff6b35;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    background-clip: padding-box;
+    padding: 5px;
+    height: 35px;
 }
-.leaflet-radar .leaflet-radar-timestamp 
-{
-        text-align: center;
+.leaflet-radar .leaflet-radar-timestamp {
+    text-align: center;
 }
-
 .leaflet-control-radar span, .leaflet-control-radar label, .leaflet-radar-toggle span {
   color: #ee530e !important;
 }
