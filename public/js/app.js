@@ -120,6 +120,9 @@ function initMap() {
     // Create map centered on Germany with OSM.DE tiles
     map = L.map('map').setView([51.1657, 10.4515], 6);
     
+    // Set map background to Rabbit Neon Orange
+    map.getContainer().style.background = '#ee530e';
+    
     // Add OpenStreetMap Germany tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
         maxZoom: 19,
