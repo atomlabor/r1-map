@@ -92,7 +92,7 @@ function initMap() {
 
  // Geocoder-Control unten links einfügen (Schutz gegen doppeltes Einfügen!)
   if(typeof L.Control.geocoder === 'function') {
-    L.Control.geocoder({ position: 'bottomleft' }).addTo(map);
+    L.Control.geocoder({ position: 'topleft' }).addTo(map);
     console.log('Leaflet-Geocoder aktiviert');
   }
     
