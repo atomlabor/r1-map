@@ -23,3 +23,16 @@
 .leaflet-radar-slider input[type="range"]::-moz-range-track {
   background: #111 !important;
 }
+.leaflet-popup-content-wrapper {
+  max-width: 140px !important;   /* Wunschbreite anpassen */
+  min-width: unset !important;
+}
+.leaflet-popup-content {
+  text-align: center;
+  padding: 6px 12px;
+}
+
+.leaflet-popup-tip-container {
+  left: 50%;
+  transform: translateX(-50%);
+}
