@@ -89,7 +89,13 @@ function initMap() {
     setTimeout(function() {
         L.control.radar({position: 'bottomright'}).addTo(map);
         console.log('Radar control added successfully');
-        
+
+ // Geocoder-Control unten links einfügen (Schutz gegen doppeltes Einfügen!)
+  if(typeof L.Control.geocoder === 'function') {
+    L.Control.geocoder({ position: 'bottomleft' }).addTo(map);
+    console.log('Leaflet-Geocoder aktiviert');
+  }
+    
         // Hide loading screen after everything is loaded
         hideLoadingScreen();
     }, 100);
