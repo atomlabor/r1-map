@@ -51,11 +51,11 @@ function showInfoPopup() {
     textContent.style.marginBottom = '8px';
     textContent.style.color = '#222';
     
-    // Create logo container
+ 
     const logoContainer = document.createElement('div');
     logoContainer.style.textAlign = 'center';
     
-    // Create logo image
+
     const logo = document.createElement('img');
     logo.src = 'https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true';
     logo.style.maxWidth = '32px';
@@ -90,65 +90,24 @@ function hideLoadingScreen() {
     }
 }
 
-// Toolbar-Action: Marker setzen
-var PlaceMarkerAction = L.Toolbar2.Action.extend({
-  options: {
-    toolbarIcon: { html: '📍', tooltip: 'Marker setzen' }
-  },
-  addHooks: function() {
-    this._map.once('click', (e) => {
-      L.marker(e.latlng).addTo(this._map);
-    });
-    this.disable();
-  }
-});
 
-// Toolbar-Action: Polyline zeichnen & messen
-var DrawPolylineAction = L.Toolbar2.Action.extend({
-  options: {
-    toolbarIcon: { html: '↔️', tooltip: 'Linie messen' }
-  },
-  addHooks: function() {
-    let latlngs = [];
-    let poly = L.polyline([], { color: '#FF6B35' }).addTo(this._map);
-    const clickHandler = (e) => {
-      latlngs.push(e.latlng);
-      poly.setLatLngs(latlngs);
-      if (latlngs.length > 1) {
-        let len = L.GeometryUtil.length(poly);
-        poly.bindTooltip((len > 1000) ? (len / 1000).toFixed(2) + ' km' : len.toFixed(1) + ' m', { permanent:true, direction:'center', className: 'polyline-label' }).openTooltip();
-      }
-    };
-    this._map.on('click', clickHandler);
-    this._map.once('dblclick', () => {
-      this._map.off('click', clickHandler);
-      this.disable();
-    });
-  }
-});
-
-// Initialize map
 function initMap() {
-    // Create map centered on Germany with OSM.DE tiles
+
     map = L.map('map').setView([51.1657, 10.4515], 6);
     
-    // Set map background to Rabbit Neon Orange
     map.getContainer().style.background = '#ee530e';
     
-    // Add OpenStreetMap Germany tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
     
-    // Initialize toolbar after map creation
     var toolbar = new L.Toolbar2.Control({
       position: 'topleft',
       actions: [DrawPolylineAction, PlaceMarkerAction]
     });
     map.addControl(toolbar);
     
-    // Add radar control with small delay to ensure map is fully initialized
     setTimeout(function() {
         L.control.radar({position: 'bottomright'}).addTo(map);
         console.log('Radar control added successfully');
@@ -158,14 +117,12 @@ function initMap() {
     hideLoadingScreen();
 }
 
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
     
     initMap();
 });
 
-// Close popup when clicking outside
 document.addEventListener('click', function(event) {
     if (popup && !popup.contains(event.target)) {
         hideInfoPopup();
