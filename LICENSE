@@ -1,4 +1,5 @@
 MIT License
+
 Copyright (c) 2025 atomlabor
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,6 +30,8 @@ Copyright © OpenStreetMap contributors
 License: Open Database License (ODbL) v1.0
 Source: https://www.openstreetmap.org/copyright
 
+**Usage Restrictions**: OSM data must be attributed properly and any derived databases must be shared under the same license.
+
 ### Leaflet
 This project uses Leaflet, an open-source JavaScript library for mobile-friendly interactive maps.
 Copyright © 2010-2023, CloudMade, Vladimir Agafonkin
@@ -36,22 +39,77 @@ License: BSD-2-Clause License
 Source: https://github.com/Leaflet/Leaflet
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+### Leaflet Toolbar
+This project uses leaflet-toolbar for enhanced toolbar functionality.
+License: MIT License
+Source: https://github.com/Leaflet/Leaflet.toolbar
+
+### Leaflet GeometryUtil
+This project uses leaflet.geometryutil for geometric calculations and utilities.
+License: MIT License
+Source: https://github.com/makinacorpus/Leaflet.GeometryUtil
+
+### Additional Leaflet Plugins
+This project may use additional Leaflet plugins and extensions, each with their respective licenses:
+- leaflet-radar (GPL-3.0 or compatible, potentially forked/adapted)
+- Other plugins as referenced in the project dependencies
+
+### US Weather Radar Data (NEXRAD)
+This project uses weather radar tiles from the National Weather Service NEXRAD system.
+Source: Iowa State University / Iowa Environmental Mesonet (IEM)
+URL: https://mesonet.agron.iastate.edu
+License: Public domain data with attribution requirements
+
+**Usage Restrictions**: NEXRAD data is public domain but requires proper attribution to the National Weather Service and Iowa State University/IEM.
+
+---
+
+## Proprietary Content
+
+### UI/Design Elements and Custom Modifications
+All custom user interface elements, design adaptations, custom icons, styling modifications, and project-specific enhancements are:
+**© 2025 atomlabor.de - All Rights Reserved**
+
+This includes but is not limited to:
+- Custom CSS styling and themes
+- Original icons and graphics
+- User interface layouts and designs
+- Custom JavaScript modifications and extensions
+- Project-specific integrations and features
+
 ---
 
 ## License Compatibility Notice
 
-Dieses Projekt nutzt das Leaflet-Framework (BSD-Lizenz), das leaflet-radar-Plugin (GPL-3.0, ggf. angepasst/forked), OSM-Kartendaten (ODbL) sowie US-Radarkacheln (NEXRAD, Quelle: Iowa State University/IEM, siehe https://mesonet.agron.iastate.edu). Bitte beachte die jeweiligen Lizenzen und Nutzungsbedingungen der Datenquellen.
+**English**: This project combines multiple open-source components with different licenses. Please ensure compliance with all individual license terms when using, modifying, or distributing this software.
 
-Eigene Icons, zusätzliche UI-Gestaltung und Anpassungen sind © atomlabor.de.
+**Deutsch**: Dieses Projekt nutzt verschiedene Open-Source-Komponenten mit unterschiedlichen Lizenzen: Leaflet-Framework (BSD-Lizenz), leaflet-toolbar und leaflet.geometryutil (MIT-Lizenz), leaflet-radar-Plugin (GPL-3.0, ggf. angepasst/forked), OSM-Kartendaten (ODbL) sowie US-Radarkacheln (NEXRAD, Quelle: Iowa State University/IEM). Bitte beachte die jeweiligen Lizenzen und Nutzungsbedingungen aller Datenquellen und Komponenten.
+
+Eigene Icons, UI-Gestaltung und projektspezifische Anpassungen sind © atomlabor.de.
 
 ---
 
-## Disclaimer
+## Official Status Disclaimer
 
-This is not an official rabbit.tech application. This project was inspired by and created for the Rabbit R1 community, but is not affiliated with, endorsed by, or officially supported by rabbit.tech or any of its subsidiaries.
+**This is not an official rabbit.tech application.**
+
+This project was independently developed and is inspired by the Rabbit R1 community. It is **not affiliated with, endorsed by, or officially supported by rabbit.tech or any of its subsidiaries**. 
+
+- rabbit.tech® and Rabbit R1® are registered trademarks of their respective owners
+- This project is a community-driven initiative
+- No official support or warranty is provided by rabbit.tech
+- Use at your own discretion
+
+---
+
+## Data Sources and Attribution
+
+- **Map Data**: © OpenStreetMap contributors (ODbL License)
+- **Weather Radar**: National Weather Service NEXRAD via Iowa State University/IEM
+- **Base Mapping Framework**: Leaflet.js and associated plugins
+- **Custom Development**: © atomlabor.de
