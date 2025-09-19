@@ -93,9 +93,14 @@
             background: rgba(53, 255, 107, 1);
         }
         
-        /* Hide leaflet-radar widget by default */
+        /* Hide leaflet-radar widget by default - removed !important to allow JS override */
         .leaflet-radar {
-            display: none !important;
+            display: none;
+        }
+        
+        /* Force show radar when active */
+        .leaflet-radar.radar-visible {
+            display: block !important;
         }
         
         .popup-overlay {
@@ -204,7 +209,7 @@
             <div class="popup-title">
                 made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #FF6B35; text-decoration: underline;" target="_blank">https://ko-fi.com/atomlabor</a>
             </div>
-            <img src="r1-map.png" alt="r1 map logo" class="popup-logo" />
+            <img alt="r1 map logo" class="popup-logo" src="">
         </div>
     </div>
     
@@ -227,20 +232,28 @@
             document.getElementById('popupOverlay').style.display = 'none';
         }
         
-        // Rain toggle functionality with improved visibility control
+        // Improved rain toggle functionality with CSS class approach
+        let isRadarVisible = false;
+        
         function toggleRain() {
             const radarElements = document.querySelectorAll('.leaflet-radar');
             const toggleButton = document.querySelector('.rain-toggle');
             
-            radarElements.forEach(element => {
-                if (element.style.display === 'none' || !element.style.display) {
-                    element.style.display = 'block';
-                    toggleButton.classList.add('active');
-                } else {
-                    element.style.display = 'none';
-                    toggleButton.classList.remove('active');
-                }
-            });
+            if (isRadarVisible) {
+                // Hide radar
+                radarElements.forEach(element => {
+                    element.classList.remove('radar-visible');
+                });
+                toggleButton.classList.remove('active');
+                isRadarVisible = false;
+            } else {
+                // Show radar
+                radarElements.forEach(element => {
+                    element.classList.add('radar-visible');
+                });
+                toggleButton.classList.add('active');
+                isRadarVisible = true;
+            }
         }
         
         // Initialize radar widget as hidden when page loads
@@ -249,8 +262,9 @@
             setTimeout(function() {
                 const radarElements = document.querySelectorAll('.leaflet-radar');
                 radarElements.forEach(element => {
-                    element.style.display = 'none';
+                    element.classList.remove('radar-visible');
                 });
+                isRadarVisible = false;
             }, 1000);
         });
         
