@@ -1,24 +1,26 @@
-<img width="350" src="https://raw.githubusercontent.com/atomlabor/r1-map/main/r1%20map.png" alt="r1-map">
+![r1-map](https://raw.githubusercontent.com/atomlabor/r1-map/main/r1%20map.png)
 
 # r1-map (Update V 1.7)
 
 Schneller Zugriff, optimierte Usability, Radar-Tool + Toolbar für Rabbit R1!
 
 ## NEU in Version 1.7
+
 - Deutlich schnellere Ladezeit und konsequent reduzierte Overlays
-- "Loading map..." nur noch als schwebendes Element, keine Überdeckung/Blockade der Map mehr
-- Polyline- und Marker-Toolbar (sichtbar unter den Zoom-Buttons) inklusive Längenmessung in m/km
-- Wetter-Radar-Plugin als Kontrollbox rechts, intuitiv ein- und ausschaltbar
+- Verbesserte Ladezeit-Anzeige (in Vorbereitung: schwebendes Element ohne Map-Blockade)
+- Polyline- und Marker-Toolbar mit Längenmessung in m/km (geplant/in Vorbereitung)
+- Wetter-Radar-Plugin als Kontrollbox (in Entwicklung: intuitive Schaltbarkeit)
 - Vollständige Touch-Unterstützung: Ziehen, Zoomen, Bedienung auf Rabbit R1 und Mobile
 - Alle Leaflet-Bibliotheken werden wieder per CDN geladen – maximale Kompatibilität und Stabilität
 - Sauberes, modernes Rabbit-Orange Theme (Map-Hintergrund, Toolbar)
 - Neue, kompakte HTML- und CSS-Struktur – alles für pures Speed-Feeling auf Geräten
 
 ## Features
+
 - 🗺️ Minimalistische OSM-Karte (Tile-Layer OpenStreetMap.de)
 - 👆 Touch & Pinch Zoom
-- 📏 Toolbar: Strecke messen & Marker setzen
-- ☁️ Wetter-Radar Layer (NEXRAD/IEM, per Checkbox schaltbar)
+- 📏 Toolbar: Strecke messen & Marker setzen (in Vorbereitung)
+- ☁️ Wetter-Radar Layer (NEXRAD/IEM, Schaltbarkeit geplant)
 - 🎨 Rabbit-Stil UI/Overlay & Popup-Dialog
 - ⚡️ Ultrakurze Ladezeit, optimiert für mobile Geräte & R1
 - 💡 Open Source & laufend weiterentwickelt
@@ -69,8 +71,6 @@ A minimalist map app designed for the Rabbit R1 device. Based on OpenStreetMap a
 - OpenStreetMap.de
 - NEXRAD weather data
 
----
-
 ## DEU (Previous Version)
 
 ### Minimalistische Karten-App für das Rabbit R1 mit Wetter-Radar (Update V 1.6)
@@ -85,10 +85,10 @@ Eine ultraleichte Karten-App für das Rabbit R1. OpenStreetMap & Leaflet, Touch-
 - 🎯 Zentrierter Header-Overlay
 - ⚡ Ladebildschirm während Karteninitialisierung
 - ✅ Funktionale Kartensteuerung (Zoom, Verschieben)
-- 🌦️ NEU: Wetter-Radar-Overlay mit leaflet-radar Plugin
-- 🎨 NEU: Popup-Redesign im Rabbit R1-Stil
-- 🎛️ NEU: Zentrierter Radar-Kontroll-Button
-- ✨ NEU: Erweiterte UI-Gestaltung für Rabbit R1 angepasst
+- 🌦️ **NEU**: Wetter-Radar-Overlay mit leaflet-radar Plugin
+- 🎨 **NEU**: Popup-Redesign im Rabbit R1-Stil
+- 🎛️ **NEU**: Zentrierter Radar-Kontroll-Button
+- ✨ **NEU**: Erweiterte UI-Gestaltung für Rabbit R1 angepasst
 
 **Wetter-Radar-Integration:**
 - US-Radardaten über Iowa State University (NEXRAD-Kacheln)
@@ -109,17 +109,15 @@ Eine ultraleichte Karten-App für das Rabbit R1. OpenStreetMap & Leaflet, Touch-
 - OpenStreetMap.de
 - NEXRAD-Wetterdaten
 
----
-
 ## Sources / Quellen
 
-Data Sources:
+**Data Sources:**
 - US Radar Data © Iowa State University/IEM (https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png)
 - Map tiles © OpenStreetMap contributors
 - Leaflet mapping library
 - leaflet-radar plugin (forked/adapted for this project)
 - All icons and UI adaptations © atomlabor.de
 
-Special Thanks: We extend our gratitude to the Iowa State University and their Iowa Environmental Mesonet for providing comprehensive weather radar data that makes this enhanced mapping experience possible.
+**Special Thanks:** We extend our gratitude to the Iowa State University and their Iowa Environmental Mesonet for providing comprehensive weather radar data that makes this enhanced mapping experience possible.
 
 Developed with ❤️ for the Rabbit R1 community
