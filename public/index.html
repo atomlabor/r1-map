@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
     <link rel="stylesheet" href="css/leaflet-radar.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-
     <style>
         body {
             margin: 0;
@@ -55,6 +54,39 @@
             background: rgba(255, 107, 53, 1);
             transform: translateY(-1px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Rain toggle button styles */
+        .rain-toggle {
+            position: fixed;
+            top: 0;
+            right: 80px;
+            padding: 3px 10px;
+            border-radius: 0px;
+            font-size: 16px;
+            font-weight: normal;
+            background: rgba(255, 107, 53, 0.9);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .rain-toggle:hover {
+            background: rgba(255, 107, 53, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rain-toggle.active {
+            background: rgba(53, 255, 107, 0.9);
+        }
+        
+        .rain-toggle.active:hover {
+            background: rgba(53, 255, 107, 1);
         }
         
         .popup-overlay {
@@ -122,8 +154,6 @@
             display: block;
             margin: 0 auto;
         }
-
-
 .leaflet-control-geocoder-form input {
   width: 140px !important;
   min-width: 80px !important;
@@ -132,19 +162,25 @@
 .leaflet-control-geocoder {
   z-index: 1100 !important;
 }
-
         .app-header {
             display: none;
         }
     </style>
-</head>  
+</head>
 <body>
+    <div id="loading">Loading...</div>
+    
     <!-- Map Container -->
     <div id="map" style="width:100vw;height:100vh"></div>
     
     <!-- Header Button -->
     <button class="header-button" onclick="openPopup()">
         r1 map
+    </button>
+    
+    <!-- Rain Toggle Button -->
+    <button class="rain-toggle" onclick="toggleRain()">
+        💧
     </button>
     
     <!-- Popup Dialog -->
@@ -156,7 +192,7 @@
             <div class="popup-title">
                 made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #FF6B35; text-decoration: underline;" target="_blank">https://ko-fi.com/atomlabor</a>
             </div>
-            <img src="https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true" alt="r1 map logo" class="popup-logo" />
+            <img src="r1-map.png" alt="r1 map logo" class="popup-logo">
         </div>
     </div>
     
@@ -179,6 +215,22 @@
             document.getElementById('popupOverlay').style.display = 'none';
         }
         
+        // Rain toggle functionality
+        function toggleRain() {
+            const radarElements = document.querySelectorAll('.leaflet-radar');
+            const toggleButton = document.querySelector('.rain-toggle');
+            
+            radarElements.forEach(element => {
+                if (element.style.display === 'none') {
+                    element.style.display = 'block';
+                    toggleButton.classList.add('active');
+                } else {
+                    element.style.display = 'none';
+                    toggleButton.classList.remove('active');
+                }
+            });
+        }
+        
         // Close popup with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
@@ -187,7 +239,6 @@
         });
     </script>
     
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>    
 </body>
 </html>
