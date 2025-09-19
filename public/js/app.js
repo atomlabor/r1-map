@@ -81,13 +81,6 @@ function hideInfoPopup() {
     }
 }
 
-// Hide loading screen
-function hideLoadingScreen() {
-  const loading = document.getElementById('loading');
-  if (loading) {
-    loading.remove();
-  }
-}
 
 function initMap() {
     map = L.map('map').setView([51.1657, 10.4515], 6);
@@ -109,7 +102,6 @@ function initMap() {
         L.control.radar({position: 'bottomright'}).addTo(map);
         console.log('Radar control added successfully');
         
-        // Hide loading screen after map, tiles, toolbar and radar are loaded
         hideLoadingScreen();
     }, 100);
     
