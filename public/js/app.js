@@ -1,12 +1,20 @@
 /**
  * R1 Map - Clean Leaflet 1.9.4 Application
  * Basic map initialization with Germany as starting point
- * Version 1.7 | Atomlabor.de Design
+ * Version 1.8 | Atomlabor.de Design
  */
 
 // Global variables
 let map;
 let popup;
+
+// Hide loading screen function
+function hideLoadingScreen() {
+    const loadingElement = document.getElementById('loading');
+    if (loadingElement) {
+        loadingElement.style.display = 'none';
+    }
+}
 
 // Show elegant info popup
 function showInfoPopup() {
@@ -51,7 +59,6 @@ function showInfoPopup() {
     textContent.style.marginBottom = '8px';
     textContent.style.color = '#222';
     
- 
     const logoContainer = document.createElement('div');
     logoContainer.style.textAlign = 'center';
     
@@ -81,39 +88,41 @@ function hideInfoPopup() {
     }
 }
 
-
+// Initialize the map
 function initMap() {
+    // Create map centered on Germany
     map = L.map('map').setView([51.1657, 10.4515], 6);
     
+    // Set background color
     map.getContainer().style.background = '#ee530e';
     
+    // Add tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
     
-    var toolbar = new L.Toolbar2.Control({
-      position: 'topleft',
-      actions: [DrawPolylineAction, PlaceMarkerAction]
-    });
-    map.addControl(toolbar);
-    
+    // Add radar control after map and tile layer initialization
+    // This is the critical part for radar functionality
     setTimeout(function() {
         L.control.radar({position: 'bottomright'}).addTo(map);
         console.log('Radar control added successfully');
         
+        // Hide loading screen after everything is loaded
         hideLoadingScreen();
     }, 100);
     
     console.log('Map initialized successfully');
 }
 
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
     
     initMap();
 });
 
+// Hide popup when clicking outside
 document.addEventListener('click', function(event) {
     if (popup && !popup.contains(event.target)) {
         hideInfoPopup();
