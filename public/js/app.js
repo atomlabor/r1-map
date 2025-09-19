@@ -127,3 +127,47 @@ document.addEventListener('click', function(event) {
         hideInfoPopup();
     }
 });
+
+// Toolbar-Action: Marker setzen
+var PlaceMarkerAction = L.Toolbar2.Action.extend({
+  options: {
+    toolbarIcon: { html: '📍', tooltip: 'Marker setzen' }
+  },
+  addHooks: function() {
+    this._map.once('click', (e) => {
+      L.marker(e.latlng).addTo(this._map);
+    });
+    this.disable();
+  }
+});
+
+// Toolbar-Action: Polyline zeichnen & messen
+var DrawPolylineAction = L.Toolbar2.Action.extend({
+  options: {
+    toolbarIcon: { html: '↔️', tooltip: 'Linie messen' }
+  },
+  addHooks: function() {
+    let latlngs = [];
+    let poly = L.polyline([], { color: '#FF6B35' }).addTo(this._map);
+    const clickHandler = (e) => {
+      latlngs.push(e.latlng);
+      poly.setLatLngs(latlngs);
+      if (latlngs.length > 1) {
+        let len = L.GeometryUtil.length(poly);
+        poly.bindTooltip((len > 1000) ? (len / 1000).toFixed(2) + ' km' : len.toFixed(1) + ' m', { permanent:true, direction:'center', className: 'polyline-label' }).openTooltip();
+      }
+    };
+    this._map.on('click', clickHandler);
+    this._map.once('dblclick', () => {
+      this._map.off('click', clickHandler);
+      this.disable();
+    });
+  }
+});
+
+// Toolbar-Control initialisieren (unten links unter Zoom)
+var toolbar = new L.Toolbar2.Control({
+  position: 'topleft',
+  actions: [DrawPolylineAction, PlaceMarkerAction]
+});
+map.addControl(toolbar);
