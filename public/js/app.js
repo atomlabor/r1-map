@@ -90,44 +90,6 @@ function hideLoadingScreen() {
     }
 }
 
-// Initialize map
-function initMap() {
-    // Create map centered on Germany with OSM.DE tiles
-    map = L.map('map').setView([51.1657, 10.4515], 6);
-    
-    // Set map background to Rabbit Neon Orange
-    map.getContainer().style.background = '#ee530e';
-    
-    // Add OpenStreetMap Germany tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-    
-    // Add radar control with small delay to ensure map is fully initialized
-    setTimeout(function() {
-        L.control.radar({position: 'bottomright'}).addTo(map);
-        console.log('Radar control added successfully');
-    }, 100);
-    
-    console.log('Map initialized successfully');
-    hideLoadingScreen();
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing R1 Map...');
-    
-    initMap();
-});
-
-// Close popup when clicking outside
-document.addEventListener('click', function(event) {
-    if (popup && !popup.contains(event.target)) {
-        hideInfoPopup();
-    }
-});
-
 // Toolbar-Action: Marker setzen
 var PlaceMarkerAction = L.Toolbar2.Action.extend({
   options: {
@@ -165,9 +127,47 @@ var DrawPolylineAction = L.Toolbar2.Action.extend({
   }
 });
 
-// Toolbar-Control initialisieren (unten links unter Zoom)
-var toolbar = new L.Toolbar2.Control({
-  position: 'topleft',
-  actions: [DrawPolylineAction, PlaceMarkerAction]
+// Initialize map
+function initMap() {
+    // Create map centered on Germany with OSM.DE tiles
+    map = L.map('map').setView([51.1657, 10.4515], 6);
+    
+    // Set map background to Rabbit Neon Orange
+    map.getContainer().style.background = '#ee530e';
+    
+    // Add OpenStreetMap Germany tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    // Initialize toolbar after map creation
+    var toolbar = new L.Toolbar2.Control({
+      position: 'topleft',
+      actions: [DrawPolylineAction, PlaceMarkerAction]
+    });
+    map.addControl(toolbar);
+    
+    // Add radar control with small delay to ensure map is fully initialized
+    setTimeout(function() {
+        L.control.radar({position: 'bottomright'}).addTo(map);
+        console.log('Radar control added successfully');
+    }, 100);
+    
+    console.log('Map initialized successfully');
+    hideLoadingScreen();
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing R1 Map...');
+    
+    initMap();
 });
-map.addControl(toolbar);
+
+// Close popup when clicking outside
+document.addEventListener('click', function(event) {
+    if (popup && !popup.contains(event.target)) {
+        hideInfoPopup();
+    }
+});
