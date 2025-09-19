@@ -40,7 +40,7 @@ L.Control.Radar = L.Control.extend({
         this.checkbox.onclick = () => this.toggle();
         checkbox_div.appendChild(this.checkbox);
         let checkbox_label = document.createElement(`span`);
-        checkbox_label.innerText = `US Radar`;
+        checkbox_label.innerText = `usa radar`;
         checkbox_div.appendChild(checkbox_label);
         
         // Removed slider creation code
