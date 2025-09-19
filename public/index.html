@@ -5,16 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>r1 map</title>
     <link rel="icon" href="https://blog.atomlabor.de/favicon.ico">
-    <link rel="stylesheet" href="css/leaflet-radar.css">
+    <link rel="stylesheet" href="css/leaflet.css">
     <link rel="stylesheet" href="css/leaflet.toolbar.css">
-<link rel="stylesheet" href="css/leaflet.css" />
-<link rel="stylesheet" href="css/leaflet.toolbar.css" />
-<script src="js/leaflet.js"></script>
-<script src="js/leaflet.toolbar.js"></script>
-<script src="js/leaflet.geometryutil.js"></script>
-<script src="js/app.js"></script>
-
-    
+    <link rel="stylesheet" href="css/leaflet-radar.css">
     <style>
         body {
             margin: 0;
@@ -127,21 +120,19 @@
             display: block;
             margin: 0 auto;
         }
-    </style>
-    <style>
+        
         .app-header {
             display: none;
         }
     </style>
 </head>
 <body>
+    <div id="map" style="width:100vw; height:100vh;"></div>
+    
     <!-- Loading Screen -->
     <div id="loading">
         Loading map...
     </div>
-    
-    <!-- Map Container -->
-    <div id="map" style="width:100vw;height:100vh"></div>
     
     <!-- Header Button -->
     <button class="header-button" onclick="openPopup()">
@@ -157,23 +148,13 @@
             <div class="popup-title">
                 made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #FF6B35; text-decoration: underline;" target="_blank">https://ko-fi.com/atomlabor</a>
             </div>
-            <img src="r1-map.png" alt="r1 map logo" class="popup-logo">
+            <img alt="r1 map logo" class="popup-logo">
         </div>
     </div>
     
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
-    <!-- Leaflet Radar JS -->
-    <script src="js/leaflet-radar.js"></script>
-    
-    <!-- Leaflet Toolbar JS -->
+    <script src="js/leaflet.js"></script>
     <script src="js/leaflet.toolbar.js"></script>
-    
-    <!-- Leaflet GeometryUtil JS -->
     <script src="js/leaflet.geometryutil.js"></script>
-    
-    <!-- App JS -->
     <script src="js/app.js"></script>
     
     <!-- Popup functionality -->
