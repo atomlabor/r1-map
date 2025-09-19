@@ -52,7 +52,7 @@ function showInfoPopup() {
     
     // Create text content with logo
     const textContent = document.createElement('div');
-    textContent.innerHTML = '<img src="https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true" class="popup-logo" style="max-width: 100px; border-radius: 8px; display: block; margin: 0 auto 8px auto;"/>\nmade with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #222;" target="_blank">https://ko-fi.com/atomlabor</a>';
+    textContent.innerHTML = '<img src="https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png" class="popup-logo" style="max-width: 100px; border-radius: 8px; display: block; margin: 0 auto 8px auto;"/>\nmade with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #222;" target="_blank">https://ko-fi.com/atomlabor</a>';
     textContent.style.marginBottom = '8px';
     textContent.style.color = '#222';
     
