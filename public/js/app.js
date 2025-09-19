@@ -55,7 +55,6 @@ function showInfoPopup() {
     const logoContainer = document.createElement('div');
     logoContainer.style.textAlign = 'center';
     
-
     const logo = document.createElement('img');
     logo.src = 'https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true';
     logo.style.maxWidth = '32px';
@@ -84,15 +83,13 @@ function hideInfoPopup() {
 
 // Hide loading screen
 function hideLoadingScreen() {
-    const loading = document.getElementById('loading');
-    if (loading) {
-        loading.style.display = 'none';
-    }
+  const loading = document.getElementById('loading');
+  if (loading) {
+    loading.remove();
+  }
 }
 
-
 function initMap() {
-
     map = L.map('map').setView([51.1657, 10.4515], 6);
     
     map.getContainer().style.background = '#ee530e';
@@ -111,10 +108,12 @@ function initMap() {
     setTimeout(function() {
         L.control.radar({position: 'bottomright'}).addTo(map);
         console.log('Radar control added successfully');
+        
+        // Hide loading screen after map, tiles, toolbar and radar are loaded
+        hideLoadingScreen();
     }, 100);
     
     console.log('Map initialized successfully');
-    hideLoadingScreen();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
