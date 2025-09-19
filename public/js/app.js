@@ -3,11 +3,9 @@
  * Basic map initialization with Germany as starting point
  * Version 1.8 | Atomlabor.de Design
  */
-
 // Global variables
 let map;
 let popup;
-
 // Hide loading screen function
 function hideLoadingScreen() {
     const loadingElement = document.getElementById('loading');
@@ -15,7 +13,6 @@ function hideLoadingScreen() {
         loadingElement.style.display = 'none';
     }
 }
-
 // Show elegant info popup
 function showInfoPopup() {
     // Remove existing popup if any
@@ -55,7 +52,7 @@ function showInfoPopup() {
     
     // Create text content with logo
     const textContent = document.createElement('div');
-    textContent.innerHTML = '<img src="r1-map.png" class="popup-logo" style="max-width: 100px; border-radius: 8px; display: block; margin: 0 auto 8px auto;"><br>made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #222;" target="_blank">https://ko-fi.com/atomlabor</a>';
+    textContent.innerHTML = '<img src="https://github.com/atomlabor/r1-map/blob/main/public/r1-map.png?raw=true" class="popup-logo" style="max-width: 100px; border-radius: 8px; display: block; margin: 0 auto 8px auto;"/>\nmade with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #222;" target="_blank">https://ko-fi.com/atomlabor</a>';
     textContent.style.marginBottom = '8px';
     textContent.style.color = '#222';
     
@@ -66,7 +63,6 @@ function showInfoPopup() {
     // Add to body
     document.body.appendChild(popup);
 }
-
 // Hide info popup
 function hideInfoPopup() {
     if (popup) {
@@ -74,7 +70,6 @@ function hideInfoPopup() {
         popup = null;
     }
 }
-
 // Initialize the map
 function initMap() {
     // Create map centered on Germany
@@ -101,14 +96,12 @@ function initMap() {
     
     console.log('Map initialized successfully');
 }
-
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing R1 Map...');
     
     initMap();
 });
-
 // Hide popup when clicking outside
 document.addEventListener('click', function(event) {
     if (popup && !popup.contains(event.target)) {
