@@ -48,6 +48,8 @@
             backdrop-filter: blur(20px);
             transition: all 0.3s ease;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            height: 24px;
+            line-height: 16px;
         }
         
         .header-button:hover {
@@ -56,14 +58,14 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         
-        /* Rain toggle button styles */
+        /* Rain toggle button styles - matched to header-button */
         .rain-toggle {
             position: fixed;
             top: 0;
             right: 80px;
             padding: 3px 10px;
             border-radius: 0px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: normal;
             background: rgba(255, 107, 53, 0.9);
             color: white;
@@ -73,6 +75,8 @@
             backdrop-filter: blur(20px);
             transition: all 0.3s ease;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            height: 24px;
+            line-height: 16px;
         }
         
         .rain-toggle:hover {
@@ -87,6 +91,11 @@
         
         .rain-toggle.active:hover {
             background: rgba(53, 255, 107, 1);
+        }
+        
+        /* Hide leaflet-radar widget by default */
+        .leaflet-radar {
+            display: none !important;
         }
         
         .popup-overlay {
@@ -154,14 +163,17 @@
             display: block;
             margin: 0 auto;
         }
-.leaflet-control-geocoder-form input {
-  width: 140px !important;
-  min-width: 80px !important;
-  max-width: 220px !important;
-}
-.leaflet-control-geocoder {
-  z-index: 1100 !important;
-}
+        
+        .leaflet-control-geocoder-form input {
+            width: 140px !important;
+            min-width: 80px !important;
+            max-width: 220px !important;
+        }
+        
+        .leaflet-control-geocoder {
+            z-index: 1100 !important;
+        }
+        
         .app-header {
             display: none;
         }
@@ -192,7 +204,7 @@
             <div class="popup-title">
                 made with ❤️ for the r1 community by atomlabor.de | if you like it, buy me a coffee: <a href="https://ko-fi.com/atomlabor" style="color: #FF6B35; text-decoration: underline;" target="_blank">https://ko-fi.com/atomlabor</a>
             </div>
-            <img src="r1-map.png" alt="r1 map logo" class="popup-logo">
+            <img src="r1-map.png" alt="r1 map logo" class="popup-logo" />
         </div>
     </div>
     
@@ -215,13 +227,13 @@
             document.getElementById('popupOverlay').style.display = 'none';
         }
         
-        // Rain toggle functionality
+        // Rain toggle functionality with improved visibility control
         function toggleRain() {
             const radarElements = document.querySelectorAll('.leaflet-radar');
             const toggleButton = document.querySelector('.rain-toggle');
             
             radarElements.forEach(element => {
-                if (element.style.display === 'none') {
+                if (element.style.display === 'none' || !element.style.display) {
                     element.style.display = 'block';
                     toggleButton.classList.add('active');
                 } else {
@@ -231,6 +243,17 @@
             });
         }
         
+        // Initialize radar widget as hidden when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit for the radar widget to be created
+            setTimeout(function() {
+                const radarElements = document.querySelectorAll('.leaflet-radar');
+                radarElements.forEach(element => {
+                    element.style.display = 'none';
+                });
+            }, 1000);
+        });
+        
         // Close popup with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
@@ -239,6 +262,6 @@
         });
     </script>
     
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>    
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 </body>
 </html>
