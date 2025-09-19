@@ -1,6 +1,6 @@
 <img width="350" src="https://raw.githubusercontent.com/atomlabor/r1-map/main/r1%20map.png" alt="r1-map">
 
-# r1-map (Update V 1.6)
+# r1-map (Update V 1.7)
 
 ## ENG
 
