@@ -1,8 +1,9 @@
 <img src="rabbit r1 map OpenStreetMaps.png" alt="Rabbit R1 Map - OpenStreetMaps" width="100%" style="max-width: 800px; margin-bottom: 20px;">
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E51DRUM)
+
 ![r1-map](https://raw.githubusercontent.com/atomlabor/r1-map/main/r1%20map.png)
 # r1-map (Update V 1.7)
 Schneller Zugriff, optimierte Usability, Radar-Tool für rabbit r1!
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E51DRUM)
 
 ## NEU in Version 1.7
 - Deutlich schnellere Ladezeit und konsequent reduzierte Overlays
